@@ -1,0 +1,79 @@
+src/app/submit/page.tsx
+  9817d26da4db2ed9 1-220
+src/components/ui/index.ts
+  9817d26da4db2ed9 1-17
+src/app/page.tsx
+  9817d26da4db2ed9 1,4
+src/components/ReviewersSection.tsx
+  9817d26da4db2ed9 1-113
+src/components/ui/Select.tsx
+  9817d26da4db2ed9 1-33,35-88,90-91,93-97
+src/components/ui/TextInput.tsx
+  9817d26da4db2ed9 1-32,34-43,45-46,48-52
+src/app/layout.tsx
+  9817d26da4db2ed9 4-6,19-20,31,33-37
+src/components/Timeline.tsx
+  9817d26da4db2ed9 1-156
+src/components/DocumentPreview.tsx
+  9817d26da4db2ed9 1-81
+tailwind.config.ts
+  9817d26da4db2ed9 1-74
+src/components/ui/Textarea.tsx
+  9817d26da4db2ed9 1-17,19-37,39-48,50-51,53-57
+src/data/mockData.ts
+  9817d26da4db2ed9 1-469
+src/types/index.ts
+  9817d26da4db2ed9 1-64
+src/app/globals.css
+  9817d26da4db2ed9 3-20,22-32,34-44,47-50,56-93
+src/app/dashboard/[id]/page.tsx
+  9817d26da4db2ed9 1-218
+src/components/Navigation.tsx
+  9817d26da4db2ed9 1-47
+src/components/ui/StatusBadge.tsx
+  9817d26da4db2ed9 1-43
+src/components/DashboardFilters.tsx
+  9817d26da4db2ed9 1-79
+src/app/dashboard/page.tsx
+  9817d26da4db2ed9 1-67,69-75,77-81,83-96,98-103,105-204
+src/components/ReviewForm.tsx
+  9817d26da4db2ed9 1-37,39-172
+src/components/RoleSwitcher.tsx
+  9817d26da4db2ed9 1-39,41-82
+src/components/ui/Card.tsx
+  9817d26da4db2ed9 1-28,30-49,51-55
+src/components/ui/Checkbox.tsx
+  9817d26da4db2ed9 1-50,52-53,55-59
+src/components/FilesSection.tsx
+  9817d26da4db2ed9 1-62
+src/components/SubmissionCard.tsx
+  9817d26da4db2ed9 1-58
+src/components/ui/FileUpload.tsx
+  9817d26da4db2ed9 1-7,9-33,35-43,45-50,52-60,62-70,72-90,92-100,102-185,187-191
+src/context/RoleContext.tsx
+  9817d26da4db2ed9 1-39
+src/components/ui/Button.tsx
+  9817d26da4db2ed9 1-36,38-55,57-61
+src/components/ReviewerAssignmentModal.tsx
+  9817d26da4db2ed9 1-49,51-191
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.40",
+  "base_commit_sha": "918351d3ec8d5179101047cf273896ef191e2220",
+  "prompts": {
+    "9817d26da4db2ed9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6f4ff12e-33d5-4458-97bf-7a1c35632554",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 3323,
+      "total_deletions": 306,
+      "accepted_lines": 3042,
+      "overriden_lines": 30
+    }
+  }
+}
