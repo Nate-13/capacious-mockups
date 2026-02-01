@@ -1,0 +1,45 @@
+src/components/submission-detail/index.ts
+  9817d26da4db2ed9 1-9
+src/components/submission-detail/ArticleInfoCard.tsx
+  9817d26da4db2ed9 1-30
+src/components/submission-detail/CompactHeader.tsx
+  9817d26da4db2ed9 1-61
+src/components/ReviewersSection.tsx
+  9817d26da4db2ed9 29
+src/components/submission-detail/DocumentViewer.tsx
+  9817d26da4db2ed9 1-72
+src/components/submission-detail/ActivityContent.tsx
+  9817d26da4db2ed9 1-25
+src/components/submission-detail/ReviewsContent.tsx
+  9817d26da4db2ed9 1-278
+src/app/dashboard/[id]/page.tsx
+  9817d26da4db2ed9 4,11,13-19,37-39,43,57-60,62-64,66-71,73-84,86-87,90-112,115-131,133,136-149,152-168,170-173,175-183,185-191,194-203,205
+src/components/submission-detail/TabsCard.tsx
+  9817d26da4db2ed9 1-44
+src/data/mockData.ts
+  9817d26da4db2ed9 4,11-47,124,126-145,162,197-212,366-373
+src/components/submission-detail/FilesCard.tsx
+  9817d26da4db2ed9 1-51
+src/types/index.ts
+  9817d26da4db2ed9 16-37,51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.40",
+  "base_commit_sha": "f3d7d377e347de13ff9bef4f9738d96cea4fe193",
+  "prompts": {
+    "9817d26da4db2ed9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6f4ff12e-33d5-4458-97bf-7a1c35632554",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 2454,
+      "total_deletions": 1737,
+      "accepted_lines": 936,
+      "overriden_lines": 1
+    }
+  }
+}
