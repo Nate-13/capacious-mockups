@@ -28,11 +28,6 @@ export default function SubmissionCard({
       onClick={onClick}
       className="mb-4 min-h-[140px] cursor-pointer"
     >
-      {/* Header row with ID */}
-      <div className="flex justify-end mb-2">
-        <span className="text-[12px] font-mono text-[#666]">#{id}</span>
-      </div>
-
       {/* Title */}
       <h3 className="text-[18px] font-serif font-bold text-black leading-tight mb-1 line-clamp-2">
         {title}

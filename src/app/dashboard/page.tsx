@@ -8,39 +8,7 @@ import { Submission } from "@/types";
 import DashboardFilters from "@/components/DashboardFilters";
 import SubmissionCard from "@/components/SubmissionCard";
 
-// Role-based title mapping
-const ROLE_TITLES: Record<RoleType, string> = {
-  Author: "My Submissions",
-  "Managing Editor": "All Submissions",
-  Reviewer: "Assigned Reviews",
-  "Copy Editor": "Copy Editing Queue",
-  Admin: "All Submissions",
-};
 
-// Role-based empty state text
-const EMPTY_STATE_TEXT: Record<RoleType, { title: string; subtitle: string }> =
-  {
-    Author: {
-      title: "No submissions yet",
-      subtitle: "Submit your first manuscript to get started",
-    },
-    "Managing Editor": {
-      title: "No submissions found",
-      subtitle: "There are no submissions matching your filters",
-    },
-    Reviewer: {
-      title: "No reviews assigned",
-      subtitle: "You have no submissions assigned for review",
-    },
-    "Copy Editor": {
-      title: "No submissions in queue",
-      subtitle: "There are no submissions ready for copy editing",
-    },
-    Admin: {
-      title: "No submissions found",
-      subtitle: "There are no submissions matching your filters",
-    },
-  };
 
 // Convert status to filter value format (lowercase with hyphens)
 function statusToFilterValue(status: string): string {
@@ -113,11 +81,6 @@ export default function DashboardPage() {
     router.push(`/dashboard/${submissionId}`);
   };
 
-  // Get role-specific title
-  const pageTitle = ROLE_TITLES[role];
-
-  // Get role-specific empty state
-  const emptyState = EMPTY_STATE_TEXT[role];
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] px-6 py-8">
@@ -125,7 +88,7 @@ export default function DashboardPage() {
         {/* Header Section */}
         <header className="mb-8">
           <h1 className="text-[32px] font-serif font-bold text-black mb-2">
-            {pageTitle}
+            Submissions
           </h1>
           <p className="text-[15px] text-[#666]">
             {filteredSubmissions.length} submission
@@ -174,28 +137,26 @@ export default function DashboardPage() {
 
             {/* Empty state text */}
             <h2 className="text-[18px] font-medium text-black mb-2">
-              {emptyState.title}
+              No submissions
             </h2>
             <p className="text-[14px] text-[#666] mb-6">
-              {emptyState.subtitle}
+              There are no submissions to display
             </p>
 
-            {/* Submit button (for Author role) */}
-            {role === "Author" && (
-              <button
-                onClick={() => router.push("/submit")}
-                className="
-                  px-6 py-3
-                  bg-black text-white
-                  text-[14px] font-medium
-                  rounded-lg
-                  hover:bg-gray-800
-                  transition-colors
-                "
-              >
-                Submit Manuscript
-              </button>
-            )}
+            {/* Submit button */}
+            <button
+              onClick={() => router.push("/submit")}
+              className="
+                px-6 py-3
+                bg-black text-white
+                text-[14px] font-medium
+                rounded-lg
+                hover:bg-gray-800
+                transition-colors
+              "
+            >
+              Submit Manuscript
+            </button>
           </div>
         )}
       </div>
