@@ -1,0 +1,23 @@
+src/app/dashboard/page.tsx
+  9817d26da4db2ed9 91,140,143,159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.40",
+  "base_commit_sha": "5b3cbe6528a1d8de797bc9c94fdedafb9031a068",
+  "prompts": {
+    "9817d26da4db2ed9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6f4ff12e-33d5-4458-97bf-7a1c35632554",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 61,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    }
+  }
+}
