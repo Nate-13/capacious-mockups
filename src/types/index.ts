@@ -13,6 +13,28 @@ export type SubmissionStatus =
 // Reviewer status for assigned reviewers
 export type ReviewerStatus = "Pending" | "Submitted";
 
+// Review recommendation
+export type ReviewRecommendation =
+  | "Accept"
+  | "Minor Revisions"
+  | "Major Revisions"
+  | "Reject";
+
+// A submitted review
+export interface Review {
+  id: string;
+  reviewerId: string;
+  submissionId: string;
+  recommendation: ReviewRecommendation;
+  commentsToEditor: string;
+  commentsToAuthor: string;
+  submittedDate: string;
+  // Editor approval workflow
+  releasedToAuthor: boolean;
+  releasedDate?: string;
+  editorModifiedComments?: string; // If editor edited the comments before releasing
+}
+
 // A reviewer
 export interface Reviewer {
   id: string;
@@ -26,6 +48,7 @@ export interface Reviewer {
   status?: ReviewerStatus;
   dueDate?: string;
   submittedDate?: string;
+  review?: Review;
 }
 
 // A submission/manuscript

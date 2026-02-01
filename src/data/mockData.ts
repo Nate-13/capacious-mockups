@@ -1,11 +1,49 @@
 import type {
   Submission,
   Reviewer,
+  Review,
   ActivityEntry,
   FileVersion,
   ActivityLog,
   FileVersionsMap,
 } from "@/types";
+
+// Mock reviews
+export const reviews: Review[] = [
+  {
+    id: "review-001",
+    reviewerId: "rev-001",
+    submissionId: "2024-034",
+    recommendation: "Minor Revisions",
+    commentsToEditor: "This manuscript presents interesting findings with solid methodology. However, the literature review could be more comprehensive. I recommend minor revisions before acceptance.",
+    commentsToAuthor: "Thank you for this well-written submission. The methodology is sound and the results are clearly presented. I have a few suggestions:\n\n1. The introduction would benefit from additional context regarding recent developments in the field.\n2. Figure 2 could use clearer labeling.\n3. The discussion section should address the limitations more explicitly.\n\nOverall, this is strong work that will make a valuable contribution after minor revisions.",
+    submittedDate: "February 10, 2024",
+    releasedToAuthor: false, // Editor hasn't approved yet
+  },
+  {
+    id: "review-002",
+    reviewerId: "rev-002",
+    submissionId: "2024-022",
+    recommendation: "Major Revisions",
+    commentsToEditor: "The topic is relevant but the execution needs significant improvement. The statistical analysis is flawed and conclusions are overstated. Recommend major revisions.",
+    commentsToAuthor: "The paper addresses an important topic, but several issues need to be addressed:\n\n1. The sample size is too small to support the conclusions drawn. Please expand the dataset or temper your claims.\n2. Section 3.2 lacks sufficient detail about the experimental setup.\n3. The statistical methods used (t-tests) may not be appropriate for this data distribution.\n4. Several claims in the discussion are not supported by the presented data.\n\nI encourage the authors to substantially revise and resubmit.",
+    submittedDate: "January 8, 2024",
+    releasedToAuthor: true,
+    releasedDate: "January 12, 2024",
+  },
+  {
+    id: "review-003",
+    reviewerId: "rev-003",
+    submissionId: "2024-022",
+    recommendation: "Major Revisions",
+    commentsToEditor: "Interesting concept but poorly executed. Needs substantial work.",
+    commentsToAuthor: "While the research question is interesting, the manuscript requires major revisions:\n\n1. The literature review misses several key recent publications.\n2. The methodology section needs more detail for reproducibility.\n3. Results presentation could be improved with better visualizations.\n\nPlease address these concerns in your revision.",
+    submittedDate: "January 9, 2024",
+    releasedToAuthor: true,
+    releasedDate: "January 12, 2024",
+    editorModifiedComments: "The manuscript requires major revisions:\n\n1. The literature review misses several key recent publications.\n2. The methodology section needs more detail for reproducibility.\n3. Results presentation could be improved with better visualizations.\n\nPlease address these concerns in your revision.", // Editor softened the opening
+  },
+];
 
 // Pool of reviewers available for assignment
 export const reviewers: Reviewer[] = [
@@ -83,9 +121,28 @@ export const submissions: Submission[] = [
     authorName: "Jane Doe",
     authorEmail: "jdoe@example.com",
     affiliation: "Sample College",
-    status: "In Desk Review",
+    status: "Revision Requested",
     submittedDate: "January 22, 2024",
-    currentVersion: 1,
+    currentVersion: 2,
+    assignedReviewers: [
+      {
+        ...reviewers[3],
+        status: "Submitted",
+        dueDate: "February 5, 2024",
+        submittedDate: "February 3, 2024",
+        review: {
+          id: "review-004",
+          reviewerId: "rev-004",
+          submissionId: "2024-039",
+          recommendation: "Minor Revisions",
+          commentsToEditor: "Good work overall. Minor issues that should be easy to address.",
+          commentsToAuthor: "This is a well-written manuscript with clear contributions. Please address the following:\n\n1. Clarify the methodology in section 2.3\n2. Add more recent references to support your claims\n3. The conclusion could be strengthened\n\nI recommend acceptance after these minor revisions.",
+          submittedDate: "February 3, 2024",
+          releasedToAuthor: true,
+          releasedDate: "February 5, 2024",
+        },
+      },
+    ],
   },
   {
     id: "2024-034",
@@ -102,6 +159,7 @@ export const submissions: Submission[] = [
         status: "Submitted",
         dueDate: "February 15, 2024",
         submittedDate: "February 10, 2024",
+        review: reviews[0],
       },
       {
         ...reviewers[5],
@@ -136,6 +194,22 @@ export const submissions: Submission[] = [
     status: "Revision Requested",
     submittedDate: "December 18, 2023",
     currentVersion: 2,
+    assignedReviewers: [
+      {
+        ...reviewers[1],
+        status: "Submitted",
+        dueDate: "January 5, 2024",
+        submittedDate: "January 8, 2024",
+        review: reviews[1],
+      },
+      {
+        ...reviewers[2],
+        status: "Submitted",
+        dueDate: "January 5, 2024",
+        submittedDate: "January 9, 2024",
+        review: reviews[2],
+      },
+    ],
   },
   {
     id: "2024-015",
@@ -288,4 +362,12 @@ export function getAvailableReviewers(): Reviewer[] {
 
 export function getSubmissionsByStatus(status: Submission["status"]): Submission[] {
   return submissions.filter((s) => s.status === status);
+}
+
+export function getReviewsForSubmission(submissionId: string): Review[] {
+  return reviews.filter((r) => r.submissionId === submissionId);
+}
+
+export function getReviewByReviewer(submissionId: string, reviewerId: string): Review | undefined {
+  return reviews.find((r) => r.submissionId === submissionId && r.reviewerId === reviewerId);
 }

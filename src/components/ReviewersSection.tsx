@@ -26,11 +26,7 @@ export default function ReviewersSection({
 
   return (
     <section>
-      {/* Section title: 18px, serif */}
-      <h2
-        className="text-[18px] mb-4"
-        style={{ fontFamily: "Georgia, Times New Roman, serif" }}
-      >
+      <h2 className="text-[15px] font-semibold text-gray-800 mb-4">
         Reviewers
       </h2>
 
