@@ -136,7 +136,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
             <motion.div
               layout
               className={`shrink-0 bg-white border border-gray-100 px-5 py-3 flex items-center justify-between ${
-                isCompact ? "rounded-lg" : "rounded-t-lg border-b-0"
+                isCompact ? "rounded-lg" : "rounded-t-lg rounded-br-lg border-b-0"
               }`}
               transition={springTransition}
             >
