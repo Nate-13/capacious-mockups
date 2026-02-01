@@ -135,19 +135,12 @@ export default function SubmissionDetailPage({ params }: PageProps) {
             {/* Top Bar - Full Width */}
             <motion.div
               layout
-              className={`shrink-0 bg-white border border-gray-100 px-5 py-3 flex items-center justify-between ${
+              className={`shrink-0 bg-white border border-gray-100 px-5 py-3 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.06)] ${
                 isCompact ? "rounded-lg" : "rounded-t-lg rounded-br-lg border-b-0"
               }`}
               transition={springTransition}
             >
               <div className="flex items-center gap-3 min-w-0">
-                <motion.span
-                  layoutId="submission-id"
-                  className="text-[12px] font-mono text-gray-400 shrink-0"
-                  transition={springTransition}
-                >
-                  #{submission.id}
-                </motion.span>
                 <motion.div layoutId="status-badge" transition={springTransition}>
                   <StatusBadge status={submission.status} />
                 </motion.div>
@@ -230,7 +223,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={springTransition}
-                      className="bg-white border border-gray-100 border-t-0 rounded-b-lg p-5"
+                      className="bg-white border border-gray-100 border-t-0 rounded-b-lg px-5 pb-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
                     >
                       <motion.h1
                         layoutId="title"

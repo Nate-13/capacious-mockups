@@ -128,8 +128,8 @@ export default function DashboardPage() {
             {pageTitle}
           </h1>
           <p className="text-[15px] text-[#666]">
-            Managing {filteredSubmissions.length} submission
-            {filteredSubmissions.length !== 1 ? "s" : ""} across various stages
+            {filteredSubmissions.length} submission
+            {filteredSubmissions.length !== 1 ? "s" : ""}
           </p>
         </header>
 
