@@ -103,7 +103,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
   const TabsComponent = (
     <motion.div
       layoutId="tabs"
-      className="flex items-center gap-1 bg-gray-50 rounded-lg p-1"
+      className="flex items-center gap-1 bg-gray-100 rounded-lg p-1"
       transition={springTransition}
     >
       {tabs.map((tab) => (
@@ -113,7 +113,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
           className={`px-4 py-2 text-[14px] font-medium rounded-md transition-colors ${
             activeTab === tab.id
               ? "bg-white text-gray-900 shadow-sm"
-              : "text-gray-500 hover:text-gray-700"
+              : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
           }`}
         >
           {tab.label}
