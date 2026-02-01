@@ -1,0 +1,33 @@
+src/components/DocumentPreview.tsx
+  9817d26da4db2ed9 14-15,18,24-25,27-28,30,34,39,42-44,56,59-62,66,69,72
+src/components/Navigation.tsx
+  9817d26da4db2ed9 15
+src/components/FilesSection.tsx
+  9817d26da4db2ed9 16-22,25,27-30,32-33,36-40,45-46,51
+src/data/mockData.ts
+  9817d26da4db2ed9 15-17,24-26,33-35,41-44,50-53,60-62,72-75,82-85,92-95,115-118,132-135,142-145,156-157,160-162,165-170,173-175,178-181,184-189,198,207,216,225,234,241,243,250,257,264,266,272
+src/app/dashboard/[id]/page.tsx
+  9817d26da4db2ed9 3,12,26-29,32,81,101-116,118-124,126-142,144-163,165-188,190-219,221,225,227-240,242-243,246,251-258
+src/app/layout.tsx
+  9817d26da4db2ed9 36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.40",
+  "base_commit_sha": "5f5aea7effcbb3782fd5dd919f77b684e3d8bf23",
+  "prompts": {
+    "9817d26da4db2ed9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6f4ff12e-33d5-4458-97bf-7a1c35632554",
+        "model": "claude-opus-4-5-20251101"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 1125,
+      "total_deletions": 1266,
+      "accepted_lines": 312,
+      "overriden_lines": 0
+    }
+  }
+}
