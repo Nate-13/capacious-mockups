@@ -12,7 +12,7 @@ export default function Navigation() {
   ];
 
   return (
-    <nav className="h-16 bg-white border-b border-gray-200">
+    <nav className="h-16 bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
       <div className="max-w-[1200px] mx-auto h-full px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="text-2xl italic font-serif text-black">

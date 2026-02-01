@@ -10,34 +10,38 @@ export default function DocumentPreview({
   onDownload,
 }: DocumentPreviewProps) {
   return (
-    <section className="xl:sticky xl:top-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[18px] font-serif font-semibold">Document Preview</h2>
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-[14px] font-semibold text-gray-700">Document Preview</h2>
         <button
           onClick={onDownload}
-          className="text-[13px] px-3 py-1.5 border border-[#333] rounded-[4px] bg-white hover:bg-gray-50 transition-colors cursor-pointer"
+          className="text-[12px] px-3 py-1.5 border border-gray-300 rounded bg-white hover:bg-gray-50 transition-colors cursor-pointer"
         >
           Download
         </button>
       </div>
 
-      <div className="bg-[#666] p-4 sm:p-6 rounded-lg">
+      {/* Document container - fills available space */}
+      <div className="bg-[#4a4a4a] rounded-lg p-6 sm:p-8 min-h-[800px] flex justify-center">
         <div
-          className="bg-white mx-auto min-h-[600px] p-6 sm:p-8 md:p-10"
-          style={{ boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}
+          className="bg-white w-full max-w-[700px] p-10 sm:p-12"
+          style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.25)" }}
         >
-          <h1 className="text-[18px] sm:text-[20px] font-serif text-center mb-6 leading-tight">
+          <h1 className="text-[20px] font-serif text-center mb-6 leading-tight">
             {title}
           </h1>
 
-          <div className="text-[13px] sm:text-[14px] font-serif leading-[1.8] text-gray-700">
+          <div className="text-[14px] font-serif leading-[1.8] text-gray-700">
             <p className="mb-4">
               <strong>Abstract:</strong> Lorem ipsum dolor sit amet, consectetur
               adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat.
+              exercitation ullamco laboris.
             </p>
+
+            <h2 className="text-[16px] font-serif font-semibold mt-6 mb-3">
+              1. Introduction
+            </h2>
 
             <p className="mb-4">
               Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -49,29 +53,23 @@ export default function DocumentPreview({
             <p className="mb-4">
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-              quae ab illo inventore veritatis et quasi architecto beatae vitae
-              dicta sunt explicabo.
+              quae ab illo inventore veritatis.
             </p>
+
+            <h2 className="text-[16px] font-serif font-semibold mt-6 mb-3">
+              2. Methods
+            </h2>
 
             <p className="mb-4">
               Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
               aut fugit, sed quia consequuntur magni dolores eos qui ratione
-              voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-              ipsum quia dolor sit amet.
-            </p>
-
-            <p className="mb-4">
-              Ut enim ad minima veniam, quis nostrum exercitationem ullam
-              corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
-              consequatur? Quis autem vel eum iure reprehenderit qui in ea
-              voluptate velit esse quam nihil molestiae consequatur.
+              voluptatem sequi nesciunt.
             </p>
 
             <p>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui
-              blanditiis praesentium voluptatum deleniti atque corrupti quos
-              dolores et quas molestias excepturi sint occaecati cupiditate non
-              provident.
+              Ut enim ad minima veniam, quis nostrum exercitationem ullam
+              corporis suscipit laboriosam, nisi ut aliquid ex ea commodi
+              consequatur.
             </p>
           </div>
         </div>

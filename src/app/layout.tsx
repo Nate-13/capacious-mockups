@@ -33,7 +33,7 @@ export default function RootLayout({
         <RoleProvider>
           <RoleSwitcher />
           <Navigation />
-          <main>{children}</main>
+          <main className="pt-16">{children}</main>
         </RoleProvider>
       </body>
     </html>
