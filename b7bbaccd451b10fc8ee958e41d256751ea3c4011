@@ -1,0 +1,23 @@
+src/data/mockData.ts
+  e14dfae9115273df 286,302,315,342,371,400,429,444,473,500,528,551,574,588,609,622,652
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "b7bbaccd451b10fc8ee958e41d256751ea3c4011",
+  "prompts": {
+    "e14dfae9115273df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2bf8122c-3fd6-48cf-b4eb-e84b646adf56",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 21,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    }
+  }
+}
