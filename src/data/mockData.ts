@@ -1647,15 +1647,6 @@ export const fileVersions: FileVersionsMap = {
       category: "supplement",
       uploadedBy: "Marcus Bell",
     },
-    {
-      id: "file-019-vid1",
-      filename: "festival_ambient_recording.mp4",
-      version: 1,
-      label: "Supplementary Video Recording",
-      uploadedDate: "December 12, 2023",
-      category: "video",
-      uploadedBy: "Marcus Bell",
-    },
   ],
   "2024-010": [
     {
@@ -1902,15 +1893,6 @@ export const fileVersions: FileVersionsMap = {
       label: "Figure 2 (High-res)",
       uploadedDate: "February 1, 2024",
       category: "image",
-      uploadedBy: "Hyun-ji Kim",
-    },
-    {
-      id: "file-042-vid1",
-      filename: "gesture_performance.mp4",
-      version: 1,
-      label: "Supplementary Video",
-      uploadedDate: "February 1, 2024",
-      category: "video",
       uploadedBy: "Hyun-ji Kim",
     },
   ],

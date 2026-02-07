@@ -28,23 +28,7 @@ function getCategoryIcon(category?: FileCategory) {
       </svg>
     );
   }
-  if (category === "video") {
-    return (
-      <svg
-        className="w-4 h-4 shrink-0 opacity-50"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-        />
-      </svg>
-    );
-  }
+
   if (
     category === "copyedit-pdf" ||
     category === "copyedit-word" ||
@@ -139,10 +123,7 @@ export default function FilesCard({
   // 3. Supplements - all
   const supplements = files.filter((f) => f.category === "supplement");
 
-  // 4. Video - all
-  const videos = files.filter((f) => f.category === "video");
-
-  // 5. Copy Editing - only the latest copy edit file
+  // 4. Copy Editing - only the latest copy edit file
   const copyEditFiles = files.filter(
     (f) => f.category === "copyedit-pdf" || f.category === "copyedit-word",
   );
@@ -181,10 +162,6 @@ export default function FilesCard({
 
   if (supplements.length > 0) {
     sections.push({ label: "Supplements", files: supplements });
-  }
-
-  if (videos.length > 0) {
-    sections.push({ label: "Video", files: videos });
   }
 
   if (latestCopyEdit) {

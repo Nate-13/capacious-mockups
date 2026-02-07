@@ -32,7 +32,7 @@ export type ReviewRecommendation =
   | "Reject";
 
 // File types that can be attached to a submission
-export type FileCategory = "manuscript" | "image" | "video" | "supplement" | "copyedit-pdf" | "copyedit-word" | "markup";
+export type FileCategory = "manuscript" | "image" | "supplement" | "copyedit-pdf" | "copyedit-word" | "markup";
 
 // A submitted review
 export interface Review {

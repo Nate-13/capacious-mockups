@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { CopyEditor } from "@/types";
 import { getAvailableCopyEditors } from "@/data/mockData";
 
@@ -48,7 +49,7 @@ export default function CopyEditorAssignmentModal({
     onClose();
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[80vh] flex flex-col">
@@ -131,6 +132,7 @@ export default function CopyEditorAssignmentModal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
