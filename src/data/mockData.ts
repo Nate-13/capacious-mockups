@@ -283,7 +283,7 @@ export const submissions: Submission[] = [
   // 1. In Desk Review (just came in)
   {
     id: "2024-052",
-    title: "Affective Resonance in Urban Sound Environments",
+    title: "New Submission, Desk Review, Version 1",
     authorName: "Maria Torres",
     authorEmail: "m.torres@newschool.edu",
     affiliation: "The New School",
@@ -299,7 +299,7 @@ export const submissions: Submission[] = [
   // 2. In Desk Review
   {
     id: "2024-050",
-    title: "Toward a Haptic Pedagogy: Touch and Learning in Digital Spaces",
+    title: "Second Desk Review Submission",
     authorName: "Kevin O'Brien",
     authorEmail: "kobrien@temple.edu",
     affiliation: "Temple University",
@@ -312,7 +312,7 @@ export const submissions: Submission[] = [
   // 3. In Peer Review — one review submitted, one pending
   {
     id: "2024-034",
-    title: "Economies of Attention in Digital Community Formation",
+    title: "Peer Review: 1 of 2 Reviews Submitted",
     authorName: "Alice Johnson",
     authorEmail: "ajohnson@northwestern.edu",
     affiliation: "Northwestern University",
@@ -339,8 +339,7 @@ export const submissions: Submission[] = [
   // 4. In Peer Review — both reviews submitted (ready for editor decision)
   {
     id: "2024-028",
-    title:
-      "Architectural Affect: How Built Environments Shape Collective Feeling",
+    title: "Peer Review: Both Reviews In, Awaiting Decision",
     authorName: "Bob Williams",
     authorEmail: "bwilliams@columbia.edu",
     affiliation: "Columbia University",
@@ -369,8 +368,7 @@ export const submissions: Submission[] = [
   // 5. Accept with Minor Changes — sent back to same reviewers
   {
     id: "2024-039",
-    title:
-      "Feeling Machines: Affective Computing and the Question of Experience",
+    title: "Accept with Minor Changes, Reviews Released",
     authorName: "Jane Doe",
     authorEmail: "jdoe@mit.edu",
     affiliation: "MIT",
@@ -399,8 +397,7 @@ export const submissions: Submission[] = [
   // 6. Conditional Accept — editor working with author
   {
     id: "2024-046",
-    title:
-      "Ambivalence and Meat: Affective Tensions in Food Consumption Practices",
+    title: "Conditional Accept, Editor Working with Author",
     authorName: "Jenny Rice",
     authorEmail: "jrice@university.edu",
     affiliation: "University of Kentucky",
@@ -429,7 +426,7 @@ export const submissions: Submission[] = [
   // 7. Accepted — ready to move to copy editing
   {
     id: "2024-015",
-    title: "The Weight of Breath: Respiratory Affect in Pandemic Times",
+    title: "Accepted, Ready to Move to Copy Editing",
     authorName: "David Miller",
     authorEmail: "dmiller@duke.edu",
     affiliation: "Duke University",
@@ -444,7 +441,7 @@ export const submissions: Submission[] = [
   // 8. Rejected
   {
     id: "2024-022",
-    title: "Rethinking Digital Empathy in Online Learning Environments",
+    title: "Rejected After Peer Review",
     authorName: "Carol Davis",
     authorEmail: "cdavis@stanford.edu",
     affiliation: "Stanford University",
@@ -473,7 +470,7 @@ export const submissions: Submission[] = [
   // 9. Revise & Resubmit (effectively out of workflow)
   {
     id: "2024-019",
-    title: "Sonic Vibrations and Collective Joy: A Study of Festival Affect",
+    title: "Revise & Resubmit, Awaiting New Submission",
     authorName: "Marcus Bell",
     authorEmail: "mbell@nyu.edu",
     affiliation: "New York University",
@@ -500,7 +497,7 @@ export const submissions: Submission[] = [
   // 10. In Copy Editing
   {
     id: "2024-010",
-    title: "Queer Temporalities and the Afterlife of Feelings",
+    title: "In Copy Editing, 2 Editors Assigned, Has CE Files",
     authorName: "Sam Nguyen",
     authorEmail: "snguyen@berkeley.edu",
     affiliation: "UC Berkeley",
@@ -528,8 +525,7 @@ export const submissions: Submission[] = [
   // 11. Ready for Production
   {
     id: "2024-005",
-    title:
-      "The Choreography of Protest: Movement, Affect, and Political Assembly",
+    title: "Ready for Production, Copy Editing Complete",
     authorName: "Laura Chen",
     authorEmail: "lchen@umich.edu",
     affiliation: "University of Michigan",
@@ -552,7 +548,7 @@ export const submissions: Submission[] = [
   // 12. Published
   {
     id: "2023-048",
-    title: "Atmospheric Attunements: Weather, Mood, and the Nonhuman",
+    title: "Published in Issue 11",
     authorName: "Derek Massumi",
     authorEmail: "dmassumi@concordia.ca",
     affiliation: "Concordia University",
@@ -575,7 +571,7 @@ export const submissions: Submission[] = [
   // 13. Dialogue (non-article type, in desk review)
   {
     id: "2024-048",
-    title: "On Affect and Architecture: A Conversation",
+    title: "Dialogue Type, Editor-Entered, Desk Review",
     authorName: "Greg Seigworth & Kathleen Stewart",
     authorEmail: "gseigworth@millersville.edu",
     affiliation: "Millersville University / University of Texas",
@@ -589,7 +585,7 @@ export const submissions: Submission[] = [
   // 14. Introduction (editor-entered, invited content)
   {
     id: "2024-055",
-    title: "Introduction: Capacious Bodies",
+    title: "Introduction Type, Editor-Entered, In Copy Editing",
     authorName: "Gail Hamner",
     authorEmail: "ghamner@syracuse.edu",
     affiliation: "Syracuse University",
@@ -610,7 +606,7 @@ export const submissions: Submission[] = [
   // 15. Book Review (simple desk review)
   {
     id: "2024-053",
-    title: "Review: 'Gut Feminism' by Elizabeth A. Wilson",
+    title: "Book Review Type, Desk Review",
     authorName: "Rosa Martinez",
     authorEmail: "rmartinez@uchicago.edu",
     affiliation: "University of Chicago",
@@ -623,7 +619,7 @@ export const submissions: Submission[] = [
   // 16. Interstice (short creative/experimental piece, in peer review)
   {
     id: "2024-042",
-    title: "Three Gestures Toward Stillness",
+    title: "Interstice Type, Peer Review, 1 of 2 Reviews",
     authorName: "Hyun-ji Kim",
     authorEmail: "hkim@risd.edu",
     affiliation: "Rhode Island School of Design",
@@ -653,7 +649,7 @@ export const submissions: Submission[] = [
   // 17. Afterword (editor-entered, invited, accepted)
   {
     id: "2024-057",
-    title: "Afterword: What Comes After Affect?",
+    title: "Afterword Type, Editor-Entered, Accepted",
     authorName: "Lauren Berlant",
     authorEmail: "lberlant@uchicago.edu",
     affiliation: "University of Chicago",
