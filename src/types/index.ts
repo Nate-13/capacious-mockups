@@ -62,7 +62,6 @@ export interface Reviewer {
   avgTurnaroundDays: number;
   // For assigned reviewers:
   status?: ReviewerStatus;
-  dueDate?: string;
   submittedDate?: string;
   review?: Review;
 }

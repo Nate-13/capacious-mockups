@@ -117,6 +117,24 @@ function EditorReviewCard({
         )}
       </div>
 
+      {/* Attached markup file */}
+      {review.markupFile && (
+        <div className="mb-4">
+          <h5 className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
+            Attached File
+          </h5>
+          <button
+            onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+            className="inline-flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-[6px] px-3 py-2 transition-colors"
+          >
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {review.markupFile}
+          </button>
+        </div>
+      )}
+
       {/* Release button */}
       {!review.releasedToAuthor && (
         <div className="flex justify-end pt-2 border-t border-gray-100">
@@ -173,6 +191,21 @@ function AuthorReviewCard({
       <p className="text-[14px] text-gray-700 whitespace-pre-wrap leading-relaxed">
         {displayComments}
       </p>
+
+      {/* Attached markup file */}
+      {review.markupFile && (
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <button
+            onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+            className="inline-flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-[6px] px-3 py-2 transition-colors"
+          >
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {review.markupFile}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -245,6 +278,17 @@ function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
             onChange={(e) => setCommentsToAuthor(e.target.value)}
             placeholder="These comments will be shared with the author (after editor review)..."
             className="w-full p-3 border border-gray-300 rounded text-[13px] min-h-[150px] focus:outline-none focus:ring-2 focus:ring-gray-200"
+          />
+        </div>
+
+        <div>
+          <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-2">
+            Attach Marked-Up Manuscript (optional)
+          </label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            className="text-[13px] text-gray-600 file:mr-3 file:px-3 file:py-1.5 file:text-[12px] file:border file:border-gray-300 file:rounded-[6px] file:bg-white file:text-gray-700 file:cursor-pointer hover:file:bg-gray-50"
           />
         </div>
 
@@ -389,8 +433,8 @@ export default function ReviewsContent({
                       Submitted
                     </span>
                   ) : (
-                    <span className="text-[12px] text-gray-500">
-                      Due: {reviewer.dueDate}
+                    <span className="text-[12px] text-gray-400">
+                      Pending
                     </span>
                   )}
                 </div>

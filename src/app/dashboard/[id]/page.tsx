@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useMemo } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useRole } from "@/context/RoleContext";
 import {
@@ -12,13 +12,14 @@ import { StatusBadge } from "@/components/ui";
 import {
   FilesCard,
   DocumentViewer,
-  ReviewsContent,
   ActivityContent,
   Tab,
   TabType,
 } from "@/components/submission-detail";
 import EditorActions from "@/components/submission-detail/EditorActions";
 import CopyEditingContent from "@/components/submission-detail/CopyEditingContent";
+import ReviewsSidebar from "@/components/submission-detail/ReviewsSidebar";
+import ReviewDetail from "@/components/submission-detail/ReviewDetail";
 import { FileVersion, SubmissionStatus } from "@/types";
 
 interface PageProps {
@@ -37,8 +38,14 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     files.length > 0 ? files[files.length - 1] : null,
   );
   const [activeTab, setActiveTab] = useState<TabType>("submission");
+  const [selectedReviewerId, setSelectedReviewerId] = useState<string | null>(
+    null,
+  );
 
-  const isCompact = activeTab !== "submission";
+  // Sidebar stays open for submission and reviews tabs
+  const showSidebar = activeTab === "submission" || activeTab === "reviews";
+  // Compact header (title/author in top bar) for all non-submission tabs
+  const showCompactHeader = activeTab !== "submission";
 
   if (!submission) {
     return (
@@ -95,6 +102,30 @@ export default function SubmissionDetailPage({ params }: PageProps) {
   }
   tabs.push({ id: "activity", label: "Activity" });
 
+  // Auto-select the first relevant reviewer when switching to reviews tab
+  const effectiveReviewerId = useMemo(() => {
+    if (activeTab !== "reviews") return null;
+    const reviewers = submission.assignedReviewers || [];
+    // If we have a valid selection, keep it
+    if (
+      selectedReviewerId &&
+      reviewers.find((r) => r.id === selectedReviewerId)
+    )
+      return selectedReviewerId;
+    // Auto-select first submitted, or first reviewer
+    const firstSubmitted = reviewers.find((r) => r.status === "Submitted");
+    return firstSubmitted?.id || reviewers[0]?.id || null;
+  }, [activeTab, selectedReviewerId, submission.assignedReviewers]);
+
+  const selectedReviewer =
+    submission.assignedReviewers?.find((r) => r.id === effectiveReviewerId) ||
+    null;
+
+  const selectedReviewerIndex =
+    submission.assignedReviewers?.findIndex(
+      (r) => r.id === effectiveReviewerId,
+    ) ?? -1;
+
   const handleReleaseReview = (reviewerId: string, editedComments: string) => {
     alert(`Review released to author! (Mock action)\nReviewer: ${reviewerId}`);
   };
@@ -116,14 +147,12 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     damping: 35,
   };
 
-  // Bouncier spring for the header bar collapse
   const headerSpring = {
     type: "spring" as const,
     stiffness: 300,
     damping: 22,
   };
 
-  // Slide-fade for title/author appearing in compact header
   const textSlideIn = {
     type: "spring" as const,
     stiffness: 400,
@@ -131,12 +160,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     delay: 0.15,
   };
 
-  const fadeTransition = {
-    duration: 0.15,
-    ease: "easeOut" as const,
-  };
-
-  // Tabs component with layoutId for morphing
+  // Tabs component
   const TabsComponent = (
     <motion.div
       layoutId="tabs"
@@ -169,13 +193,13 @@ export default function SubmissionDetailPage({ params }: PageProps) {
       <div className="h-full max-w-[1400px] mx-auto px-6 py-5">
         <LayoutGroup>
           <div className="h-full flex flex-col">
-            {/* Top Bar - Full Width */}
+            {/* Top Bar */}
             <motion.div
               layout
               className={`shrink-0 bg-white border border-gray-100 px-5 py-3 flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.06)] ${
-                isCompact
-                  ? "rounded-lg"
-                  : "rounded-t-lg rounded-br-lg border-b-0"
+                showSidebar
+                  ? "rounded-t-lg rounded-br-lg border-b-0"
+                  : "rounded-lg"
               }`}
               transition={headerSpring}
             >
@@ -192,9 +216,9 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                 <span className="text-[11px] text-gray-400 shrink-0">
                   {submission.contentType}
                 </span>
-                {/* Title and author slide in from left when compact */}
+                {/* Title and author slide in when not on submission tab */}
                 <AnimatePresence>
-                  {isCompact && (
+                  {showCompactHeader && (
                     <motion.span
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -207,7 +231,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                   )}
                 </AnimatePresence>
                 <AnimatePresence>
-                  {isCompact && (
+                  {showCompactHeader && (
                     <>
                       <motion.span
                         initial={{ opacity: 0, x: -20 }}
@@ -225,7 +249,10 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                         className="text-[13px] text-gray-500 shrink-0"
                         transition={{ ...textSlideIn, delay: 0.2 }}
                       >
-                        <span className="text-[16px] text-gray-300 mx-0.5">|</span> {submission.authorName}
+                        <span className="text-[16px] text-gray-300 mx-0.5">
+                          |
+                        </span>{" "}
+                        {submission.authorName}
                       </motion.span>
                     </>
                   )}
@@ -237,76 +264,175 @@ export default function SubmissionDetailPage({ params }: PageProps) {
             {/* Content Area */}
             <div className="flex-1 overflow-hidden pt-0">
               <div className="h-full flex">
-                {/* Left Sidebar - animates width to collapse */}
+                {/* Left Sidebar - stays open for submission + reviews, collapses for others */}
                 <motion.div
                   initial={false}
                   animate={{
-                    width: isCompact ? 0 : 320,
-                    opacity: isCompact ? 0 : 1,
+                    width: showSidebar ? 320 : 0,
+                    opacity: showSidebar ? 1 : 0,
                   }}
-                  transition={headerSpring}
+                  transition={{
+                    width: {
+                      ...headerSpring,
+                      delay: showSidebar ? 0 : 0.15,
+                    },
+                    opacity: {
+                      duration: showSidebar ? 0.2 : 0.1,
+                    },
+                  }}
                   className="shrink-0 overflow-hidden"
                 >
-                  <div className="w-[320px]">
-                    {/* Article Info - collapses height into header */}
+                  <div className="w-[320px] h-full flex flex-col">
+                    {/* Connecting card - attaches to header bar, resizes smoothly */}
+                    <motion.div
+                      layout
+                      className="bg-white border border-gray-100 border-t-0 rounded-b-lg px-5 pt-0 shadow-[0_2px_8px_rgba(0,0,0,0.06)] shrink-0 overflow-hidden"
+                      transition={headerSpring}
+                    >
+                      <div className="mb-4">
+                        <div className="w-full h-[1px] bg-gray-200" />
+                      </div>
+                      {/* Article info - collapses when not on submission */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height:
+                            activeTab === "submission" ? "auto" : 0,
+                          opacity:
+                            activeTab === "submission" ? 1 : 0,
+                        }}
+                        transition={headerSpring}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4">
+                          <div className="text-[20px] font-serif font-bold text-gray-900 leading-tight mb-1">
+                            {submission.title}
+                          </div>
+                          <p className="text-[14px] text-gray-600">
+                            {submission.authorName} &middot;{" "}
+                            {submission.affiliation}
+                          </p>
+                          <p className="text-[13px] text-gray-500 mt-1">
+                            Submitted {submission.submittedDate}
+                          </p>
+                        </div>
+                      </motion.div>
+
+                      {/* Reviews list - collapses when not on reviews */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height:
+                            activeTab === "reviews" ? "auto" : 0,
+                          opacity:
+                            activeTab === "reviews" ? 1 : 0,
+                        }}
+                        transition={headerSpring}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4">
+                          <ReviewsSidebar
+                            submission={submission}
+                            role={role}
+                            isEditor={isEditor}
+                            selectedReviewerId={effectiveReviewerId}
+                            onSelectReviewer={setSelectedReviewerId}
+                          />
+                        </div>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Files & editor actions - collapses when not on submission */}
                     <motion.div
                       initial={false}
                       animate={{
-                        height: isCompact ? 0 : "auto",
+                        height:
+                          activeTab === "submission" ? "auto" : 0,
+                        opacity:
+                          activeTab === "submission" ? 1 : 0,
                       }}
-                      transition={{
-                        type: "spring" as const,
-                        stiffness: 350,
-                        damping: 28,
-                      }}
+                      transition={headerSpring}
                       className="overflow-hidden"
                     >
-                      <div className="bg-white border border-gray-100 border-t-0 rounded-b-lg px-5 pb-5 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
-                        <div className="text-[20px] font-serif font-bold text-gray-900 leading-tight mb-1">
-                          {submission.title}
-                        </div>
-                        <p className="text-[14px] text-gray-600">
-                          {submission.authorName} &middot;{" "}
-                          {submission.affiliation}
-                        </p>
-                        <p className="text-[13px] text-gray-500 mt-1">
-                          Submitted {submission.submittedDate}
-                        </p>
+                      <div className="pt-5">
+                        <FilesCard
+                          files={files}
+                          selectedFile={selectedFile}
+                          onFileSelect={setSelectedFile}
+                          submissionStatus={submission.status}
+                          role={role}
+                        />
+                        {isEditor && (
+                          <div className="pt-5">
+                            <EditorActions
+                              submission={submission}
+                              onAction={handleEditorAction}
+                            />
+                          </div>
+                        )}
                       </div>
                     </motion.div>
-
-                    {/* Files Card */}
-                    <div className="pt-5">
-                      <FilesCard
-                        files={files}
-                        selectedFile={selectedFile}
-                        onFileSelect={setSelectedFile}
-                        submissionStatus={submission.status}
-                        role={role}
-                      />
-                    </div>
-
-                    {/* Editor Actions */}
-                    {isEditor && (
-                      <div className="pt-5">
-                        <EditorActions
-                          submission={submission}
-                          onAction={handleEditorAction}
-                        />
-                      </div>
-                    )}
                   </div>
                 </motion.div>
 
-                {/* Right Content - swaps between doc viewer and compact content */}
+                {/* Right Content */}
                 <div className="flex-1 min-w-0">
                   <AnimatePresence mode="wait" initial={false}>
-                    {isCompact ? (
+                    {activeTab === "submission" && (
+                      <motion.div
+                        key="doc-viewer"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          type: "spring" as const,
+                          stiffness: 300,
+                          damping: 26,
+                          delay: 0.12,
+                        }}
+                        className="h-full pl-5 pt-5"
+                      >
+                        <div className="h-full">
+                          <DocumentViewer
+                            submission={submission}
+                            selectedFile={selectedFile}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                    {activeTab === "reviews" && (
+                      <motion.div
+                        key="review-detail"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          type: "spring" as const,
+                          stiffness: 300,
+                          damping: 26,
+                          delay: 0.12,
+                        }}
+                        className="h-full pl-5 pt-5 overflow-y-auto"
+                      >
+                        <div className="bg-white border border-gray-200 rounded-lg p-6">
+                          <ReviewDetail
+                            submission={submission}
+                            reviewer={selectedReviewer}
+                            reviewerIndex={selectedReviewerIndex}
+                            role={role}
+                            isEditor={isEditor}
+                            onReleaseReview={handleReleaseReview}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                    {(activeTab === "activity" ||
+                      activeTab === "copy-editing") && (
                       <motion.div
                         key="compact-content"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -12 }}
+                        exit={{ opacity: 0 }}
                         transition={{
                           type: "spring" as const,
                           stiffness: 300,
@@ -316,14 +442,6 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                         className="h-full overflow-y-auto pt-5"
                       >
                         <div className="max-w-[900px] mx-auto">
-                          {activeTab === "reviews" && (
-                            <ReviewsContent
-                              submission={submission}
-                              role={role}
-                              isEditor={isEditor}
-                              onReleaseReview={handleReleaseReview}
-                            />
-                          )}
                           {activeTab === "activity" && (
                             <ActivityContent
                               activity={activity}
@@ -338,22 +456,6 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                               isEditor={isEditor}
                             />
                           )}
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key="doc-viewer"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={fadeTransition}
-                        className="h-full pl-5 pt-5"
-                      >
-                        <div className="h-full">
-                          <DocumentViewer
-                            submission={submission}
-                            selectedFile={selectedFile}
-                          />
                         </div>
                       </motion.div>
                     )}

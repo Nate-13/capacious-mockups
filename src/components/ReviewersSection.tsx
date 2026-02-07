@@ -51,7 +51,7 @@ export default function ReviewersSection({
                   Submitted ({reviewer.submittedDate})
                 </span>
               ) : (
-                <span>&#9203; Pending (Due: {reviewer.dueDate})</span>
+                <span>&#9203; Pending</span>
               )}
             </p>
 

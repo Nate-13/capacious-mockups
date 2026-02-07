@@ -47,6 +47,7 @@ export const reviews: Review[] = [
       "Thank you for this well-written submission. The methodology is sound and the results are clearly presented. I have a few suggestions:\n\n1. The introduction would benefit from additional context regarding recent developments in the field.\n2. Figure 2 could use clearer labeling.\n3. The discussion section should address the limitations more explicitly.\n\nOverall, this is strong work that will make a valuable contribution after minor revisions.",
     submittedDate: "February 10, 2024",
     releasedToAuthor: false,
+    markupFile: "manuscript_marked_up.pdf",
   },
   {
     id: "review-002",
@@ -89,6 +90,7 @@ export const reviews: Review[] = [
     submittedDate: "February 3, 2024",
     releasedToAuthor: true,
     releasedDate: "February 5, 2024",
+    markupFile: "review_annotations.pdf",
   },
   {
     id: "review-005",
@@ -324,14 +326,13 @@ export const submissions: Submission[] = [
       {
         ...reviewers[0],
         status: "Submitted",
-        dueDate: "February 15, 2024",
+
         submittedDate: "February 10, 2024",
         review: reviews[0],
       },
       {
         ...reviewers[5],
         status: "Pending",
-        dueDate: "February 20, 2024",
       },
     ],
   },
@@ -352,14 +353,14 @@ export const submissions: Submission[] = [
       {
         ...reviewers[2],
         status: "Submitted",
-        dueDate: "February 12, 2024",
+
         submittedDate: "February 8, 2024",
         review: reviews[8],
       },
       {
         ...reviewers[3],
         status: "Submitted",
-        dueDate: "February 12, 2024",
+
         submittedDate: "February 9, 2024",
         review: reviews[9],
       },
@@ -382,14 +383,14 @@ export const submissions: Submission[] = [
       {
         ...reviewers[3],
         status: "Submitted",
-        dueDate: "February 5, 2024",
+
         submittedDate: "February 3, 2024",
         review: reviews[3],
       },
       {
         ...reviewers[4],
         status: "Submitted",
-        dueDate: "February 5, 2024",
+
         submittedDate: "February 4, 2024",
         review: reviews[4],
       },
@@ -412,14 +413,14 @@ export const submissions: Submission[] = [
       {
         ...reviewers[0],
         status: "Submitted",
-        dueDate: "January 30, 2024",
+
         submittedDate: "February 15, 2024",
         review: reviews[5],
       },
       {
         ...reviewers[5],
         status: "Submitted",
-        dueDate: "January 30, 2024",
+
         submittedDate: "February 14, 2024",
         review: reviews[6],
       },
@@ -456,14 +457,14 @@ export const submissions: Submission[] = [
       {
         ...reviewers[1],
         status: "Submitted",
-        dueDate: "January 5, 2024",
+
         submittedDate: "January 8, 2024",
         review: reviews[1],
       },
       {
         ...reviewers[2],
         status: "Submitted",
-        dueDate: "January 5, 2024",
+
         submittedDate: "January 9, 2024",
         review: reviews[2],
       },
@@ -485,13 +486,13 @@ export const submissions: Submission[] = [
       {
         ...reviewers[6],
         status: "Submitted",
-        dueDate: "January 15, 2024",
+
         submittedDate: "January 10, 2024",
       },
       {
         ...reviewers[7],
         status: "Submitted",
-        dueDate: "January 15, 2024",
+
         submittedDate: "January 12, 2024",
       },
     ],
@@ -638,14 +639,14 @@ export const submissions: Submission[] = [
       {
         ...reviewers[8],
         status: "Submitted",
-        dueDate: "February 25, 2024",
+
         submittedDate: "February 20, 2024",
         review: reviews[7],
       },
       {
         ...reviewers[4],
         status: "Pending",
-        dueDate: "February 28, 2024",
+
       },
     ],
   },
