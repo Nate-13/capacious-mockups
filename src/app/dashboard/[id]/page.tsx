@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useMemo } from "react";
+import { use, useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useRole } from "@/context/RoleContext";
 import {
@@ -20,7 +20,7 @@ import EditorActions from "@/components/submission-detail/EditorActions";
 import CopyEditingContent from "@/components/submission-detail/CopyEditingContent";
 import ReviewsSidebar from "@/components/submission-detail/ReviewsSidebar";
 import ReviewDetail from "@/components/submission-detail/ReviewDetail";
-import { FileVersion, SubmissionStatus } from "@/types";
+import { ContentType, FileVersion, SubmissionStatus } from "@/types";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -41,6 +41,24 @@ export default function SubmissionDetailPage({ params }: PageProps) {
   const [selectedReviewerId, setSelectedReviewerId] = useState<string | null>(
     null,
   );
+  const [contentTypeOpen, setContentTypeOpen] = useState(false);
+  const contentTypeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        contentTypeRef.current &&
+        !contentTypeRef.current.contains(e.target as Node)
+      ) {
+        setContentTypeOpen(false);
+      }
+    }
+    if (contentTypeOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, [contentTypeOpen]);
 
   // Sidebar stays open for submission and reviews tabs
   const showSidebar = activeTab === "submission" || activeTab === "reviews";
@@ -213,9 +231,66 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                     onStatusChange={isEditor ? handleStatusOverride : undefined}
                   />
                 </motion.div>
-                <span className="text-[11px] text-gray-400 shrink-0">
-                  {submission.contentType}
-                </span>
+                {isEditor ? (
+                  <div className="relative shrink-0" ref={contentTypeRef}>
+                    <button
+                      onClick={() => setContentTypeOpen(!contentTypeOpen)}
+                      className="group text-[11px] text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                    >
+                      {submission.contentType}
+                      <span className="inline-flex items-center align-middle w-0 group-hover:w-3 overflow-hidden transition-all duration-150">
+                        <svg
+                          className={`w-2.5 h-2.5 ml-1 shrink-0 opacity-50 transition-transform duration-150 ${contentTypeOpen ? "rotate-180" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </span>
+                    </button>
+                    {contentTypeOpen && (
+                      <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
+                        {(
+                          [
+                            "Article",
+                            "Dialogue",
+                            "Interstice",
+                            "Introduction",
+                            "Afterword",
+                            "Book Review",
+                          ] as ContentType[]
+                        ).map((ct) => (
+                          <button
+                            key={ct}
+                            onClick={() => {
+                              alert(
+                                `Content type changed to "${ct}" (Mock)\nSubmission: ${submission.id}`,
+                              );
+                              setContentTypeOpen(false);
+                            }}
+                            className={`w-full text-left px-3 py-1.5 text-[12px] hover:bg-gray-50 transition-colors ${
+                              ct === submission.contentType
+                                ? "text-gray-900 font-medium"
+                                : "text-gray-600"
+                            }`}
+                          >
+                            {ct}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <span className="text-[11px] text-gray-400 shrink-0">
+                    {submission.contentType}
+                  </span>
+                )}
                 {/* Title and author slide in when not on submission tab */}
                 <AnimatePresence>
                   {showCompactHeader && (

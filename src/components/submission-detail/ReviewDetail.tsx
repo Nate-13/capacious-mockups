@@ -36,63 +36,61 @@ function EditorReviewDetail({
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h3 className="text-[18px] font-serif font-bold text-gray-900">
-            {reviewer.name}
-          </h3>
-          <p className="text-[13px] text-gray-500 mt-0.5">
-            {reviewer.affiliation}
-          </p>
-          <p className="text-[12px] text-gray-400 mt-1">
-            Submitted {review.submittedDate}
-            {review.releasedToAuthor && (
-              <span> &middot; Released {review.releasedDate}</span>
-            )}
-          </p>
-        </div>
+      <div className="flex items-start justify-between mb-1">
+        <h3 className="text-[18px] font-serif font-bold text-gray-900">
+          {reviewer.name}
+        </h3>
         <span
-          className={`text-[12px] px-2.5 py-1 rounded font-medium ${
+          className={`text-[12px] px-2.5 py-1 rounded font-medium shrink-0 ${
             recommendationColors[review.recommendation] || "bg-gray-100"
           }`}
         >
           {review.recommendation}
         </span>
       </div>
-
-      {/* Confidential comments to editor */}
-      <div>
-        <h4 className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
-          Confidential Notes to Editor
-        </h4>
-        <div className="text-[13px] text-gray-600 bg-gray-50 border border-gray-100 p-4 rounded-lg">
-          {review.commentsToEditor}
-        </div>
+      <div className="flex items-center gap-2 text-[12px] text-gray-400 mb-6">
+        <span>{reviewer.affiliation}</span>
+        <span>&middot;</span>
+        <span>Submitted {review.submittedDate}</span>
+        {review.releasedToAuthor && (
+          <>
+            <span>&middot;</span>
+            <span>Released {review.releasedDate}</span>
+          </>
+        )}
       </div>
 
-      {/* Comments to author (editable by editor before release) */}
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <h4 className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
-            Comments to Author
-          </h4>
-          {!review.releasedToAuthor && !isEditing && (
+      {/* Confidential note — compact, not a full section */}
+      <div className="text-[13px] text-gray-500 italic border-l-2 border-gray-200 pl-3 mb-6">
+        <span className="text-[11px] not-italic font-medium text-gray-400 uppercase tracking-wide">
+          Note to editor
+        </span>
+        <p className="mt-1">{review.commentsToEditor}</p>
+      </div>
+
+      {/* Comments to author — the main body */}
+      <div className="mb-6">
+        {!review.releasedToAuthor && !isEditing && (
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+              Comments to author
+            </span>
             <button
               onClick={() => setIsEditing(true)}
               className="text-[12px] text-gray-500 hover:text-gray-700 underline"
             >
               Edit before releasing
             </button>
-          )}
-        </div>
+          </div>
+        )}
         {isEditing ? (
           <div>
             <textarea
               value={editedComments}
               onChange={(e) => setEditedComments(e.target.value)}
-              className="w-full p-4 border border-gray-300 rounded-lg text-[13px] min-h-[200px] focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className="w-full p-4 border border-gray-300 rounded-lg text-[14px] min-h-[200px] focus:outline-none focus:ring-2 focus:ring-gray-200 leading-relaxed"
             />
             <div className="flex gap-2 mt-2">
               <button
@@ -113,42 +111,44 @@ function EditorReviewDetail({
             </div>
           </div>
         ) : (
-          <div className="text-[13px] text-gray-700 bg-gray-50 border border-gray-100 p-4 rounded-lg whitespace-pre-wrap leading-relaxed">
+          <div className="text-[14px] text-gray-700 whitespace-pre-wrap leading-relaxed">
             {editedComments}
           </div>
         )}
       </div>
 
-      {/* Attached markup file */}
+      {/* Attached file */}
       {review.markupFile && (
-        <div>
-          <h4 className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
-            Attached File
-          </h4>
-          <button
-            onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
-            className="inline-flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-[6px] px-3 py-2 transition-colors"
+        <button
+          onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+          className="flex items-center gap-3 w-full text-left px-4 py-3 mb-6 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
+        >
+          <svg
+            className="w-5 h-5 text-gray-400 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              className="w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            {review.markupFile}
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <div>
+            <p className="text-[13px] font-medium text-gray-800">
+              {review.markupFile}
+            </p>
+            <p className="text-[11px] text-gray-400">
+              Marked-up manuscript
+            </p>
+          </div>
+        </button>
       )}
 
-      {/* Release button */}
-      {!review.releasedToAuthor && (
+      {/* Release / status */}
+      {!review.releasedToAuthor ? (
         <div className="flex justify-end pt-4 border-t border-gray-100">
           <Button
             variant="primary"
@@ -157,9 +157,8 @@ function EditorReviewDetail({
             Release to Author
           </Button>
         </div>
-      )}
-      {review.releasedToAuthor && (
-        <div className="text-[12px] text-gray-500 text-right pt-4 border-t border-gray-100">
+      ) : (
+        <div className="text-[12px] text-gray-400 text-right pt-4 border-t border-gray-100">
           Released to author
         </div>
       )}
@@ -179,9 +178,8 @@ function AuthorReviewDetail({
     review.editorModifiedComments || review.commentsToAuthor;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-start justify-between">
+    <div>
+      <div className="flex items-start justify-between mb-1">
         <h3 className="text-[18px] font-serif font-bold text-gray-900">
           Reviewer {index + 1}
         </h3>
@@ -193,35 +191,36 @@ function AuthorReviewDetail({
           {review.recommendation}
         </span>
       </div>
-
-      {/* Comments */}
       <div className="text-[14px] text-gray-700 whitespace-pre-wrap leading-relaxed">
         {displayComments}
       </div>
-
-      {/* Attached markup file */}
       {review.markupFile && (
-        <div className="pt-4 border-t border-gray-100">
-          <button
-            onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
-            className="inline-flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-[6px] px-3 py-2 transition-colors"
+        <button
+          onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+          className="flex items-center gap-3 w-full text-left px-4 py-3 mt-6 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
+        >
+          <svg
+            className="w-5 h-5 text-gray-400 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <svg
-              className="w-4 h-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            {review.markupFile}
-          </button>
-        </div>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <div>
+            <p className="text-[13px] font-medium text-gray-800">
+              {review.markupFile}
+            </p>
+            <p className="text-[11px] text-gray-400">
+              Marked-up manuscript
+            </p>
+          </div>
+        </button>
       )}
     </div>
   );
@@ -330,7 +329,6 @@ export default function ReviewDetail({
   isEditor,
   onReleaseReview,
 }: ReviewDetailProps) {
-  // No reviewer selected
   if (!reviewer) {
     return (
       <div className="h-full flex items-center justify-center">
@@ -342,7 +340,6 @@ export default function ReviewDetail({
   const isSubmitted = reviewer.status === "Submitted" && reviewer.review;
   const isPending = reviewer.status === "Pending";
 
-  // Editor view
   if (isEditor) {
     if (isSubmitted) {
       return (
@@ -351,13 +348,15 @@ export default function ReviewDetail({
     }
     if (isPending) {
       return (
-        <div className="space-y-3">
-          <h3 className="text-[18px] font-serif font-bold text-gray-900">
+        <div>
+          <h3 className="text-[18px] font-serif font-bold text-gray-900 mb-1">
             {reviewer.name}
           </h3>
-          <p className="text-[13px] text-gray-500">{reviewer.affiliation}</p>
+          <p className="text-[12px] text-gray-400 mb-4">
+            {reviewer.affiliation}
+          </p>
           {reviewer.expertise && reviewer.expertise.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-2">
+            <div className="flex flex-wrap gap-1.5 mb-4">
               {reviewer.expertise.map((tag) => (
                 <span
                   key={tag}
@@ -368,45 +367,39 @@ export default function ReviewDetail({
               ))}
             </div>
           )}
-          <div className="bg-gray-50 border border-gray-100 rounded-lg p-6 mt-4 text-center">
-            <p className="text-[14px] text-gray-500">
-              Awaiting review from {reviewer.name}
-            </p>
-          </div>
+          <p className="text-[14px] text-gray-500">
+            Awaiting review from {reviewer.name}
+          </p>
         </div>
       );
     }
   }
 
-  // Author view
   if (role === "Author" && isSubmitted && reviewer.review?.releasedToAuthor) {
     return (
       <AuthorReviewDetail review={reviewer.review!} index={reviewerIndex} />
     );
   }
 
-  // Reviewer view
   if (role === "Reviewer") {
     if (isPending) {
       return <ReviewerSubmitForm submissionId={submission.id} />;
     }
     if (isSubmitted) {
       return (
-        <div className="space-y-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <h3 className="text-[18px] font-serif font-bold text-gray-900">
-                Your Review
-              </h3>
-              <p className="text-[12px] text-gray-400 mt-1">
-                Submitted {reviewer.review!.submittedDate}
-              </p>
-            </div>
+        <div>
+          <div className="flex items-start justify-between mb-1">
+            <h3 className="text-[18px] font-serif font-bold text-gray-900">
+              Your Review
+            </h3>
             <span className="text-[12px] px-2.5 py-1 rounded font-medium bg-gray-100 text-gray-700">
               {reviewer.review!.recommendation}
             </span>
           </div>
-          <div className="text-[13px] text-gray-700 whitespace-pre-wrap leading-relaxed">
+          <p className="text-[12px] text-gray-400 mb-6">
+            Submitted {reviewer.review!.submittedDate}
+          </p>
+          <div className="text-[14px] text-gray-700 whitespace-pre-wrap leading-relaxed">
             {reviewer.review!.commentsToAuthor}
           </div>
         </div>

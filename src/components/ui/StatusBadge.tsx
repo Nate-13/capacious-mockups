@@ -77,22 +77,24 @@ function StatusBadge({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`${baseStyles} ${variantStyles} ${className} cursor-pointer hover:opacity-80 transition-opacity`}
+        className={`group ${baseStyles} ${variantStyles} ${className} cursor-pointer hover:opacity-80 transition-opacity`}
       >
         {status}
-        <svg
-          className="inline-block w-3 h-3 ml-1.5 opacity-60"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
+        <span className="inline-flex items-center align-middle w-0 group-hover:w-4 overflow-hidden transition-all duration-150">
+          <svg
+            className={`w-3 h-3 ml-1 shrink-0 opacity-60 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </span>
       </button>
       {isOpen && (
         <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-50 min-w-[200px]">
