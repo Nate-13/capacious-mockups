@@ -1,0 +1,33 @@
+src/components/submission-detail/ReviewsContent.tsx
+  e14dfae9115273df 120-137,194-208,284-294,436-437
+src/data/mockData.ts
+  e14dfae9115273df 50,93,329,356,363,386,393,416,423,460,467,489,495,642,649
+src/app/dashboard/[id]/page.tsx
+  e14dfae9115273df 3,21-22,41-43,45-48,105-128,200-202,219,221,234,254-255,267,271-272,274-281,285-297,299-302,304-345,349-352,354,358-360,362-363,365-372,374,381,384-385,387-392,400-407,409-421,426-430
+src/components/submission-detail/ReviewsSidebar.tsx
+  e14dfae9115273df 1-145
+src/components/submission-detail/ReviewDetail.tsx
+  e14dfae9115273df 1-3,5-51,53-418
+src/components/ReviewersSection.tsx
+  e14dfae9115273df 54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "d6e2b3e8e4e19a43bf22bf39e91d54c0fcef55e9",
+  "prompts": {
+    "e14dfae9115273df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2bf8122c-3fd6-48cf-b4eb-e84b646adf56",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 984,
+      "total_deletions": 260,
+      "accepted_lines": 808,
+      "overriden_lines": 3
+    }
+  }
+}
