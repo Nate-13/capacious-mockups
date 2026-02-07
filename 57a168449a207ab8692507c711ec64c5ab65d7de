@@ -1,0 +1,27 @@
+src/app/dashboard/[id]/page.tsx
+  e14dfae9115273df 3,23,44-61,234-289,293
+src/components/ui/StatusBadge.tsx
+  e14dfae9115273df 80,83-85,96-97
+src/components/submission-detail/ReviewDetail.tsx
+  e14dfae9115273df 41,46,53-62,65-70,73-75,77-79,87,93,114,120,122-130,132-147,150-151,160-161,182,198-206,208-216,218-223,352,355,359,391,399-402
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "57a168449a207ab8692507c711ec64c5ab65d7de",
+  "prompts": {
+    "e14dfae9115273df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2bf8122c-3fd6-48cf-b4eb-e84b646adf56",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 305,
+      "total_deletions": 235,
+      "accepted_lines": 183,
+      "overriden_lines": 0
+    }
+  }
+}
