@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Submission, Reviewer, Review } from "@/types";
+import { Submission, Reviewer, Review, ReviewRecommendation } from "@/types";
 import { Button } from "@/components/ui";
 
 interface ReviewsContentProps {
@@ -23,15 +23,16 @@ function EditorReviewCard({
 }) {
   const review = reviewer.review!;
   const [editedComments, setEditedComments] = useState(
-    review.editorModifiedComments || review.commentsToAuthor
+    review.editorModifiedComments || review.commentsToAuthor,
   );
   const [isEditing, setIsEditing] = useState(false);
 
   const recommendationColors: Record<string, string> = {
-    Accept: "bg-green-100 text-green-800",
-    "Minor Revisions": "bg-blue-100 text-blue-800",
-    "Major Revisions": "bg-yellow-100 text-yellow-800",
-    Reject: "bg-red-100 text-red-800",
+    Accept: "bg-[#E0E0E0] text-[#333]",
+    "Accept with Minor Changes": "bg-[#E0E0E0] text-[#333]",
+    "Conditional Accept": "bg-[#D0D0D0] text-[#333]",
+    "Revise & Resubmit": "bg-[#999] text-white",
+    Reject: "bg-[#555] text-white",
   };
 
   return (
@@ -44,8 +45,8 @@ function EditorReviewCard({
           <p className="text-[12px] text-gray-500">
             Submitted {review.submittedDate}
             {review.releasedToAuthor && (
-              <span className="ml-2 text-green-600">
-                · Released {review.releasedDate}
+              <span className="ml-2 text-gray-600">
+                &middot; Released {review.releasedDate}
               </span>
             )}
           </p>
@@ -94,7 +95,7 @@ function EditorReviewCard({
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => setIsEditing(false)}
-                className="text-[12px] px-3 py-1.5 bg-gray-800 text-white rounded hover:bg-gray-700"
+                className="text-[12px] px-3 py-1.5 bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
               >
                 Done Editing
               </button>
@@ -128,8 +129,8 @@ function EditorReviewCard({
         </div>
       )}
       {review.releasedToAuthor && (
-        <div className="text-[12px] text-green-600 text-right pt-2 border-t border-gray-100">
-          ✓ Released to author
+        <div className="text-[12px] text-gray-600 text-right pt-2 border-t border-gray-100">
+          Released to author
         </div>
       )}
     </div>
@@ -137,12 +138,19 @@ function EditorReviewCard({
 }
 
 // Author's view of an anonymous review
-function AuthorReviewCard({ review, index }: { review: Review; index: number }) {
+function AuthorReviewCard({
+  review,
+  index,
+}: {
+  review: Review;
+  index: number;
+}) {
   const recommendationColors: Record<string, string> = {
-    Accept: "bg-green-100 text-green-800",
-    "Minor Revisions": "bg-blue-100 text-blue-800",
-    "Major Revisions": "bg-yellow-100 text-yellow-800",
-    Reject: "bg-red-100 text-red-800",
+    Accept: "bg-[#E0E0E0] text-[#333]",
+    "Accept with Minor Changes": "bg-[#E0E0E0] text-[#333]",
+    "Conditional Accept": "bg-[#D0D0D0] text-[#333]",
+    "Revise & Resubmit": "bg-[#999] text-white",
+    Reject: "bg-[#555] text-white",
   };
 
   const displayComments =
@@ -169,6 +177,90 @@ function AuthorReviewCard({ review, index }: { review: Review; index: number }) 
   );
 }
 
+// Reviewer's own submission form
+function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
+  const [recommendation, setRecommendation] =
+    useState<ReviewRecommendation>("Accept");
+  const [commentsToEditor, setCommentsToEditor] = useState("");
+  const [commentsToAuthor, setCommentsToAuthor] = useState("");
+
+  const recommendationOptions: ReviewRecommendation[] = [
+    "Accept",
+    "Accept with Minor Changes",
+    "Conditional Accept",
+    "Revise & Resubmit",
+    "Reject",
+  ];
+
+  const handleSubmit = () => {
+    alert(
+      `Review submitted (Mock)\nSubmission: ${submissionId}\nRecommendation: ${recommendation}`,
+    );
+  };
+
+  return (
+    <div className="border border-gray-200 rounded-lg p-5 bg-white">
+      <h3 className="text-[15px] font-semibold text-gray-800 mb-4">
+        Submit Your Review
+      </h3>
+
+      <div className="space-y-4">
+        <div>
+          <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-2">
+            Recommendation
+          </label>
+          <select
+            value={recommendation}
+            onChange={(e) =>
+              setRecommendation(e.target.value as ReviewRecommendation)
+            }
+            className="w-full px-3 py-2 text-[13px] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200 bg-white"
+          >
+            {recommendationOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-2">
+            Confidential Comments to Editor
+          </label>
+          <textarea
+            value={commentsToEditor}
+            onChange={(e) => setCommentsToEditor(e.target.value)}
+            placeholder="These comments are only visible to the editor..."
+            className="w-full p-3 border border-gray-300 rounded text-[13px] min-h-[100px] focus:outline-none focus:ring-2 focus:ring-gray-200"
+          />
+        </div>
+
+        <div>
+          <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-2">
+            Comments to Author
+          </label>
+          <textarea
+            value={commentsToAuthor}
+            onChange={(e) => setCommentsToAuthor(e.target.value)}
+            placeholder="These comments will be shared with the author (after editor review)..."
+            className="w-full p-3 border border-gray-300 rounded text-[13px] min-h-[150px] focus:outline-none focus:ring-2 focus:ring-gray-200"
+          />
+        </div>
+
+        <div className="flex justify-end pt-2">
+          <button
+            onClick={handleSubmit}
+            className="px-4 py-2 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
+          >
+            Submit Review
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ReviewsContent({
   submission,
   role,
@@ -178,39 +270,97 @@ export default function ReviewsContent({
   // Get reviews that have been submitted
   const submittedReviews =
     submission.assignedReviewers?.filter(
-      (r) => r.status === "Submitted" && r.review
+      (r) => r.status === "Submitted" && r.review,
     ) || [];
+
+  const totalReviewers = submission.assignedReviewers?.length || 0;
+  const pendingReviewers =
+    submission.assignedReviewers?.filter((r) => r.status === "Pending") || [];
 
   // For authors: only show reviews that have been released
   const releasedReviews = submittedReviews.filter(
-    (r) => r.review?.releasedToAuthor
+    (r) => r.review?.releasedToAuthor,
   );
+
+  // For reviewer role: check if this reviewer has a pending review
+  const reviewerHasPending =
+    role === "Reviewer" &&
+    submission.assignedReviewers?.some((r) => r.status === "Pending");
+
+  // Summary of recommendations (for editor decision section)
+  const allSubmitted = totalReviewers > 0 && pendingReviewers.length === 0;
 
   return (
     <div className="space-y-6">
-      {/* Editor view */}
-      {isEditor && submittedReviews.length > 0 && (
-        <>
-          <div className="bg-white border border-gray-200 rounded-lg p-5">
-            <h2 className="text-[15px] font-semibold text-gray-800 mb-2">
-              Review Management
-            </h2>
-            <p className="text-[13px] text-gray-500">
+      {/* Review Summary */}
+      {(isEditor || role === "Reviewer") && totalReviewers > 0 && (
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
+          <h2 className="text-[15px] font-semibold text-gray-800 mb-2">
+            {isEditor ? "Review Management" : "Review Status"}
+          </h2>
+          <p className="text-[13px] text-gray-500">
+            {submittedReviews.length} of {totalReviewers} review
+            {totalReviewers !== 1 ? "s" : ""} submitted
+            {pendingReviewers.length > 0 &&
+              `, ${pendingReviewers.length} pending`}
+          </p>
+          {isEditor && (
+            <p className="text-[12px] text-gray-400 mt-1">
               Review submitted feedback and optionally edit comments before
               releasing to the author.
             </p>
+          )}
+        </div>
+      )}
+
+      {/* Editor view of submitted reviews */}
+      {isEditor && submittedReviews.length > 0 && (
+        <div className="space-y-4">
+          {submittedReviews.map((reviewer, index) => (
+            <EditorReviewCard
+              key={reviewer.id}
+              reviewer={reviewer}
+              index={index}
+              onRelease={onReleaseReview}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Editor decision recommendation after all reviews are in */}
+      {isEditor && allSubmitted && submittedReviews.length > 0 && (
+        <div className="bg-white border border-gray-200 rounded-lg p-5">
+          <h3 className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-3">
+            Reviewer Recommendations Summary
+          </h3>
+          <div className="space-y-2">
+            {submittedReviews.map((reviewer) => {
+              const rec = reviewer.review!.recommendation;
+              const recommendationColors: Record<string, string> = {
+                Accept: "bg-[#E0E0E0] text-[#333]",
+                "Accept with Minor Changes": "bg-[#E0E0E0] text-[#333]",
+                "Conditional Accept": "bg-[#D0D0D0] text-[#333]",
+                "Revise & Resubmit": "bg-[#999] text-white",
+                Reject: "bg-[#555] text-white",
+              };
+              return (
+                <div
+                  key={reviewer.id}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-[13px] text-gray-700">
+                    {reviewer.name}
+                  </span>
+                  <span
+                    className={`text-[12px] px-2 py-1 rounded font-medium ${recommendationColors[rec] || "bg-gray-100"}`}
+                  >
+                    {rec}
+                  </span>
+                </div>
+              );
+            })}
           </div>
-          <div className="space-y-4">
-            {submittedReviews.map((reviewer, index) => (
-              <EditorReviewCard
-                key={reviewer.id}
-                reviewer={reviewer}
-                index={index}
-                onRelease={onReleaseReview}
-              />
-            ))}
-          </div>
-        </>
+        </div>
       )}
 
       {/* Editor: Assigned reviewers list */}
@@ -235,8 +385,8 @@ export default function ReviewsContent({
                 </div>
                 <div className="text-right">
                   {reviewer.status === "Submitted" ? (
-                    <span className="text-[12px] text-green-600">
-                      ✓ Submitted
+                    <span className="text-[12px] text-gray-700 font-medium">
+                      Submitted
                     </span>
                   ) : (
                     <span className="text-[12px] text-gray-500">
@@ -253,6 +403,38 @@ export default function ReviewsContent({
         </div>
       )}
 
+      {/* Reviewer view: submit review form if pending */}
+      {reviewerHasPending && (
+        <ReviewerSubmitForm submissionId={submission.id} />
+      )}
+
+      {/* Reviewer view: show own submitted review */}
+      {role === "Reviewer" &&
+        submittedReviews.length > 0 &&
+        submittedReviews.map((reviewer, index) => (
+          <div
+            key={reviewer.id}
+            className="border border-gray-200 rounded-lg p-5 bg-white"
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h4 className="text-[14px] font-semibold text-gray-800">
+                  Your Review
+                </h4>
+                <p className="text-[12px] text-gray-500">
+                  Submitted {reviewer.review!.submittedDate}
+                </p>
+              </div>
+              <span className="text-[12px] px-2 py-1 rounded font-medium bg-gray-100 text-gray-700">
+                {reviewer.review!.recommendation}
+              </span>
+            </div>
+            <p className="text-[13px] text-gray-700 whitespace-pre-wrap">
+              {reviewer.review!.commentsToAuthor}
+            </p>
+          </div>
+        ))}
+
       {/* Author view */}
       {role === "Author" && releasedReviews.length > 0 && (
         <div className="space-y-4">
@@ -267,8 +449,11 @@ export default function ReviewsContent({
       )}
 
       {/* No reviews message */}
-      {((isEditor && submittedReviews.length === 0) ||
-        (role === "Author" && releasedReviews.length === 0)) && (
+      {((isEditor && submittedReviews.length === 0 && !totalReviewers) ||
+        (role === "Author" && releasedReviews.length === 0) ||
+        (role === "Reviewer" &&
+          !reviewerHasPending &&
+          submittedReviews.length === 0)) && (
         <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
           <p className="text-[14px] text-gray-500">No reviews available yet.</p>
         </div>

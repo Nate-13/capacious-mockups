@@ -15,7 +15,7 @@ export default function DocumentViewer({
     <div className="bg-[#525252] rounded-lg p-6 flex justify-center h-full overflow-hidden">
       <div className="bg-white w-full max-w-[800px] shadow-xl overflow-y-auto">
         <div className="p-10">
-          <h1 className="text-[20px] font-serif font-bold text-center mb-6 leading-tight">
+          <h1 className="text-[16px] font-serif font-bold text-center mb-6 leading-tight">
             {submission.title}
           </h1>
 

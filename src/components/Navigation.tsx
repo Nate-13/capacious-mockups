@@ -2,13 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRole } from "@/context/RoleContext";
 
 export default function Navigation() {
   const pathname = usePathname();
+  const { role } = useRole();
+
+  const showPeopleLink = role === "Managing Editor" || role === "Admin";
 
   const navLinks = [
     { href: "/dashboard", label: "Dashboard" },
     { href: "/submit", label: "Submit" },
+    ...(showPeopleLink ? [{ href: "/admin", label: "People" }] : []),
   ];
 
   return (

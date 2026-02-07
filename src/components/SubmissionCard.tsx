@@ -9,6 +9,8 @@ interface SubmissionCardProps {
   author: string;
   status: string;
   submittedDate: string;
+  contentType?: string;
+  submissionId?: string;
   metaInfo?: string;
   onClick?: () => void;
 }
@@ -19,6 +21,8 @@ export default function SubmissionCard({
   author,
   status,
   submittedDate,
+  contentType,
+  submissionId,
   metaInfo,
   onClick,
 }: SubmissionCardProps) {
@@ -28,6 +32,22 @@ export default function SubmissionCard({
       onClick={onClick}
       className="mb-4 min-h-[140px] cursor-pointer"
     >
+      {/* Content type and submission ID */}
+      {(contentType || submissionId) && (
+        <div className="flex items-center gap-2 mb-1">
+          {contentType && (
+            <span className="text-[11px] uppercase tracking-wide text-[#999] font-medium">
+              {contentType}
+            </span>
+          )}
+          {submissionId && (
+            <span className="text-[11px] text-[#999] font-mono">
+              #{submissionId}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Title */}
       <h3 className="text-[18px] font-serif font-bold text-black leading-tight mb-1 line-clamp-2">
         {title}

@@ -8,7 +8,6 @@ interface TimelineProps {
 
 // Stage definitions
 const STAGES = [
-  { key: "submitted", label: "Submitted" },
   { key: "desk-review", label: "Desk Review" },
   { key: "peer-review", label: "Peer Review" },
   { key: "copy-editing", label: "Copy Editing" },
@@ -21,21 +20,21 @@ function getStageFromStatus(status: SubmissionStatus): {
   isRejected: boolean;
 } {
   switch (status) {
-    case "Submitted":
-      return { currentStage: 1, isRejected: false };
     case "In Desk Review":
-      return { currentStage: 2, isRejected: false };
+      return { currentStage: 1, isRejected: false };
     case "In Peer Review":
-    case "Revision Requested":
+    case "Accept with Minor Changes":
     case "Conditional Accept":
-      return { currentStage: 3, isRejected: false };
+      return { currentStage: 2, isRejected: false };
     case "Accepted":
     case "In Copy Editing":
-      return { currentStage: 4, isRejected: false };
+      return { currentStage: 3, isRejected: false };
+    case "Ready for Production":
     case "Published":
-      return { currentStage: 5, isRejected: false };
+      return { currentStage: 4, isRejected: false };
     case "Rejected":
-      return { currentStage: 2, isRejected: true };
+    case "Revise & Resubmit":
+      return { currentStage: 1, isRejected: true };
     default:
       return { currentStage: 1, isRejected: false };
   }
@@ -85,8 +84,7 @@ export default function Timeline({ currentStatus }: TimelineProps) {
   // For rejected status, we show a modified timeline
   const stages = isRejected
     ? [
-        STAGES[0], // Submitted
-        STAGES[1], // Desk Review
+        STAGES[0], // Desk Review
         { key: "rejected", label: "Rejected" },
       ]
     : STAGES;

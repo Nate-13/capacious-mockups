@@ -1,24 +1,38 @@
-// Submission status types
+// Submission status types - full workflow
 export type SubmissionStatus =
-  | "Submitted"
   | "In Desk Review"
   | "In Peer Review"
-  | "Revision Requested"
+  | "Accept with Minor Changes"
   | "Conditional Accept"
   | "Accepted"
   | "Rejected"
+  | "Revise & Resubmit"
   | "In Copy Editing"
+  | "Ready for Production"
   | "Published";
+
+// Content/submission types
+export type ContentType =
+  | "Article"
+  | "Dialogue"
+  | "Interstice"
+  | "Introduction"
+  | "Afterword"
+  | "Book Review";
 
 // Reviewer status for assigned reviewers
 export type ReviewerStatus = "Pending" | "Submitted";
 
-// Review recommendation
+// Review recommendation (what reviewers choose)
 export type ReviewRecommendation =
   | "Accept"
-  | "Minor Revisions"
-  | "Major Revisions"
+  | "Accept with Minor Changes"
+  | "Conditional Accept"
+  | "Revise & Resubmit"
   | "Reject";
+
+// File types that can be attached to a submission
+export type FileCategory = "manuscript" | "image" | "video" | "supplement" | "copyedit-pdf" | "copyedit-word" | "markup";
 
 // A submitted review
 export interface Review {
@@ -33,6 +47,8 @@ export interface Review {
   releasedToAuthor: boolean;
   releasedDate?: string;
   editorModifiedComments?: string; // If editor edited the comments before releasing
+  // Optional attached markup file
+  markupFile?: string;
 }
 
 // A reviewer
@@ -51,6 +67,19 @@ export interface Reviewer {
   review?: Review;
 }
 
+// A copy editor
+export interface CopyEditor {
+  id: string;
+  name: string;
+  email: string;
+  affiliation: string;
+  expertise: string[];
+  // For assigned copy editors:
+  status?: "Assigned" | "In Progress" | "Completed";
+  assignedDate?: string;
+  completedDate?: string;
+}
+
 // A submission/manuscript
 export interface Submission {
   id: string;
@@ -58,17 +87,27 @@ export interface Submission {
   authorName: string;
   authorEmail: string;
   affiliation: string;
+  preferredName?: string;
+  pronouns?: string;
+  biography?: string;
   status: SubmissionStatus;
+  contentType: ContentType;
   submittedDate: string;
   currentVersion: number;
   assignedReviewers?: Reviewer[];
-  assignedCopyEditor?: string;
+  assignedCopyEditors?: CopyEditor[];
+  // Editor who entered the submission (for backend-entered content)
+  enteredByEditor?: boolean;
+  editorNotes?: string;
 }
 
 // Activity log entry
 export interface ActivityEntry {
   date: string;
   description: string;
+  actor?: string; // Who performed the action
+  type?: "status-change" | "file-upload" | "review" | "assignment" | "email" | "decision" | "general";
+  fileId?: string; // Links to a FileVersion for download (used in file-upload entries)
 }
 
 // File version
@@ -78,6 +117,8 @@ export interface FileVersion {
   version: number;
   label: string;
   uploadedDate: string;
+  category?: FileCategory;
+  uploadedBy?: string;
 }
 
 // Activity log keyed by submission ID

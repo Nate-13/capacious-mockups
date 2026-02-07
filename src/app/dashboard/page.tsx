@@ -8,8 +8,6 @@ import { Submission } from "@/types";
 import DashboardFilters from "@/components/DashboardFilters";
 import SubmissionCard from "@/components/SubmissionCard";
 
-
-
 // Convert status to filter value format (lowercase with hyphens)
 function statusToFilterValue(status: string): string {
   return status.toLowerCase().replace(/\s+/g, "-");
@@ -20,6 +18,7 @@ export default function DashboardPage() {
   const { role } = useRole();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
 
   // Determine if filters should be shown (Editor and Admin only)
   const showFilters = role === "Managing Editor" || role === "Admin";
@@ -73,14 +72,71 @@ export default function DashboardPage() {
       );
     }
 
+    // Type filter (only for roles that have filters)
+    if (typeFilter && showFilters) {
+      result = result.filter(
+        (submission) => submission.contentType === typeFilter,
+      );
+    }
+
     return result;
-  }, [role, searchQuery, statusFilter, showFilters]);
+  }, [role, searchQuery, statusFilter, typeFilter, showFilters]);
+
+  // Compute meta info based on role and submission status
+  const getMetaInfo = (submission: Submission): string | undefined => {
+    if (
+      role === "Copy Editor" &&
+      submission.assignedCopyEditors &&
+      submission.assignedCopyEditors.length > 0
+    ) {
+      const editors = submission.assignedCopyEditors
+        .map((ce) => ce.name)
+        .join(", ");
+      return `Copy editor${submission.assignedCopyEditors.length !== 1 ? "s" : ""}: ${editors}`;
+    }
+
+    if (submission.status === "In Copy Editing") {
+      if (
+        submission.assignedCopyEditors &&
+        submission.assignedCopyEditors.length > 0
+      ) {
+        const editors = submission.assignedCopyEditors
+          .map((ce) => ce.name)
+          .join(", ");
+        return `Copy editor${submission.assignedCopyEditors.length !== 1 ? "s" : ""}: ${editors}`;
+      }
+    }
+
+    if (
+      submission.status === "In Peer Review" &&
+      submission.assignedReviewers &&
+      submission.assignedReviewers.length > 0
+    ) {
+      const submitted = submission.assignedReviewers.filter(
+        (r) => r.status === "Submitted",
+      ).length;
+      const total = submission.assignedReviewers.length;
+      return `${submitted}/${total} review${total !== 1 ? "s" : ""} submitted`;
+    }
+
+    if (
+      submission.assignedReviewers &&
+      submission.assignedReviewers.length > 0
+    ) {
+      return `${submission.assignedReviewers.length} reviewer${submission.assignedReviewers.length !== 1 ? "s" : ""} assigned`;
+    }
+
+    if (submission.status === "Accepted") {
+      return "Ready for copy editing";
+    }
+
+    return undefined;
+  };
 
   // Handle card click navigation
   const handleCardClick = (submissionId: string) => {
     router.push(`/dashboard/${submissionId}`);
   };
-
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] px-6 py-8">
@@ -103,6 +159,8 @@ export default function DashboardPage() {
             onSearchChange={setSearchQuery}
             statusFilter={statusFilter}
             onStatusChange={setStatusFilter}
+            typeFilter={typeFilter}
+            onTypeChange={setTypeFilter}
           />
         )}
 
@@ -117,12 +175,9 @@ export default function DashboardPage() {
                 author={submission.authorName}
                 status={submission.status}
                 submittedDate={submission.submittedDate}
-                metaInfo={
-                  submission.assignedReviewers &&
-                  submission.assignedReviewers.length > 0
-                    ? `${submission.assignedReviewers.length} reviewer${submission.assignedReviewers.length !== 1 ? "s" : ""} assigned`
-                    : undefined
-                }
+                contentType={submission.contentType}
+                submissionId={submission.id}
+                metaInfo={getMetaInfo(submission)}
                 onClick={() => handleCardClick(submission.id)}
               />
             ))}
@@ -130,18 +185,10 @@ export default function DashboardPage() {
         ) : (
           /* Empty State */
           <div className="flex flex-col items-center justify-center py-[60px]">
-            {/* Icon placeholder */}
-            <div className="w-[48px] h-[48px] border border-[#E0E0E0] rounded-lg mb-4 flex items-center justify-center">
-              <span className="text-[#999] text-xl">[ ]</span>
-            </div>
-
             {/* Empty state text */}
-            <h2 className="text-[18px] font-medium text-black mb-2">
+            <h2 className="text-[18px] font-medium text-black mb-6">
               No submissions
             </h2>
-            <p className="text-[14px] text-[#666] mb-6">
-              There are no submissions to display
-            </p>
 
             {/* Submit button */}
             <button

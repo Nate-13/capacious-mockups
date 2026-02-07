@@ -1,6 +1,6 @@
 "use client";
 
-export type TabType = "submission" | "reviews" | "activity";
+export type TabType = "submission" | "reviews" | "activity" | "copy-editing";
 
 export interface Tab {
   id: TabType;
