@@ -1,0 +1,42 @@
+docs/erd-audit.md
+  e14dfae9115273df 1-213
+docs/erd-final.md
+  e14dfae9115273df 1-670
+src/app/erd/page.tsx
+  e3cd581df4dbeb90 1-621
+docs/erd.md
+  e14dfae9115273df 1-702
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.1",
+  "base_commit_sha": "62d94f1a2f3977e06f57c57d0910f3f5e8e15602",
+  "prompts": {
+    "e14dfae9115273df": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2bf8122c-3fd6-48cf-b4eb-e84b646adf56",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 1642,
+      "total_deletions": 57,
+      "accepted_lines": 1585,
+      "overriden_lines": 0
+    },
+    "e3cd581df4dbeb90": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8a55b864-8e46-42cc-a234-f97ca4a53004",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 632,
+      "total_deletions": 1,
+      "accepted_lines": 622,
+      "overriden_lines": 0
+    }
+  }
+}
