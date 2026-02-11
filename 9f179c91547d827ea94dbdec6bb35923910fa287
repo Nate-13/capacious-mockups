@@ -1,0 +1,9 @@
+src/app/erd/page.tsx
+  e3cd581df4dbeb90 1-621
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.1",
+  "base_commit_sha": "9f179c91547d827ea94dbdec6bb35923910fa287",
+  "prompts": {}
+}
