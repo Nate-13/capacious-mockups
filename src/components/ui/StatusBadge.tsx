@@ -10,16 +10,16 @@ interface StatusBadgeProps {
 }
 
 const statusStyles: Record<SubmissionStatus, string> = {
-  "In Desk Review": "bg-[#E0E0E0] text-[#333]",
-  "In Peer Review": "bg-[#E0E0E0] text-[#333]",
-  "Accept with Minor Changes": "bg-[#E0E0E0] text-[#333]",
-  "Conditional Accept": "bg-[#333] text-white",
-  Accepted: "bg-[#333] text-white",
-  Rejected: "bg-[#999] text-white",
-  "Revise & Resubmit": "bg-[#999] text-[#333]",
-  "In Copy Editing": "bg-[#E0E0E0] text-[#333]",
-  "Ready for Production": "bg-[#333] text-white",
-  Published: "bg-[#333] text-white",
+  "In Desk Review": "bg-[#E2E8F0] text-[#475569]",
+  "In Peer Review": "bg-[#DBEAFE] text-[#1D4ED8]",
+  "Revise & Resubmit": "bg-[#FEF3C7] text-[#B45309]",
+  "Accept with Minor Changes": "bg-[#CCFBF1] text-[#0F766E]",
+  "Conditional Accept": "bg-[#F3E8FF] text-[#7C3AED]",
+  Accepted: "bg-[#D1FAE5] text-[#059669]",
+  "In Copy Editing": "bg-[#E0E7FF] text-[#4338CA]",
+  "Ready for Production": "bg-[#FFEDD5] text-[#C2410C]",
+  Rejected: "bg-[#FEE2E2] text-[#DC2626]",
+  Published: "bg-[#D1FAE5] text-[#047857]",
 };
 
 const allStatuses: SubmissionStatus[] = [

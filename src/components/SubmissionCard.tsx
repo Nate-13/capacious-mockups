@@ -10,7 +10,8 @@ interface SubmissionCardProps {
   status: string;
   submittedDate: string;
   contentType?: string;
-  submissionId?: string;
+
+  actionNeeded?: boolean;
   metaInfo?: string;
   onClick?: () => void;
 }
@@ -22,7 +23,8 @@ export default function SubmissionCard({
   status,
   submittedDate,
   contentType,
-  submissionId,
+
+  actionNeeded,
   metaInfo,
   onClick,
 }: SubmissionCardProps) {
@@ -30,21 +32,17 @@ export default function SubmissionCard({
     <Card
       hoverable
       onClick={onClick}
-      className="mb-4 min-h-[140px] cursor-pointer"
+      className="mb-4 min-h-[140px] cursor-pointer relative"
     >
-      {/* Content type and submission ID */}
-      {(contentType || submissionId) && (
-        <div className="flex items-center gap-2 mb-1">
-          {contentType && (
-            <span className="text-[11px] uppercase tracking-wide text-[#999] font-medium">
-              {contentType}
-            </span>
-          )}
-          {submissionId && (
-            <span className="text-[11px] text-[#999] font-mono">
-              #{submissionId}
-            </span>
-          )}
+      {actionNeeded && (
+        <span className="absolute top-4 right-4 w-2 h-2 rounded-full bg-[#F97316]" />
+      )}
+      {/* Content type */}
+      {contentType && (
+        <div className="mb-1">
+          <span className="text-[11px] uppercase tracking-wide text-[#999] font-medium">
+            {contentType}
+          </span>
         </div>
       )}
 

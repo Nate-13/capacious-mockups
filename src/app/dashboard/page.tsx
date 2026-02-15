@@ -133,6 +133,39 @@ export default function DashboardPage() {
     return undefined;
   };
 
+  // Determine if a submission needs the current user's action
+  const getActionNeeded = (submission: Submission): boolean => {
+    switch (role) {
+      case "Author":
+        return ["Revise & Resubmit", "Accept with Minor Changes", "Conditional Accept"].includes(submission.status);
+      case "Reviewer":
+        return (
+          submission.assignedReviewers?.some((r) => r.status === "Pending") ??
+          false
+        );
+      case "Copy Editor":
+        return (
+          submission.assignedCopyEditors?.some(
+            (ce) => ce.status === "Assigned" || ce.status === "In Progress",
+          ) ?? false
+        );
+      case "Managing Editor":
+      case "Admin": {
+        if (submission.status === "In Desk Review") return true;
+        if (
+          submission.status === "In Peer Review" &&
+          submission.assignedReviewers &&
+          submission.assignedReviewers.length > 0 &&
+          submission.assignedReviewers.every((r) => r.status === "Submitted")
+        )
+          return true;
+        return false;
+      }
+      default:
+        return false;
+    }
+  };
+
   // Handle card click navigation
   const handleCardClick = (submissionId: string) => {
     router.push(`/dashboard/${submissionId}`);
@@ -176,7 +209,7 @@ export default function DashboardPage() {
                 status={submission.status}
                 submittedDate={submission.submittedDate}
                 contentType={submission.contentType}
-                submissionId={submission.id}
+                actionNeeded={getActionNeeded(submission)}
                 metaInfo={getMetaInfo(submission)}
                 onClick={() => handleCardClick(submission.id)}
               />
