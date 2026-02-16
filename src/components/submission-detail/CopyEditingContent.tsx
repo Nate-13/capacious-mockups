@@ -1,6 +1,7 @@
 "use client";
 
 import { Submission, FileVersion } from "@/types";
+import FileUpload from "@/components/ui/FileUpload";
 
 interface CopyEditingContentProps {
   submission: Submission;
@@ -14,6 +15,36 @@ const statusColors: Record<string, string> = {
   "In Progress": "text-gray-700",
   Completed: "text-gray-900 font-medium",
 };
+
+function DownloadButton({ file }: { file: FileVersion }) {
+  return (
+    <button
+      onClick={() => alert(`Download: ${file.filename} (Mock)`)}
+      className="flex items-center gap-3 w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
+    >
+      <svg
+        className="w-5 h-5 text-gray-400 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+        />
+      </svg>
+      <div>
+        <p className="text-[13px] font-medium text-gray-800">{file.filename}</p>
+        <p className="text-[11px] text-gray-400">
+          {file.label} &middot; {file.uploadedDate}
+          {file.uploadedBy && ` · ${file.uploadedBy}`}
+        </p>
+      </div>
+    </button>
+  );
+}
 
 export default function CopyEditingContent({
   submission,
@@ -32,9 +63,136 @@ export default function CopyEditingContent({
     .filter((f) => f.category === "copyedit-pdf")
     .pop();
 
+  const latestWorkingFile = [...copyEditFiles]
+    .filter((f) => f.category === "copyedit-word")
+    .pop();
+
   const assignedEditors = submission.assignedCopyEditors || [];
 
-  // Build status subtitle
+  // --- Author view ---
+  if (role === "Author") {
+    const hasFileToReview = !!latestCePdf;
+
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="mb-5">
+          <h2 className="text-[20px] font-serif font-bold text-gray-900 leading-tight">
+            Copy Editing
+          </h2>
+        </div>
+
+        {hasFileToReview ? (
+          <>
+            <p className="text-[14px] text-gray-600 mb-5">
+              Your copy edited manuscript is ready for review. Download the file
+              below, review the changes, and upload your annotated response.
+            </p>
+
+            {/* Copy editor comments for the author */}
+            {assignedEditors.some((e) => e.comments) && (
+              <div className="mb-5">
+                <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
+                  Notes from copy editor
+                </div>
+                {assignedEditors
+                  .filter((e) => e.comments)
+                  .map((editor) => (
+                    <div
+                      key={editor.id}
+                      className="bg-gray-50 border border-gray-200 rounded-lg p-4"
+                    >
+                      <p className="text-[12px] font-medium text-gray-700 mb-1">
+                        {editor.name}
+                      </p>
+                      <p className="text-[13px] text-gray-600 whitespace-pre-line leading-relaxed">
+                        {editor.comments}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            <div className="mb-5">
+              <DownloadButton file={latestCePdf} />
+            </div>
+            <FileUpload
+              label="Upload your annotated response"
+              accept=".pdf"
+              actionAccent
+              className="h-auto"
+            />
+          </>
+        ) : (
+          <p className="text-[14px] text-gray-500">
+            Your manuscript is being copy edited. You&apos;ll be notified when
+            it&apos;s ready for your review.
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // --- Copy Editor view ---
+  if (role === "Copy Editor") {
+    const otherEditors = assignedEditors.filter(
+      (e) => e.name !== "Maria Santos",
+    );
+    const workingFile =
+      latestWorkingFile ||
+      files.filter((f) => f.category === "manuscript").pop();
+
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg p-6">
+        <div className="mb-5">
+          <h2 className="text-[20px] font-serif font-bold text-gray-900 leading-tight">
+            Copy Editing
+          </h2>
+          <p className="text-[13px] text-gray-500 mt-1">Your assignment</p>
+        </div>
+
+        {/* Working file to download */}
+        {workingFile && (
+          <div className="mb-5">
+            <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
+              Current working file
+            </div>
+            <DownloadButton file={workingFile} />
+          </div>
+        )}
+
+        {/* Comments */}
+        <div className="mb-5">
+          <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
+            Comments for editor &amp; author
+          </div>
+          <textarea
+            placeholder="Add notes about your edits, queries for the author, style decisions..."
+            className="w-full border border-gray-200 rounded-lg p-3 text-[13px] text-gray-700 placeholder-gray-400 resize-none focus:outline-none focus:border-gray-400 transition-colors"
+            rows={4}
+          />
+        </div>
+
+        {/* Upload edited version */}
+        <div className="mb-5">
+          <FileUpload
+            label="Upload edited version"
+            accept=".pdf,.doc,.docx"
+            actionAccent
+            className="h-auto"
+          />
+        </div>
+
+        {/* Other assigned editors */}
+        {otherEditors.length > 0 && (
+          <p className="text-[12px] text-gray-400">
+            Also assigned: {otherEditors.map((e) => e.name).join(", ")}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // --- Managing Editor / Admin view ---
   const inProgressCount = assignedEditors.filter(
     (e) => e.status === "In Progress",
   ).length;
@@ -55,77 +213,14 @@ export default function CopyEditingContent({
     statusParts.push(`${completedCount} completed`);
   }
 
-  // Author view — simplified
-  if (role === "Author") {
-    return (
-      <div className="bg-white border border-gray-200 rounded-lg p-6">
-        {/* Grounding header */}
-        <div className="mb-6">
-          <h2 className="text-[20px] font-serif font-bold text-gray-900 leading-tight">
-            Copy Editing
-          </h2>
-          <p className="text-[13px] text-gray-500 mt-1">
-            Your manuscript is being copy edited
-          </p>
-        </div>
+  // Show only the most relevant files: latest CE PDF + latest working doc
+  const currentFiles = [latestCePdf, latestWorkingFile].filter(
+    (f): f is FileVersion => !!f,
+  );
 
-        {/* Latest CE PDF — prominent download */}
-        {latestCePdf && (
-          <div className="mb-6">
-            <button
-              onClick={() => alert(`Download: ${latestCePdf.filename} (Mock)`)}
-              className="flex items-center gap-3 w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
-            >
-              <svg
-                className="w-5 h-5 text-gray-400 shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              <div>
-                <p className="text-[13px] font-medium text-gray-800">
-                  {latestCePdf.filename}
-                </p>
-                <p className="text-[11px] text-gray-400">
-                  {latestCePdf.label} &middot; {latestCePdf.uploadedDate}
-                </p>
-              </div>
-            </button>
-          </div>
-        )}
-
-        {/* Upload response */}
-        <div>
-          <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
-            Upload Response
-          </div>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-            <p className="text-[13px] text-gray-500">
-              Drag and drop your annotated PDF here, or click to browse
-            </p>
-            <button
-              onClick={() => alert("File upload (Mock)")}
-              className="mt-3 px-4 py-2 text-[13px] bg-white text-[#333] border border-[#333] rounded-[6px] hover:bg-gray-50 transition-colors"
-            >
-              Choose File
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Editor / Copy Editor view — clean single panel
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-6">
-      {/* Grounding header with status */}
+      {/* Header */}
       <div className="mb-6">
         <h2 className="text-[20px] font-serif font-bold text-gray-900 leading-tight">
           Copy Editing
@@ -137,41 +232,50 @@ export default function CopyEditingContent({
         )}
       </div>
 
-      {/* Copy editors list — clean rows, no card wrapper */}
+      {/* Copy editors list */}
       {assignedEditors.length > 0 ? (
         <div className="mb-6">
           {assignedEditors.map((editor, i) => (
             <div
               key={editor.id}
-              className={`flex items-center justify-between py-3 ${
+              className={`py-3 ${
                 i < assignedEditors.length - 1 ? "border-b border-gray-100" : ""
               }`}
             >
-              <div>
-                <p className="text-[14px] font-medium text-gray-800">
-                  {editor.name}
-                </p>
-                <p className="text-[12px] text-gray-500">
-                  {editor.affiliation}
-                  {editor.assignedDate && (
-                    <span className="text-gray-400">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[14px] font-medium text-gray-800">
+                    {editor.name}
+                  </p>
+                  <p className="text-[12px] text-gray-500">
+                    {editor.affiliation}
+                    {editor.assignedDate && (
+                      <span className="text-gray-400">
+                        {" "}
+                        &middot; Assigned {editor.assignedDate}
+                      </span>
+                    )}
+                  </p>
+                </div>
+                <span
+                  className={`text-[12px] ${statusColors[editor.status || "Assigned"] || "text-gray-500"}`}
+                >
+                  {editor.status}
+                  {editor.completedDate && (
+                    <span className="text-gray-400 font-normal">
                       {" "}
-                      &middot; Assigned {editor.assignedDate}
+                      {editor.completedDate}
                     </span>
                   )}
-                </p>
+                </span>
               </div>
-              <span
-                className={`text-[12px] ${statusColors[editor.status || "Assigned"] || "text-gray-500"}`}
-              >
-                {editor.status}
-                {editor.completedDate && (
-                  <span className="text-gray-400 font-normal">
-                    {" "}
-                    {editor.completedDate}
-                  </span>
-                )}
-              </span>
+              {editor.comments && (
+                <div className="mt-2 bg-gray-50 border border-gray-100 rounded-lg px-3 py-2">
+                  <p className="text-[12px] text-gray-600 whitespace-pre-line leading-relaxed">
+                    {editor.comments}
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -181,80 +285,19 @@ export default function CopyEditingContent({
         </p>
       )}
 
-      {/* Assign button — editor only */}
-      {isEditor && (
-        <button
-          onClick={() =>
-            alert(
-              "Copy editor assignment modal would open here. This is a mockup.",
-            )
-          }
-          className="w-full mb-6 p-3 text-[13px] text-gray-500 border border-dashed border-gray-300 rounded-lg bg-transparent hover:bg-gray-50 hover:border-gray-400 transition-colors"
-        >
-          + Assign Copy Editor
-        </button>
-      )}
-
-      {/* Files — prominent download rows */}
-      {copyEditFiles.length > 0 && (
+      {/* Current files */}
+      {currentFiles.length > 0 && (
         <div className="mb-6">
           <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
-            Files
+            Current files
           </div>
           <div className="space-y-2">
-            {copyEditFiles.map((file) => (
-              <button
-                key={file.id}
-                onClick={() => alert(`Download ${file.filename} (Mock)`)}
-                className="flex items-center gap-3 w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
-              >
-                <svg
-                  className="w-5 h-5 text-gray-400 shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                <div>
-                  <p className="text-[13px] font-medium text-gray-800">
-                    {file.filename}
-                  </p>
-                  <p className="text-[11px] text-gray-400">
-                    {file.label} &middot; {file.uploadedDate}
-                    {file.uploadedBy && ` · ${file.uploadedBy}`}
-                  </p>
-                </div>
-              </button>
+            {currentFiles.map((file) => (
+              <DownloadButton key={file.id} file={file} />
             ))}
           </div>
         </div>
       )}
-
-      {/* Mark as Ready for Production — editor only */}
-      {isEditor && submission.status === "In Copy Editing" && (
-        <div className="pt-4 border-t border-gray-100">
-          <button
-            onClick={() => {
-              alert(
-                `Marked as Ready for Production (Mock)\nSubmission: ${submission.id}`,
-              );
-            }}
-            className="px-4 py-2 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
-          >
-            Mark as Ready for Production
-          </button>
-          <p className="text-[11px] text-gray-400 mt-2">
-            Email notification will be sent to author
-          </p>
-        </div>
-      )}
-
     </div>
   );
 }

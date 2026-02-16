@@ -6,6 +6,7 @@ export interface Tab {
   id: TabType;
   label: string;
   count?: number;
+  hasNotification?: boolean;
 }
 
 interface TabsCardProps {
@@ -32,6 +33,9 @@ export default function TabsCard({
           }`}
         >
           {tab.label}
+          {tab.hasNotification && activeTab !== tab.id && (
+            <span className="ml-1 w-1.5 h-1.5 rounded-full bg-[#F97316] inline-block" />
+          )}
           {tab.count !== undefined && (
             <span className="ml-1.5 px-1.5 py-0.5 text-[11px] bg-gray-200 rounded">
               {tab.count}

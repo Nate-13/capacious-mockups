@@ -20,6 +20,7 @@ import EditorActions from "@/components/submission-detail/EditorActions";
 import CopyEditingContent from "@/components/submission-detail/CopyEditingContent";
 import ReviewsSidebar from "@/components/submission-detail/ReviewsSidebar";
 import ReviewDetail from "@/components/submission-detail/ReviewDetail";
+import FileUpload from "@/components/ui/FileUpload";
 import { ContentType, FileVersion, SubmissionStatus } from "@/types";
 
 interface PageProps {
@@ -60,8 +61,26 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     }
   }, [contentTypeOpen]);
 
-  // Sidebar stays open for submission and reviews tabs
-  const showSidebar = activeTab === "submission" || activeTab === "reviews";
+  // Auto-select the first relevant reviewer when switching to reviews tab
+  const effectiveReviewerId = useMemo(() => {
+    if (!submission || activeTab !== "reviews") return null;
+    const reviewers = submission.assignedReviewers || [];
+    // If we have a valid selection, keep it
+    if (
+      selectedReviewerId &&
+      reviewers.find((r) => r.id === selectedReviewerId)
+    )
+      return selectedReviewerId;
+    // Auto-select first submitted, or first reviewer
+    const firstSubmitted = reviewers.find((r) => r.status === "Submitted");
+    return firstSubmitted?.id || reviewers[0]?.id || null;
+  }, [activeTab, selectedReviewerId, submission]);
+
+  // Sidebar stays open for submission, reviews (non-reviewer), and copy editing tabs
+  const showSidebar =
+    activeTab === "submission" ||
+    (activeTab === "reviews" && role !== "Reviewer") ||
+    activeTab === "copy-editing";
   // Compact header (title/author in top bar) for all non-submission tabs
   const showCompactHeader = activeTab !== "submission";
 
@@ -91,49 +110,70 @@ export default function SubmissionDetailPage({ params }: PageProps) {
   );
 
   const showReviewsTab =
-    (isEditor && submittedReviews.length > 0) ||
-    (role === "Author" && releasedReviews.length > 0) ||
-    (role === "Reviewer" &&
-      submission.assignedReviewers &&
-      submission.assignedReviewers.length > 0);
+    role !== "Copy Editor" &&
+    (submittedReviews.length > 0 ||
+      (role === "Reviewer" &&
+        submission.assignedReviewers &&
+        submission.assignedReviewers.length > 0));
 
   const showCopyEditingTab =
     submission.status === "In Copy Editing" ||
     submission.status === "Ready for Production" ||
     submission.status === "Published";
 
-  const tabs: Tab[] = [{ id: "submission", label: "Submission" }];
+  // Compute tab notifications based on role
+  const hasPendingReview =
+    role === "Reviewer" &&
+    submission.assignedReviewers?.some((r) => r.status === "Pending");
+  const allReviewsIn =
+    isEditor &&
+    submission.status === "In Peer Review" &&
+    submission.assignedReviewers &&
+    submission.assignedReviewers.length > 0 &&
+    submission.assignedReviewers.every((r) => r.status === "Submitted");
+  const authorNeedsRevision =
+    role === "Author" &&
+    (submission.status === "Accept with Minor Changes" ||
+      submission.status === "Conditional Accept");
+  const editorNeedsDeskDecision =
+    isEditor && submission.status === "In Desk Review";
+  const hasCePdf = files.some((f) => f.category === "copyedit-pdf");
+  const authorNeedsCeResponse = role === "Author" && hasCePdf;
+  const ceNeedsWork =
+    role === "Copy Editor" &&
+    submission.assignedCopyEditors?.some(
+      (e) => e.status === "Assigned" || e.status === "In Progress",
+    );
+
+  const tabs: Tab[] = [
+    {
+      id: "submission",
+      label: "Submission",
+      hasNotification: authorNeedsRevision || editorNeedsDeskDecision,
+    },
+  ];
   if (showReviewsTab) {
-    const reviewCount = isEditor
-      ? submittedReviews.length
-      : role === "Author"
-        ? releasedReviews.length
-        : submittedReviews.length;
+    const reviewCount =
+      role === "Reviewer"
+        ? undefined
+        : isEditor
+          ? submittedReviews.length
+          : releasedReviews.length;
     tabs.push({
       id: "reviews",
-      label: "Reviews",
-      count: reviewCount > 0 ? reviewCount : undefined,
+      label: role === "Reviewer" ? "Your Review" : "Reviews",
+      count: reviewCount && reviewCount > 0 ? reviewCount : undefined,
+      hasNotification: hasPendingReview || allReviewsIn,
     });
   }
   if (showCopyEditingTab) {
-    tabs.push({ id: "copy-editing", label: "Copy Editing" });
+    tabs.push({
+      id: "copy-editing",
+      label: "Copy Editing",
+      hasNotification: authorNeedsCeResponse || ceNeedsWork,
+    });
   }
   tabs.push({ id: "activity", label: "Activity" });
-
-  // Auto-select the first relevant reviewer when switching to reviews tab
-  const effectiveReviewerId = useMemo(() => {
-    if (activeTab !== "reviews") return null;
-    const reviewers = submission.assignedReviewers || [];
-    // If we have a valid selection, keep it
-    if (
-      selectedReviewerId &&
-      reviewers.find((r) => r.id === selectedReviewerId)
-    )
-      return selectedReviewerId;
-    // Auto-select first submitted, or first reviewer
-    const firstSubmitted = reviewers.find((r) => r.status === "Submitted");
-    return firstSubmitted?.id || reviewers[0]?.id || null;
-  }, [activeTab, selectedReviewerId, submission.assignedReviewers]);
 
   const selectedReviewer =
     submission.assignedReviewers?.find((r) => r.id === effectiveReviewerId) ||
@@ -144,11 +184,12 @@ export default function SubmissionDetailPage({ params }: PageProps) {
       (r) => r.id === effectiveReviewerId,
     ) ?? -1;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleReleaseReview = (reviewerId: string, editedComments: string) => {
     alert(`Review released to author! (Mock action)\nReviewer: ${reviewerId}`);
   };
 
-  const handleEditorAction = (action: string) => {
+  const handleEditorAction = () => {
     // Mock action handler
   };
 
@@ -371,10 +412,8 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                       <motion.div
                         initial={false}
                         animate={{
-                          height:
-                            activeTab === "submission" ? "auto" : 0,
-                          opacity:
-                            activeTab === "submission" ? 1 : 0,
+                          height: activeTab === "submission" ? "auto" : 0,
+                          opacity: activeTab === "submission" ? 1 : 0,
                         }}
                         transition={headerSpring}
                         className="overflow-hidden"
@@ -397,10 +436,8 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                       <motion.div
                         initial={false}
                         animate={{
-                          height:
-                            activeTab === "reviews" ? "auto" : 0,
-                          opacity:
-                            activeTab === "reviews" ? 1 : 0,
+                          height: activeTab === "reviews" ? "auto" : 0,
+                          opacity: activeTab === "reviews" ? 1 : 0,
                         }}
                         transition={headerSpring}
                         className="overflow-hidden"
@@ -415,16 +452,87 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                           />
                         </div>
                       </motion.div>
+
+                      {/* Copy editing info - collapses when not on copy-editing */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height: activeTab === "copy-editing" ? "auto" : 0,
+                          opacity: activeTab === "copy-editing" ? 1 : 0,
+                        }}
+                        transition={headerSpring}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4">
+                          {(() => {
+                            const editors =
+                              submission.assignedCopyEditors || [];
+                            if (editors.length === 0) {
+                              return (
+                                <div>
+                                  <p className="text-[13px] text-gray-400 mb-2">
+                                    No copy editors assigned.
+                                  </p>
+                                  {isEditor && (
+                                    <button
+                                      onClick={() =>
+                                        alert(
+                                          "Copy editor assignment modal would open here. This is a mockup.",
+                                        )
+                                      }
+                                      className="w-full p-2.5 text-[12px] text-gray-500 border border-dashed border-gray-300 rounded-lg bg-transparent hover:bg-gray-50 hover:border-gray-400 transition-colors"
+                                    >
+                                      + Assign Copy Editor
+                                    </button>
+                                  )}
+                                </div>
+                              );
+                            }
+                            return (
+                              <div className="space-y-2">
+                                <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+                                  Copy Editors
+                                </div>
+                                {editors.map((editor) => (
+                                  <div
+                                    key={editor.id}
+                                    className="flex items-center justify-between"
+                                  >
+                                    <div className="min-w-0">
+                                      <p className="text-[13px] font-medium text-gray-800 truncate">
+                                        {editor.name}
+                                      </p>
+                                      <p className="text-[11px] text-gray-400 truncate">
+                                        {editor.affiliation}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                                {isEditor && (
+                                  <button
+                                    onClick={() =>
+                                      alert(
+                                        "Copy editor assignment modal would open here. This is a mockup.",
+                                      )
+                                    }
+                                    className="w-full mt-2 p-2.5 text-[12px] text-gray-500 border border-dashed border-gray-300 rounded-lg bg-transparent hover:bg-gray-50 hover:border-gray-400 transition-colors"
+                                  >
+                                    + Assign Copy Editor
+                                  </button>
+                                )}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </motion.div>
                     </motion.div>
 
                     {/* Files & editor actions - collapses when not on submission */}
                     <motion.div
                       initial={false}
                       animate={{
-                        height:
-                          activeTab === "submission" ? "auto" : 0,
-                        opacity:
-                          activeTab === "submission" ? 1 : 0,
+                        height: activeTab === "submission" ? "auto" : 0,
+                        opacity: activeTab === "submission" ? 1 : 0,
                       }}
                       transition={headerSpring}
                       className="overflow-hidden"
@@ -445,6 +553,98 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                             />
                           </div>
                         )}
+                      </div>
+                    </motion.div>
+
+                    {/* Production assets - collapses when not on copy-editing */}
+                    <motion.div
+                      initial={false}
+                      animate={{
+                        height: activeTab === "copy-editing" ? "auto" : 0,
+                        opacity: activeTab === "copy-editing" ? 1 : 0,
+                      }}
+                      transition={headerSpring}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-5">
+                        <div className="bg-white rounded-lg shadow-[0_2px_8px_rgba(0,0,0,0.08)] border border-gray-100 p-4">
+                          <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-3">
+                            Production Assets
+                          </div>
+                          {(() => {
+                            const productionAssets = files.filter(
+                              (f) => f.category === "production-asset",
+                            );
+                            return (
+                              <>
+                                {productionAssets.length > 0 ? (
+                                  <div className="space-y-1.5 mb-4">
+                                    {productionAssets.map((file) => (
+                                      <button
+                                        key={file.id}
+                                        onClick={() =>
+                                          alert(
+                                            `Download: ${file.filename} (Mock)`,
+                                          )
+                                        }
+                                        className="w-full text-left px-3 py-2 rounded text-[13px] text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors flex items-center gap-2"
+                                      >
+                                        <svg
+                                          className="w-4 h-4 shrink-0 opacity-50"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          viewBox="0 0 24 24"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={1.5}
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                          />
+                                        </svg>
+                                        <div className="truncate">
+                                          <span className="block truncate">
+                                            {file.filename}
+                                          </span>
+                                          <span className="text-[10px] text-gray-400">
+                                            {file.uploadedBy} &middot;{" "}
+                                            {file.uploadedDate}
+                                          </span>
+                                        </div>
+                                      </button>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="text-[12px] text-gray-400 mb-4">
+                                    No assets uploaded yet.
+                                  </p>
+                                )}
+                                {role === "Author" && (
+                                  <FileUpload
+                                    label="Upload Production Assets"
+                                    accept=".tiff,.tif,.png,.jpg,.jpeg,.eps,.ai,.pdf"
+                                    className="h-auto"
+                                  />
+                                )}
+                              </>
+                            );
+                          })()}
+                        </div>
+                        {(isEditor || role === "Copy Editor") &&
+                          submission.status === "In Copy Editing" && (
+                            <div className="mt-5">
+                              <button
+                                onClick={() =>
+                                  alert(
+                                    `Marked as Ready for Production (Mock)\nSubmission: ${submission.id}`,
+                                  )
+                                }
+                                className="w-full px-4 py-2.5 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
+                              >
+                                Mark as Ready for Production
+                              </button>
+                            </div>
+                          )}
                       </div>
                     </motion.div>
                   </div>
@@ -475,7 +675,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                         </div>
                       </motion.div>
                     )}
-                    {activeTab === "reviews" && (
+                    {activeTab === "reviews" && role !== "Reviewer" && (
                       <motion.div
                         key="review-detail"
                         initial={{ opacity: 0, y: 20 }}
@@ -501,8 +701,30 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                         </div>
                       </motion.div>
                     )}
+                    {activeTab === "copy-editing" && (
+                      <motion.div
+                        key="copy-editing-content"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          type: "spring" as const,
+                          stiffness: 300,
+                          damping: 26,
+                          delay: 0.12,
+                        }}
+                        className="h-full pl-5 pt-5 overflow-y-auto"
+                      >
+                        <CopyEditingContent
+                          submission={submission}
+                          files={files}
+                          role={role}
+                          isEditor={isEditor}
+                        />
+                      </motion.div>
+                    )}
                     {(activeTab === "activity" ||
-                      activeTab === "copy-editing") && (
+                      (activeTab === "reviews" && role === "Reviewer")) && (
                       <motion.div
                         key="compact-content"
                         initial={{ opacity: 0, y: 20 }}
@@ -523,13 +745,19 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                               files={files}
                             />
                           )}
-                          {activeTab === "copy-editing" && (
-                            <CopyEditingContent
-                              submission={submission}
-                              files={files}
-                              role={role}
-                              isEditor={isEditor}
-                            />
+                          {activeTab === "reviews" && role === "Reviewer" && (
+                            <div className="bg-white border border-gray-200 rounded-lg p-6">
+                              <ReviewDetail
+                                submission={submission}
+                                reviewer={
+                                  submission.assignedReviewers?.[0] || null
+                                }
+                                reviewerIndex={0}
+                                role={role}
+                                isEditor={false}
+                                onReleaseReview={handleReleaseReview}
+                              />
+                            </div>
                           )}
                         </div>
                       </motion.div>

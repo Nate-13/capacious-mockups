@@ -178,8 +178,11 @@ export default function EditorActions({
 
   return (
     <div>
-      <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-3">
-        Editor Actions
+      <div className="flex items-center gap-1.5 mb-3">
+        {actions && <span className="w-1.5 h-1.5 rounded-full bg-[#F97316]" />}
+        <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+          Editor Actions
+        </span>
       </div>
 
       {/* Action Buttons */}

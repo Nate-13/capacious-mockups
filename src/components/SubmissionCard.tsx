@@ -56,7 +56,7 @@ export default function SubmissionCard({
 
       {/* Bottom row: Status, Meta info, and Date */}
       <div className="flex items-end justify-between mt-auto">
-        <div className="flex flex-col gap-1 items-start">
+        <div className="flex items-center gap-2">
           <StatusBadge status={status} />
           {metaInfo && (
             <span className="text-[13px] text-[#666]">{metaInfo}</span>

@@ -1,6 +1,7 @@
 "use client";
 
 import { FileVersion, FileCategory, SubmissionStatus } from "@/types";
+import FileUpload from "@/components/ui/FileUpload";
 
 interface FilesCardProps {
   files: FileVersion[];
@@ -194,23 +195,12 @@ export default function FilesCard({
         ))}
 
         {showAuthorUpload && (
-          <div>
-            <div className="text-[10px] font-medium text-gray-400 uppercase tracking-wider mb-1 px-1">
-              Revision
-            </div>
-            <button
-              onClick={() =>
-                alert(
-                  "File upload dialog would open here. This is a mockup — no actual upload will occur.",
-                )
-              }
-              className="w-full border border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 hover:bg-gray-50 transition-colors cursor-pointer"
-            >
-              <span className="text-[13px] text-gray-500">
-                Upload Revised Manuscript
-              </span>
-            </button>
-          </div>
+          <FileUpload
+            label="Upload Revised Manuscript"
+            accept=".doc,.docx,.rtf"
+            actionAccent
+            className="h-auto"
+          />
         )}
       </div>
     </div>

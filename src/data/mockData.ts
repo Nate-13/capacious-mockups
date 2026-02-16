@@ -144,6 +144,47 @@ export const reviews: Review[] = [
     submittedDate: "February 20, 2024",
     releasedToAuthor: false,
   },
+  // Reviews for In Copy Editing submission (2024-010)
+  {
+    id: "review-011",
+    reviewerId: "rev-007",
+    submissionId: "2024-010",
+    recommendation: "Accept with Minor Changes",
+    commentsToEditor:
+      "A rigorous and engaging piece. The theoretical framing is strong, though a few empirical claims could be better supported. Ready after minor revisions.",
+    commentsToAuthor:
+      "This is an impressive contribution. A few suggestions:\n\n1. The opening section could more clearly state the stakes of your argument.\n2. Some of the empirical examples in Section 4 need additional context.\n3. The bibliography should include more recent work on non-binary embodiment.\n\nOverall, a strong piece that I'm happy to recommend for publication after minor revisions.",
+    submittedDate: "December 18, 2023",
+    releasedToAuthor: true,
+    releasedDate: "December 22, 2023",
+  },
+  {
+    id: "review-012",
+    reviewerId: "rev-008",
+    submissionId: "2024-010",
+    recommendation: "Accept",
+    commentsToEditor:
+      "One of the stronger submissions I've reviewed this cycle. Clear, well-argued, and timely.",
+    commentsToAuthor:
+      "A beautifully written and theoretically sophisticated manuscript. The analysis of affect and gender is both original and compelling. I have no major concerns and recommend acceptance.",
+    submittedDate: "December 20, 2023",
+    releasedToAuthor: true,
+    releasedDate: "December 22, 2023",
+  },
+  // Review for Introduction in Copy Editing (2024-055)
+  {
+    id: "review-013",
+    reviewerId: "rev-009",
+    submissionId: "2024-055",
+    recommendation: "Accept",
+    commentsToEditor:
+      "A fitting introduction for the issue. Sets up the themes well and provides a clear roadmap.",
+    commentsToAuthor:
+      "This introduction does an excellent job framing the issue's key concerns. The writing is clear and inviting. Accept as is.",
+    submittedDate: "February 22, 2024",
+    releasedToAuthor: true,
+    releasedDate: "February 24, 2024",
+  },
   // Reviews for In Peer Review (both submitted)
   {
     id: "review-008",
@@ -509,11 +550,27 @@ export const submissions: Submission[] = [
     contentType: "Article",
     submittedDate: "November 20, 2023",
     currentVersion: 5,
+    assignedReviewers: [
+      {
+        ...reviewers[6],
+        status: "Submitted",
+        submittedDate: "December 18, 2023",
+        review: reviews[8],
+      },
+      {
+        ...reviewers[7],
+        status: "Submitted",
+        submittedDate: "December 20, 2023",
+        review: reviews[9],
+      },
+    ],
     assignedCopyEditors: [
       {
         ...copyEditors[0],
         status: "In Progress",
         assignedDate: "February 1, 2024",
+        comments:
+          "A few queries flagged in the PDF: (1) the Sedgwick citation on p. 12 doesn't match the bibliography — please confirm the year. (2) I've suggested reordering two paragraphs in Section 3 for flow. (3) Some inconsistency between 'nonbinary' and 'non-binary' throughout — I've standardized to 'nonbinary' per the author's usage in the abstract. Let me know if that works.",
       },
       {
         ...copyEditors[1],
@@ -542,6 +599,8 @@ export const submissions: Submission[] = [
         status: "Completed",
         assignedDate: "January 5, 2024",
         completedDate: "January 28, 2024",
+        comments:
+          "All edits complete. Standardized footnote formatting throughout. Two image captions were missing — I've added placeholder text flagged for the author. No major issues.",
       },
     ],
   },
@@ -595,11 +654,21 @@ export const submissions: Submission[] = [
     currentVersion: 2,
     enteredByEditor: true,
     editorNotes: "Invited introduction for Issue 12.",
+    assignedReviewers: [
+      {
+        ...reviewers[8],
+        status: "Submitted",
+        submittedDate: "February 22, 2024",
+        review: reviews[10],
+      },
+    ],
     assignedCopyEditors: [
       {
         ...copyEditors[0],
         status: "In Progress",
         assignedDate: "February 20, 2024",
+        comments:
+          "Just getting started on this. Initial read-through looks clean — mostly minor punctuation and a few style consistency items. Will have the edited version ready soon.",
       },
     ],
   },
@@ -642,7 +711,6 @@ export const submissions: Submission[] = [
       {
         ...reviewers[4],
         status: "Pending",
-
       },
     ],
   },
@@ -1698,6 +1766,24 @@ export const fileVersions: FileVersionsMap = {
       uploadedDate: "February 5, 2024",
       category: "copyedit-pdf",
       uploadedBy: "Maria Santos",
+    },
+    {
+      id: "file-010-pa1",
+      filename: "figure1_hires_2400dpi.tiff",
+      version: 1,
+      label: "Production Asset",
+      uploadedDate: "February 8, 2024",
+      category: "production-asset",
+      uploadedBy: "Sam Nguyen",
+    },
+    {
+      id: "file-010-pa2",
+      filename: "figure2_hires_2400dpi.tiff",
+      version: 1,
+      label: "Production Asset",
+      uploadedDate: "February 8, 2024",
+      category: "production-asset",
+      uploadedBy: "Sam Nguyen",
     },
   ],
   "2024-005": [

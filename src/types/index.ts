@@ -32,7 +32,14 @@ export type ReviewRecommendation =
   | "Reject";
 
 // File types that can be attached to a submission
-export type FileCategory = "manuscript" | "image" | "supplement" | "copyedit-pdf" | "copyedit-word" | "markup";
+export type FileCategory =
+  | "manuscript"
+  | "image"
+  | "supplement"
+  | "copyedit-pdf"
+  | "copyedit-word"
+  | "markup"
+  | "production-asset";
 
 // A submitted review
 export interface Review {
@@ -77,6 +84,7 @@ export interface CopyEditor {
   status?: "Assigned" | "In Progress" | "Completed";
   assignedDate?: string;
   completedDate?: string;
+  comments?: string;
 }
 
 // A submission/manuscript
@@ -105,7 +113,14 @@ export interface ActivityEntry {
   date: string;
   description: string;
   actor?: string; // Who performed the action
-  type?: "status-change" | "file-upload" | "review" | "assignment" | "email" | "decision" | "general";
+  type?:
+    | "status-change"
+    | "file-upload"
+    | "review"
+    | "assignment"
+    | "email"
+    | "decision"
+    | "general";
   fileId?: string; // Links to a FileVersion for download (used in file-upload entries)
 }
 

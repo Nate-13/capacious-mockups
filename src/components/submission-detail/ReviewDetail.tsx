@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Submission, Reviewer, Review, ReviewRecommendation } from "@/types";
 import { Button } from "@/components/ui";
+import FileUpload from "@/components/ui/FileUpload";
 
 interface ReviewDetailProps {
   submission: Submission;
@@ -140,9 +141,7 @@ function EditorReviewDetail({
             <p className="text-[13px] font-medium text-gray-800">
               {review.markupFile}
             </p>
-            <p className="text-[11px] text-gray-400">
-              Marked-up manuscript
-            </p>
+            <p className="text-[11px] text-gray-400">Marked-up manuscript</p>
           </div>
         </button>
       )}
@@ -216,9 +215,7 @@ function AuthorReviewDetail({
             <p className="text-[13px] font-medium text-gray-800">
               {review.markupFile}
             </p>
-            <p className="text-[11px] text-gray-400">
-              Marked-up manuscript
-            </p>
+            <p className="text-[11px] text-gray-400">Marked-up manuscript</p>
           </div>
         </button>
       )}
@@ -249,7 +246,8 @@ function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-[18px] font-serif font-bold text-gray-900">
+      <h3 className="flex items-center gap-2 text-[18px] font-serif font-bold text-gray-900">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#F97316]" />
         Submit Your Review
       </h3>
 
@@ -297,16 +295,11 @@ function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
           />
         </div>
 
-        <div>
-          <label className="text-[11px] font-medium text-gray-400 uppercase tracking-wide block mb-2">
-            Attach Marked-Up Manuscript (optional)
-          </label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            className="text-[13px] text-gray-600 file:mr-3 file:px-3 file:py-1.5 file:text-[12px] file:border file:border-gray-300 file:rounded-[6px] file:bg-white file:text-gray-700 file:cursor-pointer hover:file:bg-gray-50"
-          />
-        </div>
+        <FileUpload
+          label="Attach Marked-Up Manuscript (optional)"
+          accept=".pdf,.doc,.docx"
+          className="h-auto"
+        />
 
         <div className="flex justify-end pt-2">
           <button
