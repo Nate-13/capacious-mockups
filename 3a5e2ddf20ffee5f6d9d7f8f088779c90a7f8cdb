@@ -1,0 +1,23 @@
+next.config.ts
+  b91bfd81cbe13cfd 4-6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "3a5e2ddf20ffee5f6d9d7f8f088779c90a7f8cdb",
+  "prompts": {
+    "b91bfd81cbe13cfd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d10ae08-580c-4996-bb33-a627d0a9c62a",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    }
+  }
+}
