@@ -2,11 +2,25 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function DocxViewer({ url }: { url: string }) {
+interface DocxViewerProps {
+  url: string;
+  zoomLevel: number;
+  onLoadSuccess: () => void;
+  onLoadError: () => void;
+}
+
+export default function DocxViewer({
+  url,
+  zoomLevel,
+  onLoadSuccess,
+  onLoadError,
+}: DocxViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [status, setStatus] = useState<"loading" | "done" | "error">(
-    "loading",
-  );
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState<number>(0);
+
+  // Scale factor: normalize 816px docx → 760px base, then apply zoom
+  const scale = (760 / 816) * zoomLevel;
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -25,9 +39,17 @@ export default function DocxViewer({ url }: { url: string }) {
 
         await renderAsync(blob, containerRef.current!);
 
-        if (!cancelled) setStatus("done");
+        if (!cancelled) {
+          onLoadSuccess();
+          // Measure content height after render
+          requestAnimationFrame(() => {
+            if (containerRef.current) {
+              setContentHeight(containerRef.current.scrollHeight);
+            }
+          });
+        }
       } catch {
-        if (!cancelled) setStatus("error");
+        if (!cancelled) onLoadError();
       }
     }
 
@@ -35,25 +57,41 @@ export default function DocxViewer({ url }: { url: string }) {
     return () => {
       cancelled = true;
     };
-  }, [url]);
+  }, [url, onLoadSuccess, onLoadError]);
+
+  // Re-measure when zoom changes
+  useEffect(() => {
+    if (containerRef.current) {
+      setContentHeight(containerRef.current.scrollHeight);
+    }
+  }, [zoomLevel]);
 
   return (
-    <div className="overflow-y-auto w-full">
+    <div className="w-full flex flex-col items-center py-6">
       <style>{`
-        .docx-wrapper { background: transparent !important; }
+        .docx-wrapper {
+          background: transparent !important;
+          padding: 0 !important;
+        }
+        .docx-wrapper > section {
+          box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1), 0 20px 25px -5px rgba(0,0,0,0.15) !important;
+          margin-bottom: 16px !important;
+          border-radius: 2px;
+        }
       `}</style>
-
-      {status === "loading" && (
-        <div className="text-center text-gray-400 text-sm py-10 animate-pulse">
-          Loading document…
-        </div>
-      )}
-      {status === "error" && (
-        <div className="text-center text-red-400 text-sm py-10">
-          Failed to load document.
-        </div>
-      )}
-      <div ref={containerRef} />
+      <div
+        ref={wrapperRef}
+        style={{ height: contentHeight ? contentHeight * scale : "auto" }}
+        className="relative"
+      >
+        <div
+          ref={containerRef}
+          style={{
+            transform: `scale(${scale})`,
+            transformOrigin: "top center",
+          }}
+        />
+      </div>
     </div>
   );
 }
