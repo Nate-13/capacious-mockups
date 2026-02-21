@@ -111,12 +111,10 @@ export default function FilesCard({
 }: FilesCardProps) {
   // Derive current/relevant files by category
 
-  // 1. Current Manuscript - only the latest version
-  const manuscripts = files.filter((f) => f.category === "manuscript");
-  const latestManuscript =
-    manuscripts.length > 0
-      ? manuscripts.reduce((a, b) => (a.version > b.version ? a : b))
-      : null;
+  // 1. Manuscripts - all versions, sorted newest first
+  const manuscripts = files
+    .filter((f) => f.category === "manuscript")
+    .sort((a, b) => b.version - a.version);
 
   // 2. Images - all
   const images = files.filter((f) => f.category === "image");
@@ -149,11 +147,11 @@ export default function FilesCard({
     badge?: (file: FileVersion) => string | undefined;
   }[] = [];
 
-  if (latestManuscript) {
+  if (manuscripts.length > 0) {
     sections.push({
-      label: "Current Manuscript",
-      files: [latestManuscript],
-      badge: () => `v${latestManuscript.version}`,
+      label: "Manuscript",
+      files: manuscripts,
+      badge: (file) => `v${file.version}`,
     });
   }
 

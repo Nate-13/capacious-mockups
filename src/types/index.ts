@@ -122,6 +122,7 @@ export interface ActivityEntry {
     | "decision"
     | "general";
   fileId?: string; // Links to a FileVersion for download (used in file-upload entries)
+  stage?: string; // Short label for milestone timeline sidebar
 }
 
 // File version
@@ -133,6 +134,7 @@ export interface FileVersion {
   uploadedDate: string;
   category?: FileCategory;
   uploadedBy?: string;
+  url?: string; // Path to actual file for preview (e.g. "/files/manuscript.pdf")
 }
 
 // Activity log keyed by submission ID

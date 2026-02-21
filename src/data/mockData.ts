@@ -739,6 +739,7 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Maria Torres",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 20, 2024",
@@ -752,6 +753,7 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Kevin O'Brien",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 15, 2024",
@@ -763,6 +765,7 @@ export const activityLog: ActivityLog = {
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
   ],
   "2024-034": [
@@ -771,12 +774,14 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Alice Johnson",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Jan 16, 2024",
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Jan 20, 2024",
@@ -796,11 +801,13 @@ export const activityLog: ActivityLog = {
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Jan 26, 2024",
       description: "Moved to peer review",
       type: "status-change",
+      stage: "Peer Review",
     },
     {
       date: "Jan 27, 2024",
@@ -832,12 +839,14 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Bob Williams",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Jan 9, 2024",
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Jan 14, 2024",
@@ -857,6 +866,7 @@ export const activityLog: ActivityLog = {
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Jan 22, 2024",
@@ -889,18 +899,21 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Jane Doe",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Jan 23, 2024",
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Jan 28, 2024",
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Jan 29, 2024",
@@ -930,6 +943,7 @@ export const activityLog: ActivityLog = {
       date: "Feb 5, 2024",
       description: "Status set to Accept with Minor Changes",
       type: "status-change",
+      stage: "Accept w/ Minor Changes",
     },
     {
       date: "Feb 12, 2024",
@@ -945,12 +959,14 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Jenny Rice",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Jan 6, 2024",
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Jan 10, 2024",
@@ -970,6 +986,7 @@ export const activityLog: ActivityLog = {
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Jan 20, 2024",
@@ -995,6 +1012,7 @@ export const activityLog: ActivityLog = {
       description: "Reviews released to author. Status: Conditional Accept",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Conditional Accept",
     },
     {
       date: "Feb 22, 2024",
@@ -1010,18 +1028,21 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "David Miller",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Dec 6, 2023",
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Dec 10, 2023",
       description: "Approved for peer review",
       actor: "Gail Hamner",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Dec 11, 2023",
@@ -1064,6 +1085,7 @@ export const activityLog: ActivityLog = {
       description: "Manuscript accepted",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Accepted",
     },
   ],
   "2024-022": [
@@ -1072,17 +1094,20 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Carol Davis",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Dec 19, 2023",
       description: "Moved to desk review",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Dec 22, 2023",
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Dec 23, 2023",
@@ -1113,6 +1138,7 @@ export const activityLog: ActivityLog = {
       description: "Submission rejected. Advisory email sent to author.",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Rejected",
     },
   ],
   "2024-019": [
@@ -1121,17 +1147,20 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Marcus Bell",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Dec 13, 2023",
       description: "Moved to desk review",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Dec 18, 2023",
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Dec 19, 2023",
@@ -1155,6 +1184,7 @@ export const activityLog: ActivityLog = {
         "Status set to Revise & Resubmit. Advisory email sent to author.",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Revise & Resubmit",
     },
   ],
   "2024-010": [
@@ -1163,16 +1193,19 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Sam Nguyen",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Nov 21, 2023",
       description: "Moved to desk review",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Nov 28, 2023",
       description: "Approved for peer review",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Dec 15, 2023",
@@ -1183,6 +1216,7 @@ export const activityLog: ActivityLog = {
       date: "Dec 20, 2023",
       description: "Manuscript accepted",
       type: "decision",
+      stage: "Accepted",
     },
     {
       date: "Jan 10, 2024",
@@ -1195,6 +1229,7 @@ export const activityLog: ActivityLog = {
       date: "Feb 1, 2024",
       description: "Moved to copy editing",
       type: "status-change",
+      stage: "Copy Editing",
     },
     {
       date: "Feb 1, 2024",
@@ -1221,16 +1256,19 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Laura Chen",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Oct 16, 2023",
       description: "Moved to desk review",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Oct 22, 2023",
       description: "Approved for peer review",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Nov 15, 2023",
@@ -1253,11 +1291,13 @@ export const activityLog: ActivityLog = {
       date: "Dec 8, 2023",
       description: "Manuscript accepted",
       type: "decision",
+      stage: "Accepted",
     },
     {
       date: "Jan 5, 2024",
       description: "Moved to copy editing",
       type: "status-change",
+      stage: "Copy Editing",
     },
     {
       date: "Jan 5, 2024",
@@ -1295,6 +1335,7 @@ export const activityLog: ActivityLog = {
       date: "Jan 28, 2024",
       description: "Copy editing completed. Ready for production.",
       type: "status-change",
+      stage: "Ready for Production",
     },
   ],
   "2023-048": [
@@ -1303,16 +1344,19 @@ export const activityLog: ActivityLog = {
       description: "Manuscript submitted",
       actor: "Derek Massumi",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Aug 5, 2023",
       description: "Moved to desk review",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Aug 15, 2023",
       description: "Approved for peer review",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Sep 20, 2023",
@@ -1323,11 +1367,13 @@ export const activityLog: ActivityLog = {
       date: "Sep 25, 2023",
       description: "Manuscript accepted",
       type: "decision",
+      stage: "Accepted",
     },
     {
       date: "Nov 1, 2023",
       description: "Moved to copy editing",
       type: "status-change",
+      stage: "Copy Editing",
     },
     {
       date: "Nov 20, 2023",
@@ -1338,11 +1384,13 @@ export const activityLog: ActivityLog = {
       date: "Dec 1, 2023",
       description: "Ready for production",
       type: "status-change",
+      stage: "Ready for Production",
     },
     {
       date: "Jan 15, 2024",
       description: "Published in Issue 11",
       type: "status-change",
+      stage: "Published",
     },
   ],
   "2024-048": [
@@ -1351,11 +1399,13 @@ export const activityLog: ActivityLog = {
       description: "Dialogue entered by editor",
       actor: "Greg Seigworth",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 10, 2024",
       description: "Moved to desk review",
       type: "status-change",
+      stage: "Desk Review",
     },
   ],
   "2024-055": [
@@ -1364,12 +1414,14 @@ export const activityLog: ActivityLog = {
       description: "Introduction entered by editor (invited)",
       actor: "Greg Seigworth",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 19, 2024",
       description: "Skipped to copy editing (invited content)",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Copy Editing",
     },
     {
       date: "Feb 20, 2024",
@@ -1384,12 +1436,14 @@ export const activityLog: ActivityLog = {
       description: "Book review submitted",
       actor: "Rosa Martinez",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 17, 2024",
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
   ],
   "2024-042": [
@@ -1398,6 +1452,7 @@ export const activityLog: ActivityLog = {
       description: "Interstice submitted",
       actor: "Hyun-ji Kim",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 1, 2024",
@@ -1409,6 +1464,7 @@ export const activityLog: ActivityLog = {
       description: "Moved to desk review",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Feb 5, 2024",
@@ -1428,6 +1484,7 @@ export const activityLog: ActivityLog = {
       description: "Approved for peer review",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Peer Review",
     },
     {
       date: "Feb 12, 2024",
@@ -1454,12 +1511,14 @@ export const activityLog: ActivityLog = {
       description: "Afterword entered by editor (invited)",
       actor: "Greg Seigworth",
       type: "general",
+      stage: "Submitted",
     },
     {
       date: "Feb 22, 2024",
       description: "Moved directly to desk review (invited content)",
       actor: "Greg Seigworth",
       type: "status-change",
+      stage: "Desk Review",
     },
     {
       date: "Feb 23, 2024",
@@ -1472,6 +1531,7 @@ export const activityLog: ActivityLog = {
       description: "Manuscript accepted (invited afterword)",
       actor: "Greg Seigworth",
       type: "decision",
+      stage: "Accepted",
     },
   ],
 };
@@ -1481,7 +1541,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-052": [
     {
       id: "file-052-1",
-      filename: "torres_urban_sound_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "February 20, 2024",
@@ -1490,7 +1550,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-052-img1",
-      filename: "figure_1_soundwave.png",
+      filename: "figure_1.png",
       version: 1,
       label: "Figure 1 (High-res)",
       uploadedDate: "February 20, 2024",
@@ -1499,7 +1559,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-052-data1",
-      filename: "sound_frequency_data.xlsx",
+      filename: "supplemental_data.xlsx",
       version: 1,
       label: "Frequency Analysis Dataset",
       uploadedDate: "February 20, 2024",
@@ -1510,7 +1570,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-050": [
     {
       id: "file-050-1",
-      filename: "obrien_haptic_pedagogy_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "February 15, 2024",
@@ -1521,27 +1581,29 @@ export const fileVersions: FileVersionsMap = {
   "2024-034": [
     {
       id: "file-034-1",
-      filename: "johnson_digital_community_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "January 15, 2024",
       category: "manuscript",
       uploadedBy: "Alice Johnson",
+      url: "/files/quiet-crisis.docx",
     },
     {
       id: "file-034-2",
-      filename: "johnson_digital_community_v2.docx",
+      filename: "manuscript_v2.pdf",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "January 25, 2024",
       category: "manuscript",
       uploadedBy: "Alice Johnson",
+      url: "/files/cats.pdf",
     },
   ],
   "2024-028": [
     {
       id: "file-028-1",
-      filename: "williams_architectural_affect_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "January 8, 2024",
@@ -1550,7 +1612,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-028-2",
-      filename: "williams_architectural_affect_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "January 20, 2024",
@@ -1559,7 +1621,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-028-img1",
-      filename: "building_exterior.jpg",
+      filename: "figure_1.jpg",
       version: 1,
       label: "Figure 1 (High-res)",
       uploadedDate: "January 8, 2024",
@@ -1568,7 +1630,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-028-img2",
-      filename: "interior_space.jpg",
+      filename: "figure_2.jpg",
       version: 1,
       label: "Figure 2 (High-res)",
       uploadedDate: "January 8, 2024",
@@ -1579,7 +1641,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-039": [
     {
       id: "file-039-1",
-      filename: "doe_feeling_machines_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "January 22, 2024",
@@ -1588,7 +1650,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-039-2",
-      filename: "doe_feeling_machines_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "January 26, 2024",
@@ -1597,7 +1659,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-039-3",
-      filename: "doe_feeling_machines_v3.docx",
+      filename: "manuscript_v3.docx",
       version: 3,
       label: "Minor Changes Revision",
       uploadedDate: "February 12, 2024",
@@ -1608,7 +1670,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-046": [
     {
       id: "file-046-1",
-      filename: "rice_ambivalence_meat_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "January 5, 2024",
@@ -1617,7 +1679,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-046-2",
-      filename: "rice_ambivalence_meat_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "January 18, 2024",
@@ -1626,7 +1688,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-046-3",
-      filename: "rice_ambivalence_meat_v3.docx",
+      filename: "manuscript_v3.docx",
       version: 3,
       label: "Conditional Accept Revision",
       uploadedDate: "February 22, 2024",
@@ -1637,7 +1699,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-015": [
     {
       id: "file-015-1",
-      filename: "miller_weight_of_breath_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "December 5, 2023",
@@ -1646,7 +1708,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-015-2",
-      filename: "miller_weight_of_breath_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "December 12, 2023",
@@ -1655,7 +1717,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-015-3",
-      filename: "miller_weight_of_breath_v3.docx",
+      filename: "manuscript_v3.docx",
       version: 3,
       label: "Minor Changes Revision",
       uploadedDate: "January 15, 2024",
@@ -1664,7 +1726,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-015-4",
-      filename: "miller_weight_of_breath_final.docx",
+      filename: "manuscript_final.docx",
       version: 4,
       label: "Final Accepted Version",
       uploadedDate: "January 20, 2024",
@@ -1675,7 +1737,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-022": [
     {
       id: "file-022-1",
-      filename: "davis_digital_empathy_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "December 18, 2023",
@@ -1684,7 +1746,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-022-2",
-      filename: "davis_digital_empathy_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Revision",
       uploadedDate: "January 25, 2024",
@@ -1695,7 +1757,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-019": [
     {
       id: "file-019-1",
-      filename: "bell_sonic_vibrations_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "December 12, 2023",
@@ -1704,7 +1766,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-019-data1",
-      filename: "festival_survey_data.csv",
+      filename: "supplemental_data.csv",
       version: 1,
       label: "Survey Dataset",
       uploadedDate: "December 12, 2023",
@@ -1715,7 +1777,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-010": [
     {
       id: "file-010-1",
-      filename: "nguyen_queer_temporalities_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "November 20, 2023",
@@ -1724,7 +1786,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-010-2",
-      filename: "nguyen_queer_temporalities_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "December 1, 2023",
@@ -1733,7 +1795,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-010-3",
-      filename: "nguyen_queer_temporalities_v3.docx",
+      filename: "manuscript_v3.docx",
       version: 3,
       label: "Post-Review Revision",
       uploadedDate: "December 28, 2023",
@@ -1742,7 +1804,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-010-4",
-      filename: "nguyen_queer_temporalities_v4.docx",
+      filename: "manuscript_v4.docx",
       version: 4,
       label: "Final Accepted Version",
       uploadedDate: "January 8, 2024",
@@ -1751,7 +1813,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-010-5",
-      filename: "nguyen_queer_temporalities_v5.docx",
+      filename: "manuscript_v5.docx",
       version: 5,
       label: "Copy Editing Working Version",
       uploadedDate: "January 10, 2024",
@@ -1760,7 +1822,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-010-ce1",
-      filename: "nguyen_queer_temporalities_CE1.pdf",
+      filename: "manuscript_CE1.pdf",
       version: 5,
       label: "Copy Edit Round 1 (PDF for author)",
       uploadedDate: "February 5, 2024",
@@ -1789,7 +1851,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-005": [
     {
       id: "file-005-1",
-      filename: "chen_choreography_protest_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "October 15, 2023",
@@ -1798,7 +1860,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-2",
-      filename: "chen_choreography_protest_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "October 28, 2023",
@@ -1807,7 +1869,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-3",
-      filename: "chen_choreography_protest_v3.docx",
+      filename: "manuscript_v3.docx",
       version: 3,
       label: "Post-Review Revision",
       uploadedDate: "November 25, 2023",
@@ -1816,7 +1878,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-4",
-      filename: "chen_choreography_protest_v4.docx",
+      filename: "manuscript_v4.docx",
       version: 4,
       label: "Conditional Accept Revision",
       uploadedDate: "December 3, 2023",
@@ -1825,7 +1887,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-5",
-      filename: "chen_choreography_protest_final.docx",
+      filename: "manuscript_final.docx",
       version: 5,
       label: "Final Accepted Version",
       uploadedDate: "December 5, 2023",
@@ -1834,7 +1896,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-ce0",
-      filename: "chen_choreography_protest_CE0.docx",
+      filename: "manuscript_CE0.docx",
       version: 5,
       label: "Copy Edit Original (untouched)",
       uploadedDate: "January 5, 2024",
@@ -1843,7 +1905,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-ce1",
-      filename: "chen_choreography_protest_CE1.pdf",
+      filename: "manuscript_CE1.pdf",
       version: 6,
       label: "Copy Edit Round 1 (PDF for author)",
       uploadedDate: "January 10, 2024",
@@ -1852,7 +1914,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-ce1-response",
-      filename: "chen_choreography_protest_CE1_response.pdf",
+      filename: "manuscript_CE1_response.pdf",
       version: 6,
       label: "Author Response to CE1",
       uploadedDate: "January 18, 2024",
@@ -1861,7 +1923,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-final",
-      filename: "chen_choreography_protest_FINAL.docx",
+      filename: "manuscript_FINAL.docx",
       version: 7,
       label: "Final Copy Edited Version",
       uploadedDate: "January 22, 2024",
@@ -1870,7 +1932,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-img1",
-      filename: "protest_march.jpg",
+      filename: "figure_1.jpg",
       version: 1,
       label: "Figure 1 (High-res)",
       uploadedDate: "October 15, 2023",
@@ -1879,7 +1941,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-005-img2",
-      filename: "dance_performance.jpg",
+      filename: "figure_2.jpg",
       version: 1,
       label: "Figure 2 (High-res)",
       uploadedDate: "October 15, 2023",
@@ -1890,7 +1952,7 @@ export const fileVersions: FileVersionsMap = {
   "2023-048": [
     {
       id: "file-048-final",
-      filename: "massumi_atmospheric_attunements_FINAL.docx",
+      filename: "manuscript_FINAL.docx",
       version: 7,
       label: "Published Version",
       uploadedDate: "January 15, 2024",
@@ -1901,7 +1963,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-048": [
     {
       id: "file-048d-1",
-      filename: "seigworth_stewart_dialogue_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Initial Draft",
       uploadedDate: "February 10, 2024",
@@ -1912,7 +1974,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-055": [
     {
       id: "file-055-1",
-      filename: "hamner_introduction_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Initial Draft",
       uploadedDate: "February 18, 2024",
@@ -1921,7 +1983,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-055-2",
-      filename: "hamner_introduction_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Editor Revised",
       uploadedDate: "February 19, 2024",
@@ -1932,7 +1994,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-053": [
     {
       id: "file-053-1",
-      filename: "martinez_gut_feminism_review_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "February 16, 2024",
@@ -1943,7 +2005,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-042": [
     {
       id: "file-042-1",
-      filename: "kim_three_gestures_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Original Submission",
       uploadedDate: "February 1, 2024",
@@ -1952,7 +2014,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-042-2",
-      filename: "kim_three_gestures_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Desk Review Revision",
       uploadedDate: "February 10, 2024",
@@ -1961,7 +2023,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-042-img1",
-      filename: "gesture_stillness_1.tiff",
+      filename: "figure_1.tiff",
       version: 1,
       label: "Figure 1 (High-res)",
       uploadedDate: "February 1, 2024",
@@ -1970,7 +2032,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-042-img2",
-      filename: "gesture_stillness_2.tiff",
+      filename: "figure_2.tiff",
       version: 1,
       label: "Figure 2 (High-res)",
       uploadedDate: "February 1, 2024",
@@ -1981,7 +2043,7 @@ export const fileVersions: FileVersionsMap = {
   "2024-057": [
     {
       id: "file-057-1",
-      filename: "berlant_afterword_v1.docx",
+      filename: "manuscript_v1.docx",
       version: 1,
       label: "Initial Draft",
       uploadedDate: "February 22, 2024",
@@ -1990,7 +2052,7 @@ export const fileVersions: FileVersionsMap = {
     },
     {
       id: "file-057-2",
-      filename: "berlant_afterword_v2.docx",
+      filename: "manuscript_v2.docx",
       version: 2,
       label: "Editor Revised",
       uploadedDate: "February 23, 2024",

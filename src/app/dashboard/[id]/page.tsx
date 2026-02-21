@@ -76,11 +76,12 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     return firstSubmitted?.id || reviewers[0]?.id || null;
   }, [activeTab, selectedReviewerId, submission]);
 
-  // Sidebar stays open for submission, reviews (non-reviewer), and copy editing tabs
+  // Sidebar stays open for submission, reviews (non-reviewer), copy editing, and activity tabs
   const showSidebar =
     activeTab === "submission" ||
     (activeTab === "reviews" && role !== "Reviewer") ||
-    activeTab === "copy-editing";
+    activeTab === "copy-editing" ||
+    activeTab === "activity";
   // Compact header (title/author in top bar) for all non-submission tabs
   const showCompactHeader = activeTab !== "submission";
 
@@ -525,6 +526,56 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                           })()}
                         </div>
                       </motion.div>
+
+                      {/* Activity stage navigator - collapses when not on activity */}
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height: activeTab === "activity" ? "auto" : 0,
+                          opacity: activeTab === "activity" ? 1 : 0,
+                        }}
+                        transition={headerSpring}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4">
+                          {(() => {
+                            const stages = [...activity]
+                              .filter((e) => e.stage)
+                              .reverse();
+                            if (stages.length === 0) return null;
+                            return (
+                              <div>
+                                <div className="text-[11px] font-medium text-gray-400 uppercase tracking-wide mb-2">
+                                  Stages
+                                </div>
+                                <div className="space-y-0.5">
+                                  {stages.map((s, i) => (
+                                    <button
+                                      key={i}
+                                      onClick={() => {
+                                        const el = document.getElementById(
+                                          `stage-${i}`,
+                                        );
+                                        el?.scrollIntoView({
+                                          behavior: "smooth",
+                                          block: "start",
+                                        });
+                                      }}
+                                      className={`w-full text-left px-3 py-1.5 rounded text-[13px] transition-colors ${
+                                        i === 0
+                                          ? "bg-gray-100 font-medium text-gray-900"
+                                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-800"
+                                      }`}
+                                    >
+                                      {s.stage}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </motion.div>
                     </motion.div>
 
                     {/* Files & editor actions - collapses when not on submission */}
@@ -723,8 +774,24 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                         />
                       </motion.div>
                     )}
-                    {(activeTab === "activity" ||
-                      (activeTab === "reviews" && role === "Reviewer")) && (
+                    {activeTab === "activity" && (
+                      <motion.div
+                        key="activity-content"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                          type: "spring" as const,
+                          stiffness: 300,
+                          damping: 26,
+                          delay: 0.12,
+                        }}
+                        className="h-full pl-5 pt-5 overflow-y-auto"
+                      >
+                        <ActivityContent activity={activity} files={files} />
+                      </motion.div>
+                    )}
+                    {activeTab === "reviews" && role === "Reviewer" && (
                       <motion.div
                         key="compact-content"
                         initial={{ opacity: 0, y: 20 }}
@@ -739,26 +806,18 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                         className="h-full overflow-y-auto pt-5"
                       >
                         <div className="max-w-[900px] mx-auto">
-                          {activeTab === "activity" && (
-                            <ActivityContent
-                              activity={activity}
-                              files={files}
+                          <div className="bg-white border border-gray-200 rounded-lg p-6">
+                            <ReviewDetail
+                              submission={submission}
+                              reviewer={
+                                submission.assignedReviewers?.[0] || null
+                              }
+                              reviewerIndex={0}
+                              role={role}
+                              isEditor={false}
+                              onReleaseReview={handleReleaseReview}
                             />
-                          )}
-                          {activeTab === "reviews" && role === "Reviewer" && (
-                            <div className="bg-white border border-gray-200 rounded-lg p-6">
-                              <ReviewDetail
-                                submission={submission}
-                                reviewer={
-                                  submission.assignedReviewers?.[0] || null
-                                }
-                                reviewerIndex={0}
-                                role={role}
-                                isEditor={false}
-                                onReleaseReview={handleReleaseReview}
-                              />
-                            </div>
-                          )}
+                          </div>
                         </div>
                       </motion.div>
                     )}
