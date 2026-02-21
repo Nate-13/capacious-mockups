@@ -44,13 +44,15 @@ export default function DocumentViewer({
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Reset state on file change
-  useEffect(() => {
+  // Reset state on file change (synchronous in render to avoid cascading effects)
+  const [prevFileId, setPrevFileId] = useState(selectedFile?.id);
+  if (selectedFile?.id !== prevFileId) {
+    setPrevFileId(selectedFile?.id);
     setZoomLevel(1.0);
     setCurrentPage(1);
     setTotalPages(0);
     setLoadingState("loading");
-  }, [selectedFile?.id]);
+  }
 
   // Zoom helpers
   const zoomIn = useCallback(() => {
@@ -154,14 +156,19 @@ export default function DocumentViewer({
   });
 
   // Callbacks for child viewers
-  const handlePdfLoadSuccess = useCallback((numPages: number) => {
-    setTotalPages(numPages);
-    setLoadingState("ready");
-  }, []);
+  const handlePdfLoadSuccess = useCallback(
+    (numPages: number) => {
+      setTotalPages(numPages);
+      setLoadingState("ready");
+      fitToWidth();
+    },
+    [fitToWidth],
+  );
 
   const handleDocxLoadSuccess = useCallback(() => {
     setLoadingState("ready");
-  }, []);
+    fitToWidth();
+  }, [fitToWidth]);
 
   const handleLoadError = useCallback(() => {
     setLoadingState("error");
@@ -181,13 +188,7 @@ export default function DocumentViewer({
   return (
     <div
       ref={containerRef}
-      className="rounded-lg flex flex-col h-full overflow-hidden relative"
-      style={{
-        background:
-          "radial-gradient(ellipse at center, #4a4a4a 0%, #3d3d3d 50%, #353535 100%)",
-        boxShadow:
-          "inset 0 1px 3px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.03)",
-      }}
+      className="rounded-lg flex flex-col h-full overflow-hidden relative bg-[#5c5c5c]"
     >
       {/* Toolbar */}
       {showToolbar && (
@@ -209,6 +210,11 @@ export default function DocumentViewer({
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto overflow-x-auto flex justify-center"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
+        }}
       >
         <AnimatePresence mode="wait">
           {url && ext === "pdf" && (
@@ -220,8 +226,7 @@ export default function DocumentViewer({
               transition={{ duration: 0.2 }}
               className="w-full flex justify-center"
               style={{
-                transform:
-                  zoomLevel !== 1 ? `scale(${zoomLevel})` : undefined,
+                transform: zoomLevel !== 1 ? `scale(${zoomLevel})` : undefined,
                 transformOrigin: "top center",
               }}
             >
@@ -338,16 +343,6 @@ export default function DocumentViewer({
           )}
         </AnimatePresence>
       </div>
-
-      {/* Loading overlay */}
-      {loadingState === "loading" && url && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 rounded-lg">
-          <div
-            className="bg-white rounded shadow-xl animate-pulse"
-            style={{ width: 760, aspectRatio: "8.5/11", maxHeight: "80%" }}
-          />
-        </div>
-      )}
 
       {/* Error overlay */}
       {loadingState === "error" && url && (

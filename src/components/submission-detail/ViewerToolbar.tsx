@@ -37,7 +37,7 @@ export default function ViewerToolbar({
   }
 
   return (
-    <div className="bg-[#3a3a3a] border-b border-white/[0.06] px-3 py-2 flex items-center shrink-0 gap-2">
+    <div className="bg-[#4e4e4e] border-b border-white/[0.06] px-3 py-2 flex items-center shrink-0 gap-2">
       {/* Left: filename */}
       <div className="flex-1 min-w-0">
         <span className="text-[12px] text-white/50 truncate block">
