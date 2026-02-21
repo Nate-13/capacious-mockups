@@ -1,0 +1,31 @@
+src/components/submission-detail/DocxViewer.tsx
+  29d0a171bdf36677 5-11,13-17,19-20,22-23,42-50,52,60-67,70,74-79,83-86,88-94
+src/components/submission-detail/DocumentViewer.tsx
+  29d0a171bdf36677 3,5,7-8,12,17,29-30,38-130,132-154,156-160,162-164,166-180,182-205,208-236,238-254,257-265,275-288,297-301,305-316,320-324,328-348,352-358,360-361
+src/components/submission-detail/PDFViewer.tsx
+  29d0a171bdf36677 3,10-19,21-26,28,30-32,35-48,50-83,85,88-89,92-93,97-109,111-116,118-121
+src/components/submission-detail/ViewerToolbar.tsx
+  29d0a171bdf36677 1-296
+src/components/submission-detail/useViewerKeyboard.ts
+  29d0a171bdf36677 1-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "a808a3114d10893dea59ef8f45eb405fb908bfca",
+  "prompts": {
+    "29d0a171bdf36677": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f164c11-7104-4c63-b807-ba4b9dbd091b",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 797,
+      "total_deletions": 170,
+      "accepted_lines": 795,
+      "overriden_lines": 1
+    }
+  }
+}
