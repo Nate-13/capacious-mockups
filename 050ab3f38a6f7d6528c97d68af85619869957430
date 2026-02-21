@@ -1,0 +1,25 @@
+src/components/submission-detail/DocumentViewer.tsx
+  29d0a171bdf36677 47-50,163,165,170-171,191,213-217
+src/components/submission-detail/ViewerToolbar.tsx
+  29d0a171bdf36677 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "050ab3f38a6f7d6528c97d68af85619869957430",
+  "prompts": {
+    "29d0a171bdf36677": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f164c11-7104-4c63-b807-ba4b9dbd091b",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 89,
+      "total_deletions": 93,
+      "accepted_lines": 24,
+      "overriden_lines": 0
+    }
+  }
+}
