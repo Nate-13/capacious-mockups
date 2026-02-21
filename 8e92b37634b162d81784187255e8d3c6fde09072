@@ -1,0 +1,52 @@
+src/data/mockData.ts
+  b91bfd81cbe13cfd 1590,1594,1600
+  aad041db3d30d6d0 742,756,768,777,784,804,810,842,849,869,902,909,916,946,962,969,989,1015,1031,1038,1045,1088,1097,1103,1110,1141,1150,1156,1163,1187,1196,1202,1208,1219,1232,1259,1265,1271,1294,1300,1338,1347,1353,1359,1370,1376,1387,1393,1402,1408,1417,1424,1439,1446,1455,1467,1487,1514,1521,1534,1544,1553,1562,1573,1584,1606,1615,1624,1633,1644,1653,1662,1673,1682,1691,1702,1711,1720,1729,1740,1749,1760,1769,1780,1789,1798,1807,1816,1825,1854,1863,1872,1881,1890,1899,1908,1917,1926,1935,1944,1955,1966,1977,1986,1997,2008,2017,2026,2035,2046,2055
+src/components/submission-detail/ActivityContent.tsx
+  aad041db3d30d6d0 10-22,25-29,32-39,41-80,82-83,90,93-156,158-160,163-166,168-169,171,173-174,176-178,183-189,192,196,198,201,210,213-220,224,228-229
+src/components/submission-detail/DocxViewer.tsx
+  b91bfd81cbe13cfd 1-59
+src/components/submission-detail/FilesCard.tsx
+  b91bfd81cbe13cfd 114,117,150,152-154
+src/components/submission-detail/DocumentViewer.tsx
+  b91bfd81cbe13cfd 3,6-19,25-26,33-35,37-77,83,92,96,103,110,114,120,124,129-130,133
+src/components/submission-detail/PDFViewer.tsx
+  b91bfd81cbe13cfd 1-46
+src/types/index.ts
+  aad041db3d30d6d0 125
+  b91bfd81cbe13cfd 137
+src/app/dashboard/[id]/page.tsx
+  aad041db3d30d6d0 79,83-84,529-578,779-794,809,817-818
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "8e92b37634b162d81784187255e8d3c6fde09072",
+  "prompts": {
+    "aad041db3d30d6d0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d401658e-7099-40e7-be15-c91dc6153c05",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 696,
+      "total_deletions": 445,
+      "accepted_lines": 361,
+      "overriden_lines": 0
+    },
+    "b91bfd81cbe13cfd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d10ae08-580c-4996-bb33-a627d0a9c62a",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 350,
+      "total_deletions": 176,
+      "accepted_lines": 192,
+      "overriden_lines": 0
+    }
+  }
+}
