@@ -1,0 +1,33 @@
+src/config/presentationSteps.ts
+  8122baeac1636a11 14,19,27,34,36,43,45,54-55,61,63,65-66,70,72,76,79-81,83,86-90,95-101
+src/components/presentation/RoleAnnouncement.tsx
+  8122baeac1636a11 1-78
+src/components/presentation/PresentationOverlay.tsx
+  8122baeac1636a11 7,19
+src/components/presentation/CursorEnhancer.tsx
+  8122baeac1636a11 17,29,78-85,94-100,102,107,116,135-136,147-148,161,163-165,171-175,192,198-199,209
+src/components/presentation/PresentationTimeline.tsx
+  8122baeac1636a11 4,12-13,17-18,20,25,35-46,48-63,66-67,71,73-101,113-133
+src/components/presentation/PresentationControls.tsx
+  8122baeac1636a11 7,10-11,13-17,19-20,24-25,27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "2cf84111bb78a304941908f43311694c79b58191",
+  "prompts": {
+    "8122baeac1636a11": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17cc36ab-e4ba-4107-a3b4-a71f9844b6f0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 449,
+      "total_deletions": 349,
+      "accepted_lines": 272,
+      "overriden_lines": 1
+    }
+  }
+}
