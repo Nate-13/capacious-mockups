@@ -21,6 +21,7 @@ import EditorActions from "@/components/submission-detail/EditorActions";
 import CopyEditingContent from "@/components/submission-detail/CopyEditingContent";
 import ReviewsSidebar from "@/components/submission-detail/ReviewsSidebar";
 import ReviewDetail from "@/components/submission-detail/ReviewDetail";
+import ReviewerAssignmentModal from "@/components/ReviewerAssignmentModal";
 import FileUpload from "@/components/ui/FileUpload";
 import { ContentType, FileVersion, SubmissionStatus } from "@/types";
 
@@ -44,6 +45,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     null,
   );
   const [contentTypeOpen, setContentTypeOpen] = useState(false);
+  const [showReviewerModal, setShowReviewerModal] = useState(false);
   const contentTypeRef = useRef<HTMLDivElement>(null);
   const { isPresenting, requestedTab } = usePresentation();
 
@@ -459,6 +461,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                             isEditor={isEditor}
                             selectedReviewerId={effectiveReviewerId}
                             onSelectReviewer={setSelectedReviewerId}
+                            onAssignReviewer={() => setShowReviewerModal(true)}
                           />
                         </div>
                       </motion.div>
@@ -837,6 +840,12 @@ export default function SubmissionDetailPage({ params }: PageProps) {
           </div>
         </LayoutGroup>
       </div>
+      <ReviewerAssignmentModal
+        isOpen={showReviewerModal}
+        onClose={() => setShowReviewerModal(false)}
+        onAssign={() => setShowReviewerModal(false)}
+        alreadyAssigned={submission.assignedReviewers?.map((r) => r.id) || []}
+      />
     </div>
   );
 }

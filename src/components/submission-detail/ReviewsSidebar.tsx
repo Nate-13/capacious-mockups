@@ -8,6 +8,7 @@ interface ReviewsSidebarProps {
   isEditor: boolean;
   selectedReviewerId: string | null;
   onSelectReviewer: (id: string) => void;
+  onAssignReviewer?: () => void;
 }
 
 const recommendationColors: Record<string, string> = {
@@ -32,6 +33,7 @@ export default function ReviewsSidebar({
   isEditor,
   selectedReviewerId,
   onSelectReviewer,
+  onAssignReviewer,
 }: ReviewsSidebarProps) {
   const reviewers = submission.assignedReviewers || [];
   const submittedCount = reviewers.filter(
@@ -136,7 +138,10 @@ export default function ReviewsSidebar({
 
       {/* Assign additional reviewer */}
       {isEditor && (
-        <button className="w-full mt-4 p-3 text-[13px] text-gray-600 border border-dashed border-gray-400 rounded-lg bg-transparent hover:bg-gray-50 transition-colors">
+        <button
+          onClick={onAssignReviewer}
+          className="w-full mt-4 p-3 text-[13px] text-gray-600 border border-dashed border-gray-400 rounded-lg bg-transparent hover:bg-gray-50 transition-colors"
+        >
           + Assign Additional Reviewer
         </button>
       )}

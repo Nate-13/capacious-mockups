@@ -1,191 +1,301 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button, Checkbox } from "@/components/ui";
+import { createPortal } from "react-dom";
 import { getAvailableReviewers } from "@/data/mockData";
-import type { Reviewer } from "@/types";
 
 interface ReviewerAssignmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAssign: (reviewerIds: string[]) => void;
-  currentlyAssigned?: string[];
+  alreadyAssigned: string[];
 }
 
 export default function ReviewerAssignmentModal({
   isOpen,
   onClose,
   onAssign,
-  currentlyAssigned = [],
+  alreadyAssigned,
 }: ReviewerAssignmentModalProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedIds, setSelectedIds] = useState<string[]>(currentlyAssigned);
-  const reviewers = getAvailableReviewers();
+  const allReviewers = getAvailableReviewers();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
+  const [mounted, setMounted] = useState(false);
 
-  // Reset selected IDs when modal opens with new currentlyAssigned
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Reset when modal opens
   useEffect(() => {
     if (isOpen) {
-      setSelectedIds(currentlyAssigned);
-      setSearchQuery("");
+      setSelectedIds([]);
+      setSearch("");
     }
-  }, [isOpen, currentlyAssigned]);
+  }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [isOpen, onClose]);
 
-  // Filter reviewers based on search query
-  const filteredReviewers = reviewers.filter((reviewer) => {
-    if (!searchQuery.trim()) return true;
-    const query = searchQuery.toLowerCase();
+  if (!isOpen || !mounted) return null;
+
+  const filteredReviewers = allReviewers.filter((reviewer) => {
+    if (alreadyAssigned.includes(reviewer.id)) return false;
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
     return (
-      reviewer.name.toLowerCase().includes(query) ||
-      reviewer.affiliation.toLowerCase().includes(query) ||
-      reviewer.expertise.some((exp) => exp.toLowerCase().includes(query))
+      reviewer.name.toLowerCase().includes(q) ||
+      reviewer.affiliation.toLowerCase().includes(q) ||
+      reviewer.expertise.some((exp) => exp.toLowerCase().includes(q))
     );
   });
 
-  const handleToggleReviewer = (reviewerId: string) => {
+  const toggleReviewer = (id: string) => {
     setSelectedIds((prev) =>
-      prev.includes(reviewerId)
-        ? prev.filter((id) => id !== reviewerId)
-        : [...prev, reviewerId],
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
-  };
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
   };
 
   const handleAssign = () => {
     onAssign(selectedIds);
+    setSelectedIds([]);
+    setSearch("");
     onClose();
   };
 
-  const requiredReviewers = 2;
-  const isAssignDisabled = selectedIds.length < requiredReviewers;
-
-  return (
+  const modal = (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-      onClick={handleOverlayClick}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zoom: 1,
+      }}
     >
       <div
-        className="bg-white rounded-lg w-full max-w-[600px] max-h-[70vh] flex flex-col"
-        style={{ padding: "32px" }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.4)",
+        }}
+        onClick={onClose}
+      />
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: 520,
+          maxHeight: "80vh",
+          margin: "0 16px",
+          backgroundColor: "white",
+          borderRadius: 8,
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold font-serif">Assign Reviewers</h2>
-          <button
-            onClick={onClose}
-            className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-black transition-colors"
-            aria-label="Close modal"
+        <div
+          style={{
+            padding: 20,
+            borderBottom: "1px solid #f3f4f6",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 15,
+              fontWeight: 600,
+              color: "#1f2937",
+              margin: 0,
+            }}
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
+            Assign Reviewers
+          </h2>
+          <p
+            style={{
+              fontSize: 12,
+              color: "#6b7280",
+              marginTop: 4,
+              marginBottom: 0,
+            }}
+          >
+            Select reviewers to assign to this submission.
+          </p>
         </div>
 
-        {/* Search bar */}
-        <input
-          type="text"
-          placeholder="Search reviewers by name or expertise..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full h-11 px-4 border border-gray-300 rounded-lg mb-4 text-sm focus:outline-none focus:border-gray-500"
-        />
+        <div style={{ padding: "16px 20px 0" }}>
+          <input
+            type="text"
+            placeholder="Search by name, affiliation, or expertise..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            autoFocus
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              fontSize: 13,
+              border: "1px solid #d1d5db",
+              borderRadius: 6,
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
+        </div>
 
-        {/* Reviewer list */}
-        <div className="flex-1 overflow-y-auto space-y-3 mb-4">
-          {filteredReviewers.map((reviewer) => (
-            <ReviewerCard
-              key={reviewer.id}
-              reviewer={reviewer}
-              isSelected={selectedIds.includes(reviewer.id)}
-              onToggle={() => handleToggleReviewer(reviewer.id)}
-            />
-          ))}
-          {filteredReviewers.length === 0 && (
-            <p className="text-center text-gray-500 py-4">
-              No reviewers found matching your search.
+        <div
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: 20,
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
+          {filteredReviewers.length === 0 ? (
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: 13,
+                color: "#6b7280",
+                padding: "16px 0",
+              }}
+            >
+              No available reviewers found.
             </p>
+          ) : (
+            filteredReviewers.map((reviewer) => {
+              const selected = selectedIds.includes(reviewer.id);
+              return (
+                <label
+                  key={reviewer.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    padding: 12,
+                    borderRadius: 8,
+                    cursor: "pointer",
+                    backgroundColor: selected ? "#f3f4f6" : "transparent",
+                    transition: "background-color 0.15s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!selected)
+                      e.currentTarget.style.backgroundColor = "#f9fafb";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!selected)
+                      e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={() => toggleReviewer(reviewer.id)}
+                    style={{ marginTop: 2, accentColor: "#333" }}
+                  />
+                  <div>
+                    <p
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 500,
+                        color: "#1f2937",
+                        margin: 0,
+                      }}
+                    >
+                      {reviewer.name}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 12,
+                        color: "#6b7280",
+                        margin: 0,
+                      }}
+                    >
+                      {reviewer.affiliation}
+                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 4,
+                        marginTop: 6,
+                      }}
+                    >
+                      {reviewer.expertise.map((exp) => (
+                        <span
+                          key={exp}
+                          style={{
+                            fontSize: 10,
+                            padding: "2px 6px",
+                            backgroundColor: "#f3f4f6",
+                            color: "#4b5563",
+                            borderRadius: 4,
+                          }}
+                        >
+                          {exp}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </label>
+              );
+            })
           )}
         </div>
 
-        {/* Add New Reviewer button */}
-        <button className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors mb-4">
-          + Add New Reviewer
-        </button>
-
-        {/* Counter */}
-        <p className="text-sm text-gray-500 mb-4">
-          Selected: {selectedIds.length} of {requiredReviewers} required
-        </p>
-
-        {/* Action buttons */}
-        <div className="flex justify-end gap-3">
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleAssign}
-            disabled={isAssignDisabled}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 8,
+            padding: 20,
+            borderTop: "1px solid #f3f4f6",
+          }}
+        >
+          <button
+            onClick={onClose}
+            style={{
+              padding: "8px 16px",
+              fontSize: 13,
+              color: "#4b5563",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
-            Assign Reviewers
-          </Button>
+            Cancel
+          </button>
+          <button
+            onClick={handleAssign}
+            disabled={selectedIds.length === 0}
+            style={{
+              padding: "8px 16px",
+              fontSize: 13,
+              fontWeight: 700,
+              color: "white",
+              backgroundColor: selectedIds.length === 0 ? "#999" : "#333",
+              border: "none",
+              borderRadius: 6,
+              cursor: selectedIds.length === 0 ? "not-allowed" : "pointer",
+              opacity: selectedIds.length === 0 ? 0.5 : 1,
+            }}
+          >
+            Assign {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
+          </button>
         </div>
       </div>
     </div>
   );
-}
 
-interface ReviewerCardProps {
-  reviewer: Reviewer;
-  isSelected: boolean;
-  onToggle: () => void;
-}
-
-function ReviewerCard({ reviewer, isSelected, onToggle }: ReviewerCardProps) {
-  return (
-    <div
-      className={`
-        p-4 rounded-lg border cursor-pointer transition-colors
-        ${
-          isSelected
-            ? "bg-gray-100 border-[#333]"
-            : "bg-[#F5F5F5] border-gray-200 hover:border-gray-300"
-        }
-      `}
-      onClick={onToggle}
-    >
-      <div className="flex items-start gap-3">
-        <Checkbox checked={isSelected} onChange={onToggle} className="mt-0.5" />
-        <div className="flex-1 min-w-0">
-          <p className="text-base font-bold">{reviewer.name}</p>
-          <p className="text-sm text-gray-500">{reviewer.affiliation}</p>
-          <p className="text-[13px] text-gray-500 mt-1">
-            Keywords: {reviewer.expertise.join(", ")}
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Reviews completed: {reviewer.reviewsCompleted} | Avg turnaround:{" "}
-            {reviewer.avgTurnaroundDays} days
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  return createPortal(modal, document.body);
 }

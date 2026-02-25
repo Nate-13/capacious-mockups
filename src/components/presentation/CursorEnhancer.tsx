@@ -227,7 +227,7 @@ export default function CursorEnhancer() {
       {/* Custom cursor */}
       <div
         ref={cursorRef}
-        className="pointer-events-none fixed left-0 top-0 z-[9999]"
+        className="pointer-events-none fixed left-0 top-0 z-[10001]"
         style={{ willChange: "transform" }}
       >
         <div
@@ -255,7 +255,7 @@ export default function CursorEnhancer() {
       {/* Laser pointer SVG layer */}
       <svg
         ref={svgRef}
-        className="pointer-events-none fixed inset-0 z-[9997]"
+        className="pointer-events-none fixed inset-0 z-[10000]"
         width="100%"
         height="100%"
         overflow="visible"
@@ -348,7 +348,7 @@ export default function CursorEnhancer() {
         {ripples.map((ripple) => (
           <motion.div
             key={ripple.id}
-            className="pointer-events-none fixed z-[9998] rounded-full"
+            className="pointer-events-none fixed z-[10001] rounded-full"
             style={{
               left: ripple.x,
               top: ripple.y,
