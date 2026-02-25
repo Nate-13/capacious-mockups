@@ -1,0 +1,23 @@
+src/components/presentation/CursorEnhancer.tsx
+  8122baeac1636a11 16,27-28,34,36-50,68-74,84-93,96-97,103,122-123,133,140,144-145,147-159,161-166,168-169,175-176,179-184,186,202,245-249,257-285,308,318
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "e7f523e33a4a84f6272bb7f2caf0e50e3a7066e4",
+  "prompts": {
+    "8122baeac1636a11": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17cc36ab-e4ba-4107-a3b4-a71f9844b6f0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 151,
+      "total_deletions": 60,
+      "accepted_lines": 117,
+      "overriden_lines": 0
+    }
+  }
+}
