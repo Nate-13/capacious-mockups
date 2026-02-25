@@ -14,6 +14,7 @@ interface LaserPath {
   points: string;
   fading: boolean;
   isArrow: boolean;
+  isRect: boolean;
 }
 
 let rippleId = 0;
@@ -25,6 +26,7 @@ export default function CursorEnhancer() {
   const [laserPaths, setLaserPaths] = useState<LaserPath[]>([]);
   const isDragging = useRef(false);
   const isArrowMode = useRef(false);
+  const isRectMode = useRef(false);
   const startPoint = useRef<{ x: number; y: number } | null>(null);
   const currentPoints = useRef<{ x: number; y: number }[]>([]);
   const currentPathId = useRef<number>(0);
@@ -73,6 +75,14 @@ export default function CursorEnhancer() {
     [],
   );
 
+  // Build a rectangle path from two corners
+  const buildRect = useCallback(
+    (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      return `M ${from.x} ${from.y} L ${to.x} ${from.y} L ${to.x} ${to.y} L ${from.x} ${to.y} Z`;
+    },
+    [],
+  );
+
   // Track mouse position via ref (no re-renders)
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -81,17 +91,20 @@ export default function CursorEnhancer() {
       }
 
       if (isDragging.current) {
-        if (isArrowMode.current && startPoint.current) {
+        const pt = { x: e.clientX, y: e.clientY };
+        if (isRectMode.current && startPoint.current) {
+          // Rectangle mode
+          const d = buildRect(startPoint.current, pt);
+          if (activeGlowRef.current) activeGlowRef.current.setAttribute("d", d);
+          if (activePathRef.current) activePathRef.current.setAttribute("d", d);
+        } else if (isArrowMode.current && startPoint.current) {
           // Arrow mode: straight line from start to current
-          const d = buildArrowLine(startPoint.current, {
-            x: e.clientX,
-            y: e.clientY,
-          });
+          const d = buildArrowLine(startPoint.current, pt);
           if (activeGlowRef.current) activeGlowRef.current.setAttribute("d", d);
           if (activePathRef.current) activePathRef.current.setAttribute("d", d);
         } else {
           // Freeform mode
-          currentPoints.current.push({ x: e.clientX, y: e.clientY });
+          currentPoints.current.push(pt);
           const d = buildPath(currentPoints.current);
           if (activeGlowRef.current) activeGlowRef.current.setAttribute("d", d);
           if (activePathRef.current) activePathRef.current.setAttribute("d", d);
@@ -100,7 +113,7 @@ export default function CursorEnhancer() {
     };
     window.addEventListener("mousemove", handler);
     return () => window.removeEventListener("mousemove", handler);
-  }, [buildPath, buildArrowLine]);
+  }, [buildPath, buildArrowLine, buildRect]);
 
   // Prevent text selection during drag
   useEffect(() => {
@@ -119,7 +132,8 @@ export default function CursorEnhancer() {
     setRipples((prev) => [...prev, { id, x: e.clientX, y: e.clientY }]);
 
     isDragging.current = true;
-    isArrowMode.current = aKeyDown.current;
+    isRectMode.current = e.shiftKey;
+    isArrowMode.current = !e.shiftKey && aKeyDown.current;
     startPoint.current = { x: e.clientX, y: e.clientY };
     currentPoints.current = [{ x: e.clientX, y: e.clientY }];
     currentPathId.current = ++pathId;
@@ -130,7 +144,8 @@ export default function CursorEnhancer() {
         id: currentPathId.current,
         points: "",
         fading: false,
-        isArrow: aKeyDown.current,
+        isArrow: !e.shiftKey && aKeyDown.current,
+        isRect: e.shiftKey,
       },
     ]);
   }, []);
@@ -143,14 +158,21 @@ export default function CursorEnhancer() {
 
       const id = currentPathId.current;
       let finalPath: string;
+      const endPt = { x: e.clientX, y: e.clientY };
 
-      if (isArrowMode.current && startPoint.current) {
-        finalPath = buildArrowLine(startPoint.current, {
-          x: e.clientX,
-          y: e.clientY,
-        });
-        const dx = e.clientX - startPoint.current.x;
-        const dy = e.clientY - startPoint.current.y;
+      if (isRectMode.current && startPoint.current) {
+        const dx = endPt.x - startPoint.current.x;
+        const dy = endPt.y - startPoint.current.y;
+        if (Math.sqrt(dx * dx + dy * dy) < 10) {
+          setLaserPaths((prev) => prev.filter((p) => p.id !== id));
+          currentPoints.current = [];
+          return;
+        }
+        finalPath = buildRect(startPoint.current, endPt);
+      } else if (isArrowMode.current && startPoint.current) {
+        finalPath = buildArrowLine(startPoint.current, endPt);
+        const dx = endPt.x - startPoint.current.x;
+        const dy = endPt.y - startPoint.current.y;
         if (Math.sqrt(dx * dx + dy * dy) < 10) {
           setLaserPaths((prev) => prev.filter((p) => p.id !== id));
           currentPoints.current = [];
@@ -167,13 +189,14 @@ export default function CursorEnhancer() {
 
       // Snapshot the final path
       const wasArrow = isArrowMode.current;
+      const wasRect = isRectMode.current;
       setLaserPaths((prev) =>
         prev.map((p) => (p.id === id ? { ...p, points: finalPath } : p)),
       );
       currentPoints.current = [];
 
-      // Arrows hold for 1.5s before fading; freeform fades immediately
-      const fadeDelay = wasArrow ? 1500 : 0;
+      // Arrows and rects hold for 1.5s before fading; freeform fades immediately
+      const fadeDelay = wasArrow || wasRect ? 1500 : 0;
       setTimeout(() => {
         setLaserPaths((prev) =>
           prev.map((p) => (p.id === id ? { ...p, fading: true } : p)),
@@ -183,7 +206,7 @@ export default function CursorEnhancer() {
         }, 1500);
       }, fadeDelay);
     },
-    [buildPath, buildArrowLine],
+    [buildPath, buildArrowLine, buildRect],
   );
 
   useEffect(() => {
