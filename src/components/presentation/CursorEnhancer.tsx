@@ -222,8 +222,6 @@ export default function CursorEnhancer() {
     setRipples((prev) => prev.filter((r) => r.id !== id));
   }, []);
 
-  const activePath = laserPaths.find((p) => !p.fading && !p.points);
-
   return (
     <>
       {/* Custom cursor */}

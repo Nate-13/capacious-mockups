@@ -30,6 +30,8 @@ export default function RoleAnnouncement() {
       setVisible(true);
       const timer = setTimeout(() => setVisible(false), 1200);
       return () => clearTimeout(timer);
+    } else {
+      setVisible(false);
     }
   }, [isPresenting, currentStep.role, currentStepIndex]);
 

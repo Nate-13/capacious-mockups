@@ -200,14 +200,6 @@ export default function AdminPage() {
                       ))}
                     </div>
                   </div>
-                  <div className="text-right ml-4 shrink-0">
-                    <p className="text-[12px] text-[#999]">
-                      {reviewer.reviewsCompleted} reviews completed
-                    </p>
-                    <p className="text-[12px] text-[#999]">
-                      ~{reviewer.avgTurnaroundDays} day avg turnaround
-                    </p>
-                  </div>
                 </div>
               </Card>
             ))}
