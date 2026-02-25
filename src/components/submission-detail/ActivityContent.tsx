@@ -1,6 +1,7 @@
 "use client";
 
 import { ActivityEntry, FileVersion } from "@/types";
+import { useToast } from "@/components/Toast";
 
 interface ActivityContentProps {
   activity: ActivityEntry[];
@@ -87,6 +88,7 @@ export default function ActivityContent({
   activity,
   files,
 }: ActivityContentProps) {
+  const { showToast } = useToast();
   const groups = buildStageGroups(activity, files);
 
   return (
@@ -126,7 +128,7 @@ export default function ActivityContent({
                 {stageFile && (
                   <button
                     onClick={() =>
-                      alert(`Download: ${stageFile.filename} (Mock)`)
+                      showToast(`Download: ${stageFile.filename}`, "info")
                     }
                     className="flex items-center gap-2.5 mt-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded transition-colors text-left"
                   >
@@ -193,7 +195,7 @@ export default function ActivityContent({
                     {linkedFile && (
                       <button
                         onClick={() =>
-                          alert(`Download: ${linkedFile.filename} (Mock)`)
+                          showToast(`Download: ${linkedFile.filename}`, "info")
                         }
                         className="flex items-center gap-2.5 mt-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded transition-colors text-left"
                       >

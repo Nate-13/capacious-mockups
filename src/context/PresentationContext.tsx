@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import { useRole } from "@/context/RoleContext";
+import { useDemoState } from "@/context/DemoStateContext";
 import {
   PRESENTATION_STEPS,
   PresentationStep,
@@ -40,6 +41,7 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
   const [requestedTab, setRequestedTab] = useState<TabType | null>(null);
   const router = useRouter();
   const { setRole } = useRole();
+  const { resetDemoState } = useDemoState();
 
   const currentStep = PRESENTATION_STEPS[currentStepIndex];
 
@@ -56,10 +58,11 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
   );
 
   const startPresentation = useCallback(() => {
+    resetDemoState();
     setIsPresenting(true);
     document.body.classList.add("presentation-mode");
     goToStep(0);
-  }, [goToStep]);
+  }, [goToStep, resetDemoState]);
 
   const endPresentation = useCallback(() => {
     setIsPresenting(false);
@@ -125,9 +128,9 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      // Number keys 1-8 to jump to step
+      // Number keys 1-9 to jump to step
       const num = parseInt(e.key);
-      if (num >= 1 && num <= TOTAL_STEPS) {
+      if (num >= 1 && num <= Math.min(9, TOTAL_STEPS)) {
         e.preventDefault();
         goToStep(num - 1);
         return;

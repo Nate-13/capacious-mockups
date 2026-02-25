@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Submission, Reviewer, Review, ReviewRecommendation } from "@/types";
 import { Button } from "@/components/ui";
+import { useToast } from "@/components/Toast";
 
 interface ReviewsContentProps {
   submission: Submission;
@@ -21,6 +22,7 @@ function EditorReviewCard({
   index: number;
   onRelease: (reviewerId: string, editedComments: string) => void;
 }) {
+  const { showToast } = useToast();
   const review = reviewer.review!;
   const [editedComments, setEditedComments] = useState(
     review.editorModifiedComments || review.commentsToAuthor,
@@ -124,11 +126,21 @@ function EditorReviewCard({
             Attached File
           </h5>
           <button
-            onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+            onClick={() => showToast(`Download: ${review.markupFile}`, "info")}
             className="inline-flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-[6px] px-3 py-2 transition-colors"
           >
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              className="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             {review.markupFile}
           </button>
@@ -163,6 +175,7 @@ function AuthorReviewCard({
   review: Review;
   index: number;
 }) {
+  const { showToast } = useToast();
   const recommendationColors: Record<string, string> = {
     Accept: "bg-[#E0E0E0] text-[#333]",
     "Accept with Minor Changes": "bg-[#E0E0E0] text-[#333]",
@@ -196,11 +209,21 @@ function AuthorReviewCard({
       {review.markupFile && (
         <div className="mt-4 pt-4 border-t border-gray-100">
           <button
-            onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+            onClick={() => showToast(`Download: ${review.markupFile}`, "info")}
             className="inline-flex items-center gap-2 text-[13px] text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-[6px] px-3 py-2 transition-colors"
           >
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            <svg
+              className="w-4 h-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
             {review.markupFile}
           </button>
@@ -212,6 +235,7 @@ function AuthorReviewCard({
 
 // Reviewer's own submission form
 function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
+  const { showToast } = useToast();
   const [recommendation, setRecommendation] =
     useState<ReviewRecommendation>("Accept");
   const [commentsToEditor, setCommentsToEditor] = useState("");
@@ -226,9 +250,7 @@ function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
   ];
 
   const handleSubmit = () => {
-    alert(
-      `Review submitted (Mock)\nSubmission: ${submissionId}\nRecommendation: ${recommendation}`,
-    );
+    showToast("Review submitted successfully", "success");
   };
 
   return (
@@ -433,9 +455,7 @@ export default function ReviewsContent({
                       Submitted
                     </span>
                   ) : (
-                    <span className="text-[12px] text-gray-400">
-                      Pending
-                    </span>
+                    <span className="text-[12px] text-gray-400">Pending</span>
                   )}
                 </div>
               </div>

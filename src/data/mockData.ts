@@ -395,14 +395,14 @@ export const submissions: Submission[] = [
         status: "Submitted",
 
         submittedDate: "February 8, 2024",
-        review: reviews[8],
+        review: reviews[11],
       },
       {
         ...reviewers[3],
         status: "Submitted",
 
         submittedDate: "February 9, 2024",
-        review: reviews[9],
+        review: reviews[12],
       },
     ],
   },

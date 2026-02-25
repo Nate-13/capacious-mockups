@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { CopyEditor } from "@/types";
 import { getAvailableCopyEditors } from "@/data/mockData";
 
 interface CopyEditorAssignmentModalProps {
@@ -21,19 +20,39 @@ export default function CopyEditorAssignmentModal({
   const allEditors = getAvailableCopyEditors();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [search, setSearch] = useState("");
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedIds([]);
+      setSearch("");
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !mounted) return null;
 
   const filteredEditors = allEditors.filter((editor) => {
-    const isAlready = alreadyAssigned.includes(editor.id);
-    const matchesSearch =
-      search === "" ||
-      editor.name.toLowerCase().includes(search.toLowerCase()) ||
-      editor.affiliation.toLowerCase().includes(search.toLowerCase()) ||
-      editor.expertise.some((e) =>
-        e.toLowerCase().includes(search.toLowerCase()),
-      );
-    return !isAlready && matchesSearch;
+    if (alreadyAssigned.includes(editor.id)) return false;
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    return (
+      editor.name.toLowerCase().includes(q) ||
+      editor.affiliation.toLowerCase().includes(q) ||
+      editor.expertise.some((exp) => exp.toLowerCase().includes(q))
+    );
   });
 
   const toggleEditor = (id: string) => {
@@ -49,90 +68,232 @@ export default function CopyEditorAssignmentModal({
     onClose();
   };
 
-  return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[80vh] flex flex-col">
-        <div className="p-5 border-b border-gray-100">
-          <h2 className="text-[15px] font-semibold text-gray-800">
+  const modal = (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zoom: 1,
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.4)",
+        }}
+        onClick={onClose}
+      />
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          maxWidth: 520,
+          maxHeight: "80vh",
+          margin: "0 16px",
+          backgroundColor: "white",
+          borderRadius: 8,
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <div
+          style={{
+            padding: 20,
+            borderBottom: "1px solid #f3f4f6",
+          }}
+        >
+          <h2
+            style={{
+              fontSize: 15,
+              fontWeight: 600,
+              color: "#1f2937",
+              margin: 0,
+            }}
+          >
             Assign Copy Editors
           </h2>
-          <p className="text-[12px] text-gray-500 mt-1">
+          <p
+            style={{
+              fontSize: 12,
+              color: "#6b7280",
+              marginTop: 4,
+              marginBottom: 0,
+            }}
+          >
             Select copy editors to assign to this submission.
           </p>
         </div>
 
-        <div className="px-5 pt-4">
+        <div style={{ padding: "16px 20px 0" }}>
           <input
             type="text"
             placeholder="Search by name, affiliation, or expertise..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-3 py-2 text-[13px] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-200"
+            autoFocus
+            style={{
+              width: "100%",
+              padding: "8px 12px",
+              fontSize: 13,
+              border: "1px solid #d1d5db",
+              borderRadius: 6,
+              outline: "none",
+              boxSizing: "border-box",
+            }}
           />
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5 space-y-2">
+        <div
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: 20,
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
           {filteredEditors.length === 0 ? (
-            <p className="text-[13px] text-gray-500 text-center py-4">
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: 13,
+                color: "#6b7280",
+                padding: "16px 0",
+              }}
+            >
               No available copy editors found.
             </p>
           ) : (
-            filteredEditors.map((editor) => (
-              <label
-                key={editor.id}
-                className={`flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-                  selectedIds.includes(editor.id)
-                    ? "bg-gray-100"
-                    : "hover:bg-gray-50"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(editor.id)}
-                  onChange={() => toggleEditor(editor.id)}
-                  className="mt-0.5 rounded border-gray-300"
-                />
-                <div>
-                  <p className="text-[14px] font-medium text-gray-800">
-                    {editor.name}
-                  </p>
-                  <p className="text-[12px] text-gray-500">
-                    {editor.affiliation}
-                  </p>
-                  <div className="flex flex-wrap gap-1 mt-1">
-                    {editor.expertise.map((exp) => (
-                      <span
-                        key={exp}
-                        className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded"
-                      >
-                        {exp}
-                      </span>
-                    ))}
+            filteredEditors.map((editor) => {
+              const selected = selectedIds.includes(editor.id);
+              return (
+                <label
+                  key={editor.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    padding: 12,
+                    borderRadius: 8,
+                    cursor: "pointer",
+                    backgroundColor: selected ? "#f3f4f6" : "transparent",
+                    transition: "background-color 0.15s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!selected)
+                      e.currentTarget.style.backgroundColor = "#f9fafb";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!selected)
+                      e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    onChange={() => toggleEditor(editor.id)}
+                    style={{ marginTop: 2, accentColor: "#333" }}
+                  />
+                  <div>
+                    <p
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 500,
+                        color: "#1f2937",
+                        margin: 0,
+                      }}
+                    >
+                      {editor.name}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 12,
+                        color: "#6b7280",
+                        margin: 0,
+                      }}
+                    >
+                      {editor.affiliation}
+                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 4,
+                        marginTop: 6,
+                      }}
+                    >
+                      {editor.expertise.map((exp) => (
+                        <span
+                          key={exp}
+                          style={{
+                            fontSize: 10,
+                            padding: "2px 6px",
+                            backgroundColor: "#f3f4f6",
+                            color: "#4b5563",
+                            borderRadius: 4,
+                          }}
+                        >
+                          {exp}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </label>
-            ))
+                </label>
+              );
+            })
           )}
         </div>
 
-        <div className="p-5 border-t border-gray-100 flex justify-end gap-2">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 8,
+            padding: 20,
+            borderTop: "1px solid #f3f4f6",
+          }}
+        >
           <button
             onClick={onClose}
-            className="px-4 py-2 text-[13px] text-gray-600 hover:text-gray-800 transition-colors"
+            style={{
+              padding: "8px 16px",
+              fontSize: 13,
+              color: "#4b5563",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
             Cancel
           </button>
           <button
             onClick={handleAssign}
             disabled={selectedIds.length === 0}
-            className="px-4 py-2 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              padding: "8px 16px",
+              fontSize: 13,
+              fontWeight: 700,
+              color: "white",
+              backgroundColor: selectedIds.length === 0 ? "#999" : "#333",
+              border: "none",
+              borderRadius: 6,
+              cursor: selectedIds.length === 0 ? "not-allowed" : "pointer",
+              opacity: selectedIds.length === 0 ? 0.5 : 1,
+            }}
           >
             Assign {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
           </button>
         </div>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
+
+  return createPortal(modal, document.body);
 }

@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Submission, Reviewer, Review, ReviewRecommendation } from "@/types";
 import { Button } from "@/components/ui";
 import FileUpload from "@/components/ui/FileUpload";
+import { useDemoState } from "@/context/DemoStateContext";
+import { useToast } from "@/components/Toast";
 
 interface ReviewDetailProps {
   submission: Submission;
@@ -30,6 +32,7 @@ function EditorReviewDetail({
   reviewer: Reviewer;
   onRelease: (reviewerId: string, editedComments: string) => void;
 }) {
+  const { showToast } = useToast();
   const review = reviewer.review!;
   const [editedComments, setEditedComments] = useState(
     review.editorModifiedComments || review.commentsToAuthor,
@@ -121,7 +124,7 @@ function EditorReviewDetail({
       {/* Attached file */}
       {review.markupFile && (
         <button
-          onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+          onClick={() => showToast(`Download: ${review.markupFile}`, "info")}
           className="flex items-center gap-3 w-full text-left px-4 py-3 mb-6 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
         >
           <svg
@@ -173,6 +176,7 @@ function AuthorReviewDetail({
   review: Review;
   index: number;
 }) {
+  const { showToast } = useToast();
   const displayComments =
     review.editorModifiedComments || review.commentsToAuthor;
 
@@ -195,7 +199,7 @@ function AuthorReviewDetail({
       </div>
       {review.markupFile && (
         <button
-          onClick={() => alert(`Download: ${review.markupFile} (Mock)`)}
+          onClick={() => showToast(`Download: ${review.markupFile}`, "info")}
           className="flex items-center gap-3 w-full text-left px-4 py-3 mt-6 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
         >
           <svg
@@ -224,7 +228,14 @@ function AuthorReviewDetail({
 }
 
 // Reviewer's own submission form
-function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
+function ReviewerSubmitForm({
+  submissionId,
+  reviewerId,
+}: {
+  submissionId: string;
+  reviewerId: string;
+}) {
+  const { submitReview } = useDemoState();
   const [recommendation, setRecommendation] =
     useState<ReviewRecommendation>("Accept");
   const [commentsToEditor, setCommentsToEditor] = useState("");
@@ -239,8 +250,12 @@ function ReviewerSubmitForm({ submissionId }: { submissionId: string }) {
   ];
 
   const handleSubmit = () => {
-    alert(
-      `Review submitted (Mock)\nSubmission: ${submissionId}\nRecommendation: ${recommendation}`,
+    submitReview(
+      submissionId,
+      reviewerId,
+      recommendation,
+      commentsToEditor,
+      commentsToAuthor,
     );
   };
 
@@ -376,7 +391,12 @@ export default function ReviewDetail({
 
   if (role === "Reviewer") {
     if (isPending) {
-      return <ReviewerSubmitForm submissionId={submission.id} />;
+      return (
+        <ReviewerSubmitForm
+          submissionId={submission.id}
+          reviewerId={reviewer.id}
+        />
+      );
     }
     if (isSubmitted) {
       return (

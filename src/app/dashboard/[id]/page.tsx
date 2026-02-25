@@ -4,11 +4,8 @@ import { use, useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useRole } from "@/context/RoleContext";
 import { usePresentation } from "@/context/PresentationContext";
-import {
-  getSubmissionById,
-  getFilesForSubmission,
-  getActivityForSubmission,
-} from "@/data/mockData";
+import { useDemoState } from "@/context/DemoStateContext";
+import { useToast } from "@/components/Toast";
 import { StatusBadge } from "@/components/ui";
 import {
   FilesCard,
@@ -22,6 +19,7 @@ import CopyEditingContent from "@/components/submission-detail/CopyEditingConten
 import ReviewsSidebar from "@/components/submission-detail/ReviewsSidebar";
 import ReviewDetail from "@/components/submission-detail/ReviewDetail";
 import ReviewerAssignmentModal from "@/components/ReviewerAssignmentModal";
+import CopyEditorAssignmentModal from "@/components/submission-detail/CopyEditorAssignmentModal";
 import FileUpload from "@/components/ui/FileUpload";
 import { ContentType, FileVersion, SubmissionStatus } from "@/types";
 
@@ -32,10 +30,23 @@ interface PageProps {
 export default function SubmissionDetailPage({ params }: PageProps) {
   const { id } = use(params);
   const { role } = useRole();
+  const {
+    getSubmission,
+    getActivity,
+    getFiles,
+    updateSubmissionStatus,
+    updateContentType,
+    assignReviewers,
+    releaseReview,
+    makeEditorDecision,
+    assignCopyEditors,
+    markReadyForProduction,
+  } = useDemoState();
+  const { showToast } = useToast();
 
-  const submission = getSubmissionById(id);
-  const files = getFilesForSubmission(id);
-  const activity = getActivityForSubmission(id);
+  const submission = getSubmission(id);
+  const files = getFiles(id);
+  const activity = getActivity(id);
 
   const [selectedFile, setSelectedFile] = useState<FileVersion | null>(
     files.length > 0 ? files[files.length - 1] : null,
@@ -46,6 +57,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
   );
   const [contentTypeOpen, setContentTypeOpen] = useState(false);
   const [showReviewerModal, setShowReviewerModal] = useState(false);
+  const [showCopyEditorModal, setShowCopyEditorModal] = useState(false);
   const contentTypeRef = useRef<HTMLDivElement>(null);
   const { isPresenting, requestedTab } = usePresentation();
 
@@ -121,12 +133,13 @@ export default function SubmissionDetailPage({ params }: PageProps) {
     (r) => r.review?.releasedToAuthor,
   );
 
+  const hasAssignedReviewers =
+    submission.assignedReviewers && submission.assignedReviewers.length > 0;
   const showReviewsTab =
     role !== "Copy Editor" &&
     (submittedReviews.length > 0 ||
-      (role === "Reviewer" &&
-        submission.assignedReviewers &&
-        submission.assignedReviewers.length > 0));
+      (role === "Reviewer" && hasAssignedReviewers) ||
+      (isEditor && hasAssignedReviewers));
 
   const showCopyEditingTab =
     submission.status === "In Copy Editing" ||
@@ -196,19 +209,52 @@ export default function SubmissionDetailPage({ params }: PageProps) {
       (r) => r.id === effectiveReviewerId,
     ) ?? -1;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleReleaseReview = (reviewerId: string, editedComments: string) => {
-    alert(`Review released to author! (Mock action)\nReviewer: ${reviewerId}`);
+    releaseReview(submission.id, reviewerId, editedComments || undefined);
   };
 
-  const handleEditorAction = () => {
-    // Mock action handler
+  const handleEditorAction = (action: string) => {
+    if (!submission) return;
+    switch (action) {
+      case "approve-peer-review":
+        updateSubmissionStatus(submission.id, "In Peer Review");
+        break;
+      case "accept":
+      case "conditional-accept":
+      case "accept-minor-changes":
+      case "revise-resubmit":
+      case "reject":
+        makeEditorDecision(submission.id, action);
+        break;
+      case "move-to-copy-editing":
+      case "skip-to-copy-editing":
+        updateSubmissionStatus(submission.id, "In Copy Editing");
+        break;
+      case "desk-reject":
+        updateSubmissionStatus(submission.id, "Rejected");
+        break;
+      case "mark-ready-for-production":
+        markReadyForProduction(submission.id);
+        break;
+      case "publish":
+        updateSubmissionStatus(submission.id, "Published");
+        break;
+      case "assign-copy-editors":
+        setShowCopyEditorModal(true);
+        break;
+      case "re-assign-reviewers":
+        setShowReviewerModal(true);
+        break;
+      case "request-revisions":
+        showToast("Revision request sent to author", "info");
+        break;
+      default:
+        showToast(`${action} simulated`, "info");
+    }
   };
 
   const handleStatusOverride = (newStatus: SubmissionStatus) => {
-    alert(
-      `Status overridden to "${newStatus}" (Mock)\nSubmission: ${submission.id}`,
-    );
+    updateSubmissionStatus(submission.id, newStatus);
   };
 
   // Animation configuration
@@ -322,9 +368,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                           <button
                             key={ct}
                             onClick={() => {
-                              alert(
-                                `Content type changed to "${ct}" (Mock)\nSubmission: ${submission.id}`,
-                              );
+                              updateContentType(submission.id, ct);
                               setContentTypeOpen(false);
                             }}
                             className={`w-full text-left px-3 py-1.5 text-[12px] hover:bg-gray-50 transition-colors ${
@@ -489,9 +533,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                                   {isEditor && (
                                     <button
                                       onClick={() =>
-                                        alert(
-                                          "Copy editor assignment modal would open here. This is a mockup.",
-                                        )
+                                        setShowCopyEditorModal(true)
                                       }
                                       className="w-full p-2.5 text-[12px] text-gray-500 border border-dashed border-gray-300 rounded-lg bg-transparent hover:bg-gray-50 hover:border-gray-400 transition-colors"
                                     >
@@ -523,11 +565,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                                 ))}
                                 {isEditor && (
                                   <button
-                                    onClick={() =>
-                                      alert(
-                                        "Copy editor assignment modal would open here. This is a mockup.",
-                                      )
-                                    }
+                                    onClick={() => setShowCopyEditorModal(true)}
                                     className="w-full mt-2 p-2.5 text-[12px] text-gray-500 border border-dashed border-gray-300 rounded-lg bg-transparent hover:bg-gray-50 hover:border-gray-400 transition-colors"
                                   >
                                     + Assign Copy Editor
@@ -646,8 +684,9 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                                       <button
                                         key={file.id}
                                         onClick={() =>
-                                          alert(
-                                            `Download: ${file.filename} (Mock)`,
+                                          showToast(
+                                            `Download: ${file.filename}`,
+                                            "info",
                                           )
                                         }
                                         className="w-full text-left px-3 py-2 rounded text-[13px] text-gray-600 hover:bg-gray-50 hover:text-gray-800 transition-colors flex items-center gap-2"
@@ -698,9 +737,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                             <div className="mt-5">
                               <button
                                 onClick={() =>
-                                  alert(
-                                    `Marked as Ready for Production (Mock)\nSubmission: ${submission.id}`,
-                                  )
+                                  markReadyForProduction(submission.id)
                                 }
                                 className="w-full px-4 py-2.5 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
                               >
@@ -843,8 +880,20 @@ export default function SubmissionDetailPage({ params }: PageProps) {
       <ReviewerAssignmentModal
         isOpen={showReviewerModal}
         onClose={() => setShowReviewerModal(false)}
-        onAssign={() => setShowReviewerModal(false)}
+        onAssign={(reviewerIds) => {
+          assignReviewers(submission.id, reviewerIds);
+          setShowReviewerModal(false);
+        }}
         alreadyAssigned={submission.assignedReviewers?.map((r) => r.id) || []}
+      />
+      <CopyEditorAssignmentModal
+        isOpen={showCopyEditorModal}
+        onClose={() => setShowCopyEditorModal(false)}
+        onAssign={(editorIds) => {
+          assignCopyEditors(submission.id, editorIds);
+          setShowCopyEditorModal(false);
+        }}
+        alreadyAssigned={submission.assignedCopyEditors?.map((e) => e.id) || []}
       />
     </div>
   );

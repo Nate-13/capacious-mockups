@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useRole, RoleType } from "@/context/RoleContext";
-import { submissions } from "@/data/mockData";
+import { useDemoState } from "@/context/DemoStateContext";
 import { Submission } from "@/types";
 import DashboardFilters from "@/components/DashboardFilters";
 import SubmissionCard from "@/components/SubmissionCard";
@@ -16,6 +16,7 @@ function statusToFilterValue(status: string): string {
 export default function DashboardPage() {
   const router = useRouter();
   const { role } = useRole();
+  const { getAllSubmissions, version } = useDemoState();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -25,7 +26,7 @@ export default function DashboardPage() {
 
   // Filter submissions based on role and filters
   const filteredSubmissions = useMemo(() => {
-    let result: Submission[] = [...submissions];
+    let result: Submission[] = [...getAllSubmissions()];
 
     // Role-based filtering
     switch (role) {
@@ -80,7 +81,15 @@ export default function DashboardPage() {
     }
 
     return result;
-  }, [role, searchQuery, statusFilter, typeFilter, showFilters]);
+  }, [
+    role,
+    searchQuery,
+    statusFilter,
+    typeFilter,
+    showFilters,
+    getAllSubmissions,
+    version,
+  ]);
 
   // Compute meta info based on role and submission status
   const getMetaInfo = (submission: Submission): string | undefined => {
@@ -137,7 +146,11 @@ export default function DashboardPage() {
   const getActionNeeded = (submission: Submission): boolean => {
     switch (role) {
       case "Author":
-        return ["Revise & Resubmit", "Accept with Minor Changes", "Conditional Accept"].includes(submission.status);
+        return [
+          "Revise & Resubmit",
+          "Accept with Minor Changes",
+          "Conditional Accept",
+        ].includes(submission.status);
       case "Reviewer":
         return (
           submission.assignedReviewers?.some((r) => r.status === "Pending") ??

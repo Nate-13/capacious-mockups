@@ -11,10 +11,10 @@ export interface PresentationStep {
 }
 
 export const PRESENTATION_STEPS: PresentationStep[] = [
-  // --- Managing Editor workflow ---
+  // === Act 1: "The Editor's Day" (Managing Editor) ===
   {
     id: 1,
-    title: "Dashboard",
+    title: "Dashboard Overview",
     description:
       "The Managing Editor sees all submissions across every status, with filters for status and content type.",
     role: "Managing Editor",
@@ -22,33 +22,42 @@ export const PRESENTATION_STEPS: PresentationStep[] = [
   },
   {
     id: 2,
-    title: "Desk Review",
+    title: "New Submission",
     description:
-      "The editor reviews a new submission and decides whether to send it out for peer review.",
+      "A new submission has arrived. The editor reviews it and decides whether to send it out for peer review.",
     role: "Managing Editor",
     route: "/dashboard/2024-052",
     tab: "submission",
   },
   {
     id: 3,
-    title: "Peer Review",
+    title: "Assigning Reviewers",
     description:
-      "The editor assigns peer reviewers and tracks which reviews have come in.",
+      "After approving for peer review, the editor selects and assigns subject-matter experts as reviewers.",
     role: "Managing Editor",
-    route: "/dashboard/2024-034",
+    route: "/dashboard/2024-052",
     tab: "reviews",
   },
   {
     id: 4,
-    title: "Editor Decision",
+    title: "Review Approval",
     description:
-      "With all reviews in, the editor reads the feedback and renders a decision on the manuscript.",
+      "Reviews are in. The editor reads each review, can edit the comments before releasing them to the author.",
     role: "Managing Editor",
     route: "/dashboard/2024-028",
     tab: "reviews",
   },
   {
     id: 5,
+    title: "Editor Decision",
+    description:
+      "After approving reviews, the editor renders a decision on the manuscript.",
+    role: "Managing Editor",
+    route: "/dashboard/2024-028",
+    tab: "reviews",
+  },
+  {
+    id: 6,
     title: "Copy Editing",
     description:
       "The editor oversees the copy editing process — marked-up versions are exchanged between copy editor and author.",
@@ -57,7 +66,7 @@ export const PRESENTATION_STEPS: PresentationStep[] = [
     tab: "copy-editing",
   },
   {
-    id: 6,
+    id: 7,
     title: "Activity Log",
     description:
       "A complete timeline of every action taken on a submission — from initial submission through production.",
@@ -66,34 +75,43 @@ export const PRESENTATION_STEPS: PresentationStep[] = [
     tab: "activity",
   },
   {
-    id: 7,
+    id: 8,
     title: "People Management",
     description:
-      "The editor manages the reviewer and copy editor databases — tracking expertise, turnaround times, and availability.",
+      "The editor manages the reviewer and copy editor databases — tracking expertise and availability.",
     role: "Managing Editor",
     route: "/admin",
   },
-  // --- Other perspectives ---
+  // === Act 2: "The Other Side" ===
   {
-    id: 8,
-    title: "Author View",
+    id: 9,
+    title: "Reviewer's Dashboard",
     description:
-      "Authors only see their own submissions, action items, and the submission form.",
-    role: "Author",
+      "Reviewers see only the submissions they've been assigned to review.",
+    role: "Reviewer",
     route: "/dashboard",
   },
   {
-    id: 9,
-    title: "Reviewer View",
+    id: 10,
+    title: "Submitting a Review",
     description:
-      "Reviewers see only the submissions they've been assigned to review, and can submit their evaluations.",
+      "A reviewer completes their evaluation, provides a recommendation, and submits their review.",
     role: "Reviewer",
     route: "/dashboard/2024-034",
     tab: "reviews",
   },
+  // === Act 3: "Closing the Loop" ===
   {
-    id: 10,
-    title: "Copy Editor View",
+    id: 11,
+    title: "Author's View",
+    description:
+      "Authors see only their own submissions and any action items requiring their attention.",
+    role: "Author",
+    route: "/dashboard",
+  },
+  {
+    id: 12,
+    title: "Copy Editor's View",
     description:
       "Copy editors see only manuscripts in copy editing, and work through the markup and review cycle.",
     role: "Copy Editor",

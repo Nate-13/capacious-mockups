@@ -7,6 +7,7 @@ import FileUpload from "@/components/ui/FileUpload";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import { useRole } from "@/context/RoleContext";
+import { useToast } from "@/components/Toast";
 
 interface FormData {
   articleTitle: string;
@@ -38,6 +39,7 @@ interface UploadedFile {
 
 export default function SubmitPage() {
   const { role } = useRole();
+  const { showToast } = useToast();
   const isEditor = role === "Managing Editor" || role === "Admin";
 
   const [formData, setFormData] = useState<FormData>({
@@ -91,13 +93,13 @@ export default function SubmitPage() {
 
     if (validateForm()) {
       console.log("Form submitted:", formData);
-      alert("Submission received!");
+      showToast("Submission received!", "success");
     }
   };
 
   const handleSaveDraft = () => {
     console.log("Draft saved:", formData);
-    alert("Draft saved!");
+    showToast("Draft saved!", "info");
   };
 
   const handleInputChange = (field: keyof FormData, value: string) => {

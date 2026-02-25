@@ -17,7 +17,6 @@ export default function EditorActions({
     submission.assignedReviewers.every((r) => r.status === "Submitted");
 
   const handleAction = (action: string) => {
-    alert(`Action: ${action} (Mock)\nSubmission: ${submission.id}`);
     onAction(action);
   };
 

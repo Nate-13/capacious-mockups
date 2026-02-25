@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { RoleProvider } from "@/context/RoleContext";
+import { ToastProvider } from "@/components/Toast";
+import { DemoStateProvider } from "@/context/DemoStateContext";
 import { PresentationProvider } from "@/context/PresentationContext";
 import RoleSwitcher from "@/components/RoleSwitcher";
 import Navigation from "@/components/Navigation";
@@ -33,12 +35,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
       >
         <RoleProvider>
-          <PresentationProvider>
-            <RoleSwitcher />
-            <Navigation />
-            <PresentationOverlay />
-            <main className="pt-16">{children}</main>
-          </PresentationProvider>
+          <ToastProvider>
+            <DemoStateProvider>
+              <PresentationProvider>
+                <RoleSwitcher />
+                <Navigation />
+                <PresentationOverlay />
+                <main className="pt-16">{children}</main>
+              </PresentationProvider>
+            </DemoStateProvider>
+          </ToastProvider>
         </RoleProvider>
       </body>
     </html>

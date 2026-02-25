@@ -2,6 +2,7 @@
 
 import { Submission, FileVersion } from "@/types";
 import FileUpload from "@/components/ui/FileUpload";
+import { useToast } from "@/components/Toast";
 
 interface CopyEditingContentProps {
   submission: Submission;
@@ -17,9 +18,10 @@ const statusColors: Record<string, string> = {
 };
 
 function DownloadButton({ file }: { file: FileVersion }) {
+  const { showToast } = useToast();
   return (
     <button
-      onClick={() => alert(`Download: ${file.filename} (Mock)`)}
+      onClick={() => showToast(`Download: ${file.filename}`, "info")}
       className="flex items-center gap-3 w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors"
     >
       <svg
