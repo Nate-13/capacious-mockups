@@ -13,6 +13,7 @@ interface LaserPath {
   id: number;
   points: string;
   fading: boolean;
+  isArrow: boolean;
 }
 
 let rippleId = 0;
@@ -23,11 +24,30 @@ export default function CursorEnhancer() {
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const [laserPaths, setLaserPaths] = useState<LaserPath[]>([]);
   const isDragging = useRef(false);
+  const isArrowMode = useRef(false);
+  const startPoint = useRef<{ x: number; y: number } | null>(null);
   const currentPoints = useRef<{ x: number; y: number }[]>([]);
   const currentPathId = useRef<number>(0);
   const svgRef = useRef<SVGSVGElement>(null);
   const activePathRef = useRef<SVGPathElement>(null);
   const activeGlowRef = useRef<SVGPathElement>(null);
+  const aKeyDown = useRef(false);
+
+  // Track 'a' key state
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "a" || e.key === "A") aKeyDown.current = true;
+    };
+    const up = (e: KeyboardEvent) => {
+      if (e.key === "a" || e.key === "A") aKeyDown.current = false;
+    };
+    window.addEventListener("keydown", down);
+    window.addEventListener("keyup", up);
+    return () => {
+      window.removeEventListener("keydown", down);
+      window.removeEventListener("keyup", up);
+    };
+  }, []);
 
   // Build an SVG path string from points
   const buildPath = useCallback((points: { x: number; y: number }[]) => {
@@ -45,6 +65,14 @@ export default function CursorEnhancer() {
     return d;
   }, []);
 
+  // Build a straight line path for arrow mode
+  const buildArrowLine = useCallback(
+    (from: { x: number; y: number }, to: { x: number; y: number }) => {
+      return `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
+    },
+    [],
+  );
+
   // Track mouse position via ref (no re-renders)
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -52,28 +80,32 @@ export default function CursorEnhancer() {
         cursorRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
       }
 
-      // Laser path drawing - update both SVG paths directly via refs
       if (isDragging.current) {
-        currentPoints.current.push({ x: e.clientX, y: e.clientY });
-        const d = buildPath(currentPoints.current);
-        if (activeGlowRef.current) {
-          activeGlowRef.current.setAttribute("d", d);
-        }
-        if (activePathRef.current) {
-          activePathRef.current.setAttribute("d", d);
+        if (isArrowMode.current && startPoint.current) {
+          // Arrow mode: straight line from start to current
+          const d = buildArrowLine(startPoint.current, {
+            x: e.clientX,
+            y: e.clientY,
+          });
+          if (activeGlowRef.current) activeGlowRef.current.setAttribute("d", d);
+          if (activePathRef.current) activePathRef.current.setAttribute("d", d);
+        } else {
+          // Freeform mode
+          currentPoints.current.push({ x: e.clientX, y: e.clientY });
+          const d = buildPath(currentPoints.current);
+          if (activeGlowRef.current) activeGlowRef.current.setAttribute("d", d);
+          if (activePathRef.current) activePathRef.current.setAttribute("d", d);
         }
       }
     };
     window.addEventListener("mousemove", handler);
     return () => window.removeEventListener("mousemove", handler);
-  }, [buildPath]);
+  }, [buildPath, buildArrowLine]);
 
   // Prevent text selection during drag
   useEffect(() => {
     const handler = (e: Event) => {
-      if (isDragging.current) {
-        e.preventDefault();
-      }
+      if (isDragging.current) e.preventDefault();
     };
     document.addEventListener("selectstart", handler);
     return () => document.removeEventListener("selectstart", handler);
@@ -83,12 +115,12 @@ export default function CursorEnhancer() {
   const handleMouseDown = useCallback((e: MouseEvent) => {
     e.preventDefault();
 
-    // Ripple
     const id = ++rippleId;
     setRipples((prev) => [...prev, { id, x: e.clientX, y: e.clientY }]);
 
-    // Start laser path
     isDragging.current = true;
+    isArrowMode.current = aKeyDown.current;
+    startPoint.current = { x: e.clientX, y: e.clientY };
     currentPoints.current = [{ x: e.clientX, y: e.clientY }];
     currentPathId.current = ++pathId;
 
@@ -98,40 +130,61 @@ export default function CursorEnhancer() {
         id: currentPathId.current,
         points: "",
         fading: false,
+        isArrow: aKeyDown.current,
       },
     ]);
   }, []);
 
   // Mouse up - finalize and fade the path
-  const handleMouseUp = useCallback(() => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
+  const handleMouseUp = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
 
-    const finalPath = buildPath(currentPoints.current);
-    const id = currentPathId.current;
+      const id = currentPathId.current;
+      let finalPath: string;
 
-    // Only keep if there's a meaningful drag
-    if (currentPoints.current.length < 4) {
-      setLaserPaths((prev) => prev.filter((p) => p.id !== id));
+      if (isArrowMode.current && startPoint.current) {
+        finalPath = buildArrowLine(startPoint.current, {
+          x: e.clientX,
+          y: e.clientY,
+        });
+        const dx = e.clientX - startPoint.current.x;
+        const dy = e.clientY - startPoint.current.y;
+        if (Math.sqrt(dx * dx + dy * dy) < 10) {
+          setLaserPaths((prev) => prev.filter((p) => p.id !== id));
+          currentPoints.current = [];
+          return;
+        }
+      } else {
+        finalPath = buildPath(currentPoints.current);
+        if (currentPoints.current.length < 4) {
+          setLaserPaths((prev) => prev.filter((p) => p.id !== id));
+          currentPoints.current = [];
+          return;
+        }
+      }
+
+      // Snapshot the final path
+      const wasArrow = isArrowMode.current;
+      setLaserPaths((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, points: finalPath } : p)),
+      );
       currentPoints.current = [];
-      return;
-    }
 
-    // Snapshot the final path, keep it visible
-    setLaserPaths((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, points: finalPath } : p)),
-    );
-    currentPoints.current = [];
-
-    // Start fading immediately
-    setLaserPaths((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, fading: true } : p)),
-    );
-    // Remove from DOM after fade completes
-    setTimeout(() => {
-      setLaserPaths((prev) => prev.filter((p) => p.id !== id));
-    }, 1500);
-  }, [buildPath]);
+      // Arrows hold for 1.5s before fading; freeform fades immediately
+      const fadeDelay = wasArrow ? 1500 : 0;
+      setTimeout(() => {
+        setLaserPaths((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, fading: true } : p)),
+        );
+        setTimeout(() => {
+          setLaserPaths((prev) => prev.filter((p) => p.id !== id));
+        }, 1500);
+      }, fadeDelay);
+    },
+    [buildPath, buildArrowLine],
+  );
 
   useEffect(() => {
     window.addEventListener("mousedown", handleMouseDown);
@@ -146,7 +199,7 @@ export default function CursorEnhancer() {
     setRipples((prev) => prev.filter((r) => r.id !== id));
   }, []);
 
-  const activePath = laserPaths.find((p) => !p.fading);
+  const activePath = laserPaths.find((p) => !p.fading && !p.points);
 
   return (
     <>
@@ -187,16 +240,52 @@ export default function CursorEnhancer() {
         overflow="visible"
       >
         <defs>
-          <filter id="laser-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <filter
+            id="laser-glow"
+            filterUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width="100%"
+            height="100%"
+          >
             <feGaussianBlur stdDeviation="4" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
+          {/* Arrowhead marker */}
+          <marker
+            id="arrowhead"
+            markerWidth="30"
+            markerHeight="24"
+            refX="26"
+            refY="12"
+            orient="auto"
+            markerUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 0 0 L 30 12 L 0 24 L 7 12 Z"
+              fill="rgba(239, 68, 68, 0.85)"
+            />
+          </marker>
+          <marker
+            id="arrowhead-glow"
+            markerWidth="36"
+            markerHeight="30"
+            refX="30"
+            refY="15"
+            orient="auto"
+            markerUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 0 0 L 36 15 L 0 30 L 8 15 Z"
+              fill="rgba(239, 68, 68, 0.35)"
+            />
+          </marker>
         </defs>
 
-        {/* All laser paths — completed ones stay in DOM so CSS transitions work */}
+        {/* All laser paths */}
         {laserPaths.map((lp) => {
           const isActive = !lp.fading && !lp.points;
           return (
@@ -216,6 +305,7 @@ export default function CursorEnhancer() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 filter="url(#laser-glow)"
+                markerEnd={lp.isArrow ? "url(#arrowhead-glow)" : undefined}
               />
               <path
                 ref={isActive ? activePathRef : undefined}
@@ -225,6 +315,7 @@ export default function CursorEnhancer() {
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                markerEnd={lp.isArrow ? "url(#arrowhead)" : undefined}
               />
             </g>
           );
