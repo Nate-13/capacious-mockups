@@ -1,0 +1,58 @@
+src/app/layout.tsx
+  8122baeac1636a11 5,8,36-41
+src/components/RoleSwitcher.tsx
+  8122baeac1636a11 5,17,20
+src/components/presentation/PresentationOverlay.tsx
+  8122baeac1636a11 1-20
+src/config/presentationSteps.ts
+  8122baeac1636a11 1-84
+src/components/presentation/PresentationControls.tsx
+  8122baeac1636a11 1-26,28-42,44-74,76-78,80-137
+src/components/Navigation.tsx
+  8122baeac1636a11 6-7,12-14,52-56
+src/app/globals.css
+  8122baeac1636a11 99-114
+src/context/PresentationContext.tsx
+  8122baeac1636a11 1-186
+src/components/presentation/PresentationLauncher.tsx
+  8122baeac1636a11 1-27
+src/components/presentation/CursorEnhancer.tsx
+  8122baeac1636a11 1-121,123-212,214-222,224-230,232-257
+src/app/dashboard/[id]/page.tsx
+  8122baeac1636a11 6,48-55
+src/components/presentation/PresentationTimeline.tsx
+  8122baeac1636a11 1-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "1b26df878e213f7c7ede0a6243f188a3e3f89a45",
+  "prompts": {
+    "29d0a171bdf36677": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3f164c11-7104-4c63-b807-ba4b9dbd091b",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 0,
+      "accepted_lines": 7,
+      "overriden_lines": 0
+    },
+    "8122baeac1636a11": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17cc36ab-e4ba-4107-a3b4-a71f9844b6f0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 1196,
+      "total_deletions": 355,
+      "accepted_lines": 809,
+      "overriden_lines": 7
+    }
+  }
+}
