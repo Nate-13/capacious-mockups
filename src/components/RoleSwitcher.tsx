@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRole, RoleType } from "@/context/RoleContext";
+import { usePresentation } from "@/context/PresentationContext";
 
 const roles: RoleType[] = [
   "Author",
@@ -13,7 +14,10 @@ const roles: RoleType[] = [
 
 export default function RoleSwitcher() {
   const { role, setRole } = useRole();
+  const { isPresenting } = usePresentation();
   const [isOpen, setIsOpen] = useState(false);
+
+  if (isPresenting) return null;
 
   return (
     <div className="fixed bottom-4 right-4 z-50">

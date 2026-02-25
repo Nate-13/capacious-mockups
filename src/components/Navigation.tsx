@@ -3,10 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRole } from "@/context/RoleContext";
+import { usePresentation } from "@/context/PresentationContext";
+import PresentationLauncher from "@/components/presentation/PresentationLauncher";
 
 export default function Navigation() {
   const pathname = usePathname();
   const { role } = useRole();
+  const { isPresenting } = usePresentation();
+
+  if (isPresenting) return null;
 
   const showPeopleLink = role === "Managing Editor" || role === "Admin";
 
@@ -44,8 +49,11 @@ export default function Navigation() {
           })}
         </div>
 
-        {/* User Name */}
-        <span className="text-sm text-gray-500">(User: Greg S.)</span>
+        {/* User Name + Demo */}
+        <div className="flex items-center gap-3">
+          <PresentationLauncher />
+          <span className="text-sm text-gray-500">(User: Greg S.)</span>
+        </div>
       </div>
     </nav>
   );

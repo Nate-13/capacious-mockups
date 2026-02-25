@@ -3,6 +3,7 @@
 import { use, useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useRole } from "@/context/RoleContext";
+import { usePresentation } from "@/context/PresentationContext";
 import {
   getSubmissionById,
   getFilesForSubmission,
@@ -44,6 +45,14 @@ export default function SubmissionDetailPage({ params }: PageProps) {
   );
   const [contentTypeOpen, setContentTypeOpen] = useState(false);
   const contentTypeRef = useRef<HTMLDivElement>(null);
+  const { isPresenting, requestedTab } = usePresentation();
+
+  // Sync tab with presentation mode
+  useEffect(() => {
+    if (isPresenting && requestedTab) {
+      setActiveTab(requestedTab);
+    }
+  }, [isPresenting, requestedTab]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
