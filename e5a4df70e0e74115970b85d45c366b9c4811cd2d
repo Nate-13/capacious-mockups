@@ -1,0 +1,29 @@
+src/components/ReviewerAssignmentModal.tsx
+  8122baeac1636a11 4,11,18,20-23,25-27,29,32-33,35,37-45,47-52,54-56,60,62,68-69,73,75-83,86-92,94-105,108-111,114-119,123-132,135-136,138-152,155-162,164,166-171,173,175-252,257-263,265,267-274,277-278,280-291,293-294,300
+src/components/submission-detail/ReviewsSidebar.tsx
+  8122baeac1636a11 11,36,142
+src/components/presentation/CursorEnhancer.tsx
+  8122baeac1636a11 230,258,351
+src/app/dashboard/[id]/page.tsx
+  8122baeac1636a11 24,48,464,843-848
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "e5a4df70e0e74115970b85d45c366b9c4811cd2d",
+  "prompts": {
+    "8122baeac1636a11": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "17cc36ab-e4ba-4107-a3b4-a71f9844b6f0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 333,
+      "total_deletions": 205,
+      "accepted_lines": 255,
+      "overriden_lines": 0
+    }
+  }
+}
