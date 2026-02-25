@@ -1,0 +1,49 @@
+src/components/submission-detail/ActivityContent.tsx
+  cfeefaac5dc6aaa6 4,91,131,198
+src/app/layout.tsx
+  cfeefaac5dc6aaa6 5-6,38-40,45-47
+src/context/DemoStateContext.tsx
+  cfeefaac5dc6aaa6 1-92,94-167,169-487
+src/components/submission-detail/CopyEditingContent.tsx
+  cfeefaac5dc6aaa6 5,21,24
+src/app/submit/page.tsx
+  cfeefaac5dc6aaa6 10,42,96,102
+src/context/PresentationContext.tsx
+  cfeefaac5dc6aaa6 13,44,61,65,131,133
+src/components/submission-detail/ReviewDetail.tsx
+  cfeefaac5dc6aaa6 7-8,35,127,179,202,232-233,235-236,238,253-258,394,397,399
+src/app/dashboard/[id]/page.tsx
+  cfeefaac5dc6aaa6 7-8,22,33-45,47-49,60,136-137,141-142,213,216-253,257,371,536,568,687-689,740,883-886,889-896
+src/data/mockData.ts
+  cfeefaac5dc6aaa6 398,405
+src/components/submission-detail/ReviewsContent.tsx
+  cfeefaac5dc6aaa6 6,25,129,178,212,238,253
+src/config/presentationSteps.ts
+  cfeefaac5dc6aaa6 14,17,25,27,34,36,38,43,45,52-60,69,78,81,85,87-88,90-91,95-96,98,103,105-114
+src/components/Toast.tsx
+  cfeefaac5dc6aaa6 1-102
+src/app/dashboard/page.tsx
+  cfeefaac5dc6aaa6 6,19,29,89-90
+src/components/submission-detail/CopyEditorAssignmentModal.tsx
+  cfeefaac5dc6aaa6 3,23,25-27,29-45,48-55,71,73-81,84-88,92-103,106-109,112-117,122-127,133,139-148,153-160,164-169,174-176,178-196,200,202,206-211,216-220,225-230,235-241,246,248-250,255-261,265-272,279-289,295,297-298
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "ea27abd1123ce9b542498243ff5014951b2e7e2a",
+  "prompts": {
+    "cfeefaac5dc6aaa6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8b1aa27d-7d29-4c89-9aee-afeeade59102",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 1054,
+      "total_deletions": 190,
+      "accepted_lines": 951,
+      "overriden_lines": 3
+    }
+  }
+}
