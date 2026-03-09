@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.9",
+  "base_commit_sha": "1be8d402dcde33d1e70090802a159f2a5f474363",
+  "prompts": {
+    "b7f028980ba0a677": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5fb952a7-8297-4bdd-b5be-de1377e55694",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 2,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  }
+}
