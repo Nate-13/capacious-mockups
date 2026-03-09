@@ -1,0 +1,39 @@
+src/context/DemoStateContext.tsx
+  b7f028980ba0a677 408,413,419
+src/components/submission-detail/ActivityContent.tsx
+  b7f028980ba0a677 22
+src/components/Timeline.tsx
+  b7f028980ba0a677 32
+src/components/ui/StatusBadge.tsx
+  b7f028980ba0a677 20,34
+src/types/index.ts
+  b7f028980ba0a677 11
+src/components/DashboardFilters.tsx
+  b7f028980ba0a677 22
+src/components/submission-detail/EditorActions.tsx
+  b7f028980ba0a677 154,159
+src/app/dashboard/[id]/page.tsx
+  b7f028980ba0a677 146,744
+src/data/mockData.ts
+  b7f028980ba0a677 582,585,592,1336,1338,1385,1387
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.9",
+  "base_commit_sha": "d43048a0eb891574113b0ed37742e35aeffefac1",
+  "prompts": {
+    "b7f028980ba0a677": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5fb952a7-8297-4bdd-b5be-de1377e55694",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Nate-13 <149812512+Nate-13@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 20,
+      "total_deletions": 20,
+      "accepted_lines": 20,
+      "overriden_lines": 0
+    }
+  }
+}
