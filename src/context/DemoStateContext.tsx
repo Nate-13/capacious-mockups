@@ -405,18 +405,18 @@ export function DemoStateProvider({ children }: { children: ReactNode }) {
         ...prev,
         statusOverrides: {
           ...prev.statusOverrides,
-          [submissionId]: "Ready for Production",
+          [submissionId]: "Ready for Publication",
         },
       }));
 
       addActivity(submissionId, {
-        description: "Marked as Ready for Production",
+        description: "Marked as Ready for Publication",
         actor: "Managing Editor",
         type: "status-change",
       });
 
       bump();
-      showToast("Marked as Ready for Production", "success");
+      showToast("Marked as Ready for Publication", "success");
     },
     [addActivity, bump, showToast],
   );

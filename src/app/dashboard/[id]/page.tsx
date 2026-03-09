@@ -143,7 +143,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
 
   const showCopyEditingTab =
     submission.status === "In Copy Editing" ||
-    submission.status === "Ready for Production" ||
+    submission.status === "Ready for Publication" ||
     submission.status === "Published";
 
   // Compute tab notifications based on role
@@ -741,7 +741,7 @@ export default function SubmissionDetailPage({ params }: PageProps) {
                                 }
                                 className="w-full px-4 py-2.5 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
                               >
-                                Mark as Ready for Production
+                                Mark as Ready for Publication
                               </button>
                             </div>
                           )}

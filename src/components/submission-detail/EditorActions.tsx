@@ -151,12 +151,12 @@ export default function EditorActions({
               onClick={() => handleAction("mark-ready-for-production")}
               className="w-full px-4 py-2 text-[13px] font-bold bg-[#333] text-white rounded-[6px] hover:bg-[#222] transition-colors"
             >
-              Mark Ready for Production
+              Mark Ready for Publication
             </button>
           </div>
         );
 
-      case "Ready for Production":
+      case "Ready for Publication":
         return (
           <div className="flex flex-col gap-2">
             <button

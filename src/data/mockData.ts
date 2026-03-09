@@ -579,17 +579,17 @@ export const submissions: Submission[] = [
       },
     ],
   },
-  // 11. Ready for Production
+  // 11. Ready for Publication
   {
     id: "2024-005",
-    title: "Ready for Production, Copy Editing Complete",
+    title: "Ready for Publication, Copy Editing Complete",
     authorName: "Laura Chen",
     authorEmail: "lchen@umich.edu",
     affiliation: "University of Michigan",
     pronouns: "she/her",
     biography:
       "Laura Chen is a Professor of Performance Studies at the University of Michigan.",
-    status: "Ready for Production",
+    status: "Ready for Publication",
     contentType: "Article",
     submittedDate: "October 15, 2023",
     currentVersion: 6,
@@ -1333,9 +1333,9 @@ export const activityLog: ActivityLog = {
     },
     {
       date: "Jan 28, 2024",
-      description: "Copy editing completed. Ready for production.",
+      description: "Copy editing completed. Ready for publication.",
       type: "status-change",
-      stage: "Ready for Production",
+      stage: "Ready for Publication",
     },
   ],
   "2023-048": [
@@ -1382,9 +1382,9 @@ export const activityLog: ActivityLog = {
     },
     {
       date: "Dec 1, 2023",
-      description: "Ready for production",
+      description: "Ready for publication",
       type: "status-change",
-      stage: "Ready for Production",
+      stage: "Ready for Publication",
     },
     {
       date: "Jan 15, 2024",

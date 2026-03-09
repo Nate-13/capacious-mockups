@@ -17,7 +17,7 @@ const statusStyles: Record<SubmissionStatus, string> = {
   "Conditional Accept": "bg-[#F3E8FF] text-[#7C3AED]",
   Accepted: "bg-[#D1FAE5] text-[#059669]",
   "In Copy Editing": "bg-[#E0E7FF] text-[#4338CA]",
-  "Ready for Production": "bg-[#FFEDD5] text-[#C2410C]",
+  "Ready for Publication": "bg-[#FFEDD5] text-[#C2410C]",
   Rejected: "bg-[#FEE2E2] text-[#DC2626]",
   Published: "bg-[#D1FAE5] text-[#047857]",
 };
@@ -31,7 +31,7 @@ const allStatuses: SubmissionStatus[] = [
   "Rejected",
   "Revise & Resubmit",
   "In Copy Editing",
-  "Ready for Production",
+  "Ready for Publication",
   "Published",
 ];
 

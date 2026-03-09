@@ -8,7 +8,7 @@ export type SubmissionStatus =
   | "Rejected"
   | "Revise & Resubmit"
   | "In Copy Editing"
-  | "Ready for Production"
+  | "Ready for Publication"
   | "Published";
 
 // Content/submission types

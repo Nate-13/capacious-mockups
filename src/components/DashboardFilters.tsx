@@ -19,7 +19,7 @@ const STATUS_OPTIONS = [
   { value: "rejected", label: "Rejected" },
   { value: "revise-&-resubmit", label: "Revise & Resubmit" },
   { value: "in-copy-editing", label: "In Copy Editing" },
-  { value: "ready-for-production", label: "Ready for Production" },
+  { value: "ready-for-production", label: "Ready for Publication" },
   { value: "published", label: "Published" },
 ];
 

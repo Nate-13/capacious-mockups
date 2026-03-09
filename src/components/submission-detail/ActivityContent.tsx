@@ -19,7 +19,7 @@ const stageDotColors: Record<string, string> = {
   "Revise & Resubmit": "bg-amber-700",
   Rejected: "bg-red-600",
   "Copy Editing": "bg-indigo-700",
-  "Ready for Production": "bg-orange-700",
+  "Ready for Publication": "bg-orange-700",
   Published: "bg-emerald-700",
 };
 

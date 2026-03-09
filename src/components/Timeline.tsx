@@ -29,7 +29,7 @@ function getStageFromStatus(status: SubmissionStatus): {
     case "Accepted":
     case "In Copy Editing":
       return { currentStage: 3, isRejected: false };
-    case "Ready for Production":
+    case "Ready for Publication":
     case "Published":
       return { currentStage: 4, isRejected: false };
     case "Rejected":
